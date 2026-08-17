@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <rect width="1200" height="900" fill="#0f0f0f"/>
+  <rect x="100" y="100" width="1000" height="560" rx="20" fill="#1c1c1c" stroke="#c9a227" stroke-opacity=".4"/>
+  <g stroke="#c9a227" stroke-opacity=".55">
+    <path d="M180 520 L980 220" stroke-width="2"/>
+    <circle cx="980" cy="220" r="8" fill="#c9a227"/>
+    <path d="M220 600 C420 420 650 340 900 300" fill="none" stroke-width="2" stroke-dasharray="8 8"/>
+  </g>
+  <rect x="160" y="700" width="180" height="70" rx="12" fill="#1c1c1c" stroke="#c9a227" stroke-opacity=".35"/>
+  <rect x="360" y="700" width="180" height="70" rx="12" fill="#1c1c1c" stroke="#c9a227" stroke-opacity=".35"/>
+  <rect x="560" y="700" width="180" height="70" rx="12" fill="#1c1c1c" stroke="#c9a227" stroke-opacity=".35"/>
+  <text x="250" y="742" text-anchor="middle" fill="#f5f0e8" font-size="18" font-family="sans-serif">148 mph</text>
+  <text x="450" y="742" text-anchor="middle" fill="#f5f0e8" font-size="18" font-family="sans-serif">312 yd</text>
+  <text x="650" y="742" text-anchor="middle" fill="#f5f0e8" font-size="18" font-family="sans-serif">Spin 2400</text>
+</svg>

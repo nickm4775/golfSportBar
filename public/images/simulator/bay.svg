@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f5f0e8"/>
+      <stop offset="100%" stop-color="#dfe8e1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <rect x="80" y="80" width="1040" height="620" rx="28" fill="#1a3d2e"/>
+  <rect x="120" y="120" width="960" height="480" rx="12" fill="#2d5a45"/>
+  <path d="M180 520c160-90 340-140 500-120 170 20 330 80 480 160" stroke="#f5f0e8" stroke-opacity=".4" stroke-width="4" fill="none"/>
+  <circle cx="1040" cy="540" r="12" fill="#f5f0e8"/>
+  <rect x="420" y="740" width="360" height="20" rx="10" fill="#7a9a7e"/>
+  <text x="600" y="850" text-anchor="middle" font-family="Georgia, serif" font-size="28" fill="#1a3d2e">Private Bay</text>
+</svg>

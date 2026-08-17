@@ -1,0 +1,401 @@
+{
+  "eyebrow": "菜单",
+  "title": "本店精选。",
+  "subtitle": "小食、汉堡与调酒——经典与招牌。",
+  "priceLabel": "起",
+  "fullMenu": "完整菜单。",
+  "fullMenuSubtitle": "全部菜品，按分类浏览。",
+  "tabsAria": "菜单分类",
+  "emptyCategory": "此分类暂无菜品。",
+  "categories": {
+    "classicos": "经典",
+    "autorais": "招牌",
+    "petiscos": "小食",
+    "pizzas": "披萨",
+    "burgers": "汉堡",
+    "sobremesas": "甜品",
+    "refrigerantes": "汽水",
+    "aguas": "水",
+    "energeticos": "能量饮料",
+    "mocktails": "无酒精",
+    "cervejas": "啤酒",
+    "caipiras": "凯皮林纳",
+    "doses": "单杯",
+    "garrafas": "整瓶"
+  },
+  "caipirasNote": "水果：塔希提青柠、西西里柠檬、菠萝或草莓。",
+  "items": {
+    "classicGin": {
+      "name": "经典金汤力",
+      "description": "Beefeater、汤力水、西西里柠檬、迷迭香、杜松子与豆蔻。"
+    },
+    "ginFrutas": {
+      "name": "红莓金酒",
+      "description": "Beefeater、汤力、石榴糖浆、草莓、黑莓、蓝莓与薄荷。"
+    },
+    "aperol": {
+      "name": "Aperol",
+      "description": "Aperol、起泡酒、苏打水与巴伊亚橙。"
+    },
+    "mojito": {
+      "name": "莫吉托",
+      "description": "朗姆、塔希提青柠、糖浆、苏打水与薄荷。"
+    },
+    "pinaColada": {
+      "name": "椰林飘香",
+      "description": "朗姆、Malibu、椰奶、菠萝、炼乳与巧克力酱。"
+    },
+    "negroni": {
+      "name": "Negroni + 咖啡 Negroni",
+      "description": "Beefeater、Campari、红威末。（Campari 经咖啡豆浸泡）"
+    },
+    "macunaima": {
+      "name": "Macunaíma",
+      "description": "卡莎萨、塔希提青柠、糖浆与 Fernet。"
+    },
+    "oldFashioned": {
+      "name": "Old Fashioned",
+      "description": "Ballantine's American Barrel、方糖、苦精、苏打、橙与阿玛瑞纳樱桃。"
+    },
+    "moscowMule": {
+      "name": "莫斯科骡子",
+      "description": "Absolut、塔希提青柠、姜汁、糖浆、苏打、迷迭香与柠檬皮。"
+    },
+    "maracujack": {
+      "name": "Maracujack",
+      "description": "Jack Daniel's、百香果、糖浆与苏打水。"
+    },
+    "carajillo": {
+      "name": "Carajillo",
+      "description": "Licor 43 与意式浓缩咖啡。"
+    },
+    "malibuWatermelon": {
+      "name": "Malibu 西瓜飞溅",
+      "description": "Malibu、塔希提青柠、西瓜糖浆、Sprite 与薄荷。"
+    },
+    "paperPlane": {
+      "name": "Paper Plane",
+      "description": "Aperol、波本威士忌、西西里柠檬与 Cynar。"
+    },
+    "ginCitric": {
+      "name": "Gin Citric Tropical",
+      "description": "Beefeater、百香果、糖浆、西西里柠檬、汤力与迷迭香。"
+    },
+    "gingerSouer": {
+      "name": "Ginger Souer",
+      "description": "Jack Daniel's、姜糖浆、西西里柠檬与巴氏杀菌蛋白。"
+    },
+    "ressaca43": {
+      "name": "Ressaca 43",
+      "description": "Beefeater、芙蓉花、Licor 43、苏打、西西里柠檬与柑橘。"
+    },
+    "lightBreeze": {
+      "name": "Light Breeze",
+      "description": "银色龙舌兰、草莓、百香果、糖浆与塔希提青柠。"
+    },
+    "scottie": {
+      "name": "Scottie Scheffler",
+      "description": "Southern Comfort、杏仁甜酒、黑刺李金酒与橙汁。"
+    },
+    "victoria": {
+      "name": "Victoria Lovelady",
+      "description": "Cointreau、龙舌兰、啤酒、龙舌兰糖浆与塔希提青柠。"
+    },
+    "rory": {
+      "name": "Rory McIlroy",
+      "description": "Absolut、青香蕉 Monin、芒果、柠檬、巴氏杀菌蛋白与苦精。"
+    },
+    "jamesSalad": {
+      "name": "James Salad",
+      "description": "生菜、帕玛森、帕尔马火腿、脆洋葱、牛油果芥末酱与特制酱汁。"
+    },
+    "burrata": {
+      "name": "香蒜布拉塔",
+      "description": "油封番茄、香蒜酱与恰巴塔烤面包。"
+    },
+    "batataFrita": {
+      "name": "薯条",
+      "description": "配特制酱。"
+    },
+    "pastelBrie": {
+      "name": "布里芝士酥饺",
+      "description": "配甜辣酱。"
+    },
+    "croquete": {
+      "name": "肋排可乐饼",
+      "description": "配啤酒焦糖洋葱酱。"
+    },
+    "camaraoAlho": {
+      "name": "蒜油虾",
+      "description": ""
+    },
+    "camarao": {
+      "name": "酥脆虾",
+      "description": "配特制酱与恰巴塔。"
+    },
+    "calabresaAcebolada": {
+      "name": "洋葱意式香肠",
+      "description": "配特制酱与恰巴塔。"
+    },
+    "cubosMignon": {
+      "name": "菲力小块",
+      "description": "配戈贡佐拉酱。"
+    },
+    "iscaPicanha": {
+      "name": "皮卡尼亚条",
+      "description": "配奇米丘里酱。"
+    },
+    "taboaFrios": {
+      "name": "冷切拼盘",
+      "description": "布里、帕玛森、帕尔马火腿、萨拉米、黑橄榄、巴西坚果与杏干。"
+    },
+    "pepperoni": {
+      "name": "意式辣肠披萨",
+      "description": "那不勒斯面皮、番茄酱、马苏里拉、辣肠与香蒜酱。"
+    },
+    "quatroQueijos": {
+      "name": "四种奶酪披萨",
+      "description": "那不勒斯面皮、番茄酱、马苏里拉、波罗伏洛、戈贡佐拉与布里。"
+    },
+    "napolitana": {
+      "name": "那不勒斯披萨",
+      "description": "那不勒斯面皮、番茄酱、水牛马苏里拉、樱桃番茄与新鲜罗勒。"
+    },
+    "pizzaCalabresa": {
+      "name": "卡拉布雷萨披萨",
+      "description": "那不勒斯面皮、番茄酱、马苏里拉、意式香肠与薄洋葱。"
+    },
+    "baconBlend": {
+      "name": "培根汉堡",
+      "description": "店内肉饼、布里欧修、特制酱、脆培根与殖民奶酪，配薯条。"
+    },
+    "beefBlend": {
+      "name": "牛肉汉堡",
+      "description": "店内肉饼、布里欧修、蒜香帕玛森酱与马苏里拉，配薯条。"
+    },
+    "chickenBurger": {
+      "name": "鸡肉汉堡",
+      "description": "烤鸡、布里欧修、蒜香帕玛森酱、马苏里拉、生菜、油封番茄，配薯条。"
+    },
+    "cafeExpresso": {
+      "name": "意式浓缩咖啡",
+      "description": ""
+    },
+    "petitGateau": {
+      "name": "熔岩蛋糕",
+      "description": ""
+    },
+    "tacaSorvete": {
+      "name": "冰淇淋杯",
+      "description": ""
+    },
+    "refrigerantes": {
+      "name": "碳酸饮料",
+      "description": "可口可乐、零度可乐、瓜拉纳、零度瓜拉纳或雪碧。"
+    },
+    "aguaSemGas": {
+      "name": "无气矿泉水",
+      "description": ""
+    },
+    "aguaComGas": {
+      "name": "气泡水",
+      "description": ""
+    },
+    "aguaCoco": {
+      "name": "椰子水",
+      "description": ""
+    },
+    "redBull": {
+      "name": "红牛",
+      "description": "原味、无糖或热带味。"
+    },
+    "mockMojito": {
+      "name": "莫吉托（无酒精）",
+      "description": "雪碧、塔希提青柠与薄荷。"
+    },
+    "mockPina": {
+      "name": "椰林飘香（无酒精）",
+      "description": "椰奶、菠萝、炼乳与巧克力酱。"
+    },
+    "mockMule": {
+      "name": "莫斯科骡子（无酒精）",
+      "description": "姜汁、塔希提青柠、糖浆、苏打与迷迭香。"
+    },
+    "pinkLemonade": {
+      "name": "粉红柠檬水",
+      "description": "石榴糖浆、糖浆、塔希提青柠、橙片与薄荷。"
+    },
+    "arnoldPalmer": {
+      "name": "Arnold Palmer",
+      "description": "热带水果茶、西西里柠檬、芙蓉花瓣与薄荷糖浆。"
+    },
+    "budweiser": {
+      "name": "百威",
+      "description": ""
+    },
+    "corona": {
+      "name": "科罗娜",
+      "description": ""
+    },
+    "heineken": {
+      "name": "喜力",
+      "description": ""
+    },
+    "heinekenZero": {
+      "name": "喜力无醇",
+      "description": ""
+    },
+    "baden": {
+      "name": "Baden",
+      "description": ""
+    },
+    "caipiraYpioca": {
+      "name": "Ypioca 卡莎萨",
+      "description": "水果：塔希提青柠、西西里柠檬、菠萝或草莓。"
+    },
+    "caipiraAbsolut": {
+      "name": "Absolut 伏特加",
+      "description": "水果：塔希提青柠、西西里柠檬、菠萝或草莓。"
+    },
+    "caipiraSmirnoff": {
+      "name": "Smirnoff",
+      "description": "水果：塔希提青柠、西西里柠檬、菠萝或草莓。"
+    },
+    "caipiraSake": {
+      "name": "清酒",
+      "description": "水果：塔希提青柠、西西里柠檬、菠萝或草莓。"
+    },
+    "caipiraSteinhaeger": {
+      "name": "Steinhaeger",
+      "description": "水果：塔希提青柠、西西里柠檬、菠萝或草莓。"
+    },
+    "doseAbsolut": {
+      "name": "Absolut Vodka",
+      "description": ""
+    },
+    "doseSmirnoff": {
+      "name": "Smirnoff",
+      "description": ""
+    },
+    "doseGreyGoose": {
+      "name": "Grey Goose",
+      "description": ""
+    },
+    "doseBeefeater": {
+      "name": "Beefeater London Dry Gin",
+      "description": ""
+    },
+    "doseGordons": {
+      "name": "Gordon's",
+      "description": ""
+    },
+    "doseTanqueray": {
+      "name": "Tanqueray",
+      "description": ""
+    },
+    "doseBallantines": {
+      "name": "Ballantine's 10 anos",
+      "description": ""
+    },
+    "doseJameson": {
+      "name": "Jameson Irish Whiskey",
+      "description": ""
+    },
+    "doseChivas12": {
+      "name": "Chivas Regal 12 anos",
+      "description": ""
+    },
+    "doseJack": {
+      "name": "Jack Daniel's",
+      "description": ""
+    },
+    "doseJwRed": {
+      "name": "Johnnie Walker Red Label",
+      "description": ""
+    },
+    "doseJwBlack": {
+      "name": "Johnnie Walker Black Label",
+      "description": ""
+    },
+    "doseLicor43": {
+      "name": "Licor 43",
+      "description": ""
+    },
+    "doseCointreau": {
+      "name": "Cointreau",
+      "description": ""
+    },
+    "doseJackHoney": {
+      "name": "Jack Daniel's Honey",
+      "description": ""
+    },
+    "doseJagermeister": {
+      "name": "Jägermeister",
+      "description": ""
+    },
+    "doseBacardi": {
+      "name": "Bacardi Carta Branca",
+      "description": ""
+    },
+    "doseHavana": {
+      "name": "Havana Club 3 anos",
+      "description": ""
+    },
+    "doseCuervoPrata": {
+      "name": "José Cuervo Prata",
+      "description": ""
+    },
+    "doseCuervoOuro": {
+      "name": "José Cuervo Ouro",
+      "description": ""
+    },
+    "doseCampari": {
+      "name": "Campari",
+      "description": ""
+    },
+    "doseSteinhaeger": {
+      "name": "Steinhaeger",
+      "description": ""
+    },
+    "doseYpiocaPrata": {
+      "name": "Ypioca Prata",
+      "description": ""
+    },
+    "doseYpiocaOuro": {
+      "name": "Ypioca Ouro",
+      "description": ""
+    },
+    "garrafaAbsolut": {
+      "name": "Absolut Vodka",
+      "description": ""
+    },
+    "garrafaGreyGoose": {
+      "name": "Grey Goose",
+      "description": ""
+    },
+    "garrafaBeefeater": {
+      "name": "Beefeater London Dry Gin",
+      "description": ""
+    },
+    "garrafaTanqueray": {
+      "name": "Tanqueray",
+      "description": ""
+    },
+    "garrafaChivas12": {
+      "name": "Chivas Regal 12 anos",
+      "description": ""
+    },
+    "garrafaRoyalSalute": {
+      "name": "Royal Salute 21 anos",
+      "description": ""
+    },
+    "garrafaJack": {
+      "name": "Jack Daniel's",
+      "description": ""
+    },
+    "garrafaJwBlack": {
+      "name": "Johnnie Walker Black Label",
+      "description": ""
+    }
+  }
+}

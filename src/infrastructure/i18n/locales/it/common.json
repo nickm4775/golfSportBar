@@ -1,0 +1,19 @@
+{
+  "nav": {
+    "simulator": "Simulatore",
+    "menu": "Menu",
+    "locations": "Sedi"
+  },
+  "theme": {
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "toggle": "Cambia tema"
+  },
+  "language": "Lingua",
+  "footer": {
+    "rights": "Tutti i diritti riservati.",
+    "tagline": "Golf indoor · Gastronomia · Drink"
+  },
+  "instagram": "Instagram",
+  "phone": "Telefono"
+}

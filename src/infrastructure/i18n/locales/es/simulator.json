@@ -1,0 +1,19 @@
+{
+  "eyebrow": "Simulador",
+  "title": "Más que un swing.",
+  "subtitle": "Física realista, miles de campos y partidas con amigos — golf indoor con la energía de un sport bar.",
+  "slides": {
+    "bay": {
+      "title": "Juega. Compite. Disfruta.",
+      "copy": "Bays privados para vos, amigos y grupos — entrenamiento o partida, todo el año."
+    },
+    "tech": {
+      "title": "Sensación de campo de verdad.",
+      "copy": "Física de bola precisa y datos en tiempo real; miles de campos para explorar."
+    },
+    "night": {
+      "title": "Noches que se juegan juntas.",
+      "copy": "Torneos, afterwork y multiplayer: el simulador reúne; la carta y los drinks cierran la noche."
+    }
+  }
+}

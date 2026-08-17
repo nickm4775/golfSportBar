@@ -1,0 +1,401 @@
+{
+  "eyebrow": "Menu",
+  "title": "House selection.",
+  "subtitle": "Small plates, burgers, and drinks — classics and signatures.",
+  "priceLabel": "From",
+  "fullMenu": "Full menu.",
+  "fullMenuSubtitle": "The complete offering, organized by category.",
+  "tabsAria": "Menu categories",
+  "emptyCategory": "No items in this category.",
+  "categories": {
+    "classicos": "Classics",
+    "autorais": "Signature",
+    "petiscos": "Small plates",
+    "pizzas": "Pizzas",
+    "burgers": "Burgers",
+    "sobremesas": "Desserts",
+    "refrigerantes": "Soft drinks",
+    "aguas": "Water",
+    "energeticos": "Energy drinks",
+    "mocktails": "Non-alcoholic",
+    "cervejas": "Beers",
+    "caipiras": "Caipirinhas",
+    "doses": "Shots",
+    "garrafas": "Bottles"
+  },
+  "caipirasNote": "Fruits: Tahiti lime, Sicilian lemon, pineapple or strawberry.",
+  "items": {
+    "classicGin": {
+      "name": "Classic Gin & Tonic",
+      "description": "Beefeater London Dry, tonic water, Sicilian lemon slices, rosemary, juniper and cardamom."
+    },
+    "ginFrutas": {
+      "name": "Red Berries Gin",
+      "description": "Beefeater London Dry, tonic water, grenadine, strawberries, blackberries, blueberries and mint."
+    },
+    "aperol": {
+      "name": "Aperol",
+      "description": "Aperol, sparkling wine, soda water and Bahia orange slice."
+    },
+    "mojito": {
+      "name": "Mojito",
+      "description": "Rum, Tahiti lime, simple syrup, soda water and mint leaves."
+    },
+    "pinaColada": {
+      "name": "Piña Colada",
+      "description": "Rum, Malibu, coconut milk, pineapple, condensed milk and chocolate sauce."
+    },
+    "negroni": {
+      "name": "Negroni + Negroni Coffee",
+      "description": "Beefeater London Dry, Campari, Vermouth Rosso. (Campari infused with coffee beans)"
+    },
+    "macunaima": {
+      "name": "Macunaíma",
+      "description": "Cachaça, Tahiti lime, simple syrup and Fernet."
+    },
+    "oldFashioned": {
+      "name": "Old Fashioned",
+      "description": "Ballantine's American Barrel, sugar cube, angostura, soda water, orange and amarena cherry."
+    },
+    "moscowMule": {
+      "name": "Moscow Mule",
+      "description": "Absolut Vodka, Tahiti lime, ginger juice, simple syrup, soda water, rosemary and lemon zest."
+    },
+    "maracujack": {
+      "name": "Maracujack",
+      "description": "Jack Daniel's, passion fruit, simple syrup and soda water."
+    },
+    "carajillo": {
+      "name": "Carajillo",
+      "description": "Licor 43 and espresso coffee."
+    },
+    "malibuWatermelon": {
+      "name": "Malibu Watermelon Splash",
+      "description": "Malibu rum, Tahiti lime, watermelon syrup, Sprite and mint."
+    },
+    "paperPlane": {
+      "name": "Paper Plane",
+      "description": "Aperol, bourbon whisky, Sicilian lemon and Cynar."
+    },
+    "ginCitric": {
+      "name": "Gin Citric Tropical",
+      "description": "Beefeater London Dry, passion fruit, simple syrup, Sicilian lemon, tonic and rosemary."
+    },
+    "gingerSouer": {
+      "name": "Ginger Souer",
+      "description": "Jack Daniel's, ginger syrup, Sicilian lemon and pasteurized egg white."
+    },
+    "ressaca43": {
+      "name": "Ressaca 43",
+      "description": "Beefeater London Dry, hibiscus infusion, Licor 43, soda water, Sicilian lemon and tangerine."
+    },
+    "lightBreeze": {
+      "name": "Light Breeze",
+      "description": "Silver tequila, strawberry, passion fruit pulp, simple syrup and Tahiti lime."
+    },
+    "scottie": {
+      "name": "Scottie Scheffler",
+      "description": "Southern Comfort, amaretto, sloe gin and orange juice."
+    },
+    "victoria": {
+      "name": "Victoria Lovelady",
+      "description": "Cointreau, tequila, beer, agave syrup and Tahiti lime."
+    },
+    "rory": {
+      "name": "Rory McIlroy",
+      "description": "Absolut Vodka, green banana Monin, mango juice, lemon juice, pasteurized egg white and bitter."
+    },
+    "jamesSalad": {
+      "name": "James Salad",
+      "description": "Iceberg lettuce, Parmesan shavings, Parma ham, onion crisp, avocado-wasabi emulsion and ceboletti l'ancienne dressing."
+    },
+    "burrata": {
+      "name": "Burrata with Pesto",
+      "description": "With confit tomato, pesto sauce and ciabatta toast."
+    },
+    "batataFrita": {
+      "name": "French Fries",
+      "description": "With special sauce."
+    },
+    "pastelBrie": {
+      "name": "Brie Pastel",
+      "description": "Served with Sweet Chilli."
+    },
+    "croquete": {
+      "name": "Rib Croquette",
+      "description": "With beer caramelized onion emulsion."
+    },
+    "camaraoAlho": {
+      "name": "Garlic & Oil Shrimp",
+      "description": ""
+    },
+    "camarao": {
+      "name": "Crunchy Shrimp",
+      "description": "Served with special sauce and ciabatta slices."
+    },
+    "calabresaAcebolada": {
+      "name": "Calabresa with Onions",
+      "description": "Served with special sauce and ciabatta slices."
+    },
+    "cubosMignon": {
+      "name": "Mignon Cubes",
+      "description": "With gorgonzola sauce."
+    },
+    "iscaPicanha": {
+      "name": "Picanha Strips",
+      "description": "With chimichurri sauce."
+    },
+    "taboaFrios": {
+      "name": "Charcuterie Board",
+      "description": "Brie, Parmesan, Parma ham, salami, black olives, Brazil nuts and apricots."
+    },
+    "pepperoni": {
+      "name": "Pepperoni Pizza",
+      "description": "Neapolitan dough, tomato sauce, mozzarella, pepperoni and pesto."
+    },
+    "quatroQueijos": {
+      "name": "Four Cheese Pizza",
+      "description": "Neapolitan dough, tomato sauce, mozzarella, provolone, gorgonzola and brie."
+    },
+    "napolitana": {
+      "name": "Napolitana Pizza",
+      "description": "Neapolitan dough, tomato sauce, buffalo mozzarella, cherry tomato and fresh basil."
+    },
+    "pizzaCalabresa": {
+      "name": "Calabresa Pizza",
+      "description": "Neapolitan dough, tomato sauce, mozzarella, calabresa and thinly sliced onion."
+    },
+    "baconBlend": {
+      "name": "Bacon Blend",
+      "description": "House blend, brioche bun, special tasty sauce, crispy bacon and colonial cheese with canoe fries."
+    },
+    "beefBlend": {
+      "name": "Beef Blend",
+      "description": "House blend, brioche, garlic-Parmesan emulsion and mozzarella. With canoe fries."
+    },
+    "chickenBurger": {
+      "name": "Chicken Burger",
+      "description": "Grilled chicken, brioche, garlic-Parmesan emulsion, mozzarella, lettuce, confit tomato. With canoe fries."
+    },
+    "cafeExpresso": {
+      "name": "Espresso",
+      "description": ""
+    },
+    "petitGateau": {
+      "name": "Petit Gateau",
+      "description": ""
+    },
+    "tacaSorvete": {
+      "name": "Ice Cream Cup",
+      "description": ""
+    },
+    "refrigerantes": {
+      "name": "Soft Drinks",
+      "description": "Coca-Cola, Coca-Cola Zero, Guaraná, Guaraná Zero or Sprite."
+    },
+    "aguaSemGas": {
+      "name": "Still Water",
+      "description": ""
+    },
+    "aguaComGas": {
+      "name": "Sparkling Water",
+      "description": ""
+    },
+    "aguaCoco": {
+      "name": "Coconut Water",
+      "description": ""
+    },
+    "redBull": {
+      "name": "Red Bull",
+      "description": "Original, Sugar Free or Tropical."
+    },
+    "mockMojito": {
+      "name": "Mojito",
+      "description": "Sprite, Tahiti lime and mint leaves."
+    },
+    "mockPina": {
+      "name": "Piña Colada",
+      "description": "Coconut milk, pineapple, condensed milk and chocolate sauce."
+    },
+    "mockMule": {
+      "name": "Moscow Mule",
+      "description": "Ginger juice, Tahiti lime, simple syrup, soda water and rosemary."
+    },
+    "pinkLemonade": {
+      "name": "Pink Lemonade",
+      "description": "Grenadine, simple syrup, Tahiti lime, orange slices and mint."
+    },
+    "arnoldPalmer": {
+      "name": "Arnold Palmer",
+      "description": "Tropical fruit tea, Sicilian lemon, hibiscus petals and mint syrup."
+    },
+    "budweiser": {
+      "name": "Budweiser",
+      "description": ""
+    },
+    "corona": {
+      "name": "Corona",
+      "description": ""
+    },
+    "heineken": {
+      "name": "Heineken",
+      "description": ""
+    },
+    "heinekenZero": {
+      "name": "Heineken Zero",
+      "description": ""
+    },
+    "baden": {
+      "name": "Baden",
+      "description": ""
+    },
+    "caipiraYpioca": {
+      "name": "Ypioca Cachaça",
+      "description": "Fruits: Tahiti lime, Sicilian lemon, pineapple or strawberry."
+    },
+    "caipiraAbsolut": {
+      "name": "Absolut Vodka",
+      "description": "Fruits: Tahiti lime, Sicilian lemon, pineapple or strawberry."
+    },
+    "caipiraSmirnoff": {
+      "name": "Smirnoff",
+      "description": "Fruits: Tahiti lime, Sicilian lemon, pineapple or strawberry."
+    },
+    "caipiraSake": {
+      "name": "Sake",
+      "description": "Fruits: Tahiti lime, Sicilian lemon, pineapple or strawberry."
+    },
+    "caipiraSteinhaeger": {
+      "name": "Steinhaeger",
+      "description": "Fruits: Tahiti lime, Sicilian lemon, pineapple or strawberry."
+    },
+    "doseAbsolut": {
+      "name": "Absolut Vodka",
+      "description": ""
+    },
+    "doseSmirnoff": {
+      "name": "Smirnoff",
+      "description": ""
+    },
+    "doseGreyGoose": {
+      "name": "Grey Goose",
+      "description": ""
+    },
+    "doseBeefeater": {
+      "name": "Beefeater London Dry Gin",
+      "description": ""
+    },
+    "doseGordons": {
+      "name": "Gordon's",
+      "description": ""
+    },
+    "doseTanqueray": {
+      "name": "Tanqueray",
+      "description": ""
+    },
+    "doseBallantines": {
+      "name": "Ballantine's 10 anos",
+      "description": ""
+    },
+    "doseJameson": {
+      "name": "Jameson Irish Whiskey",
+      "description": ""
+    },
+    "doseChivas12": {
+      "name": "Chivas Regal 12 anos",
+      "description": ""
+    },
+    "doseJack": {
+      "name": "Jack Daniel's",
+      "description": ""
+    },
+    "doseJwRed": {
+      "name": "Johnnie Walker Red Label",
+      "description": ""
+    },
+    "doseJwBlack": {
+      "name": "Johnnie Walker Black Label",
+      "description": ""
+    },
+    "doseLicor43": {
+      "name": "Licor 43",
+      "description": ""
+    },
+    "doseCointreau": {
+      "name": "Cointreau",
+      "description": ""
+    },
+    "doseJackHoney": {
+      "name": "Jack Daniel's Honey",
+      "description": ""
+    },
+    "doseJagermeister": {
+      "name": "Jägermeister",
+      "description": ""
+    },
+    "doseBacardi": {
+      "name": "Bacardi Carta Branca",
+      "description": ""
+    },
+    "doseHavana": {
+      "name": "Havana Club 3 anos",
+      "description": ""
+    },
+    "doseCuervoPrata": {
+      "name": "José Cuervo Prata",
+      "description": ""
+    },
+    "doseCuervoOuro": {
+      "name": "José Cuervo Ouro",
+      "description": ""
+    },
+    "doseCampari": {
+      "name": "Campari",
+      "description": ""
+    },
+    "doseSteinhaeger": {
+      "name": "Steinhaeger",
+      "description": ""
+    },
+    "doseYpiocaPrata": {
+      "name": "Ypioca Prata",
+      "description": ""
+    },
+    "doseYpiocaOuro": {
+      "name": "Ypioca Ouro",
+      "description": ""
+    },
+    "garrafaAbsolut": {
+      "name": "Absolut Vodka",
+      "description": ""
+    },
+    "garrafaGreyGoose": {
+      "name": "Grey Goose",
+      "description": ""
+    },
+    "garrafaBeefeater": {
+      "name": "Beefeater London Dry Gin",
+      "description": ""
+    },
+    "garrafaTanqueray": {
+      "name": "Tanqueray",
+      "description": ""
+    },
+    "garrafaChivas12": {
+      "name": "Chivas Regal 12 anos",
+      "description": ""
+    },
+    "garrafaRoyalSalute": {
+      "name": "Royal Salute 21 anos",
+      "description": ""
+    },
+    "garrafaJack": {
+      "name": "Jack Daniel's",
+      "description": ""
+    },
+    "garrafaJwBlack": {
+      "name": "Johnnie Walker Black Label",
+      "description": ""
+    }
+  }
+}

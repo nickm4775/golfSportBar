@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d9b56a" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#1a3d2e" stop-opacity=".85"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="800" fill="url(#bg)"/>
+  <circle cx="720" cy="220" r="140" fill="#f5f0e8" opacity=".18"/>
+  <circle cx="280" cy="560" r="180" fill="#000" opacity=".12"/>
+  <rect x="120" y="160" width="280" height="420" rx="40" fill="#f5f0e8" opacity=".2"/>
+  <ellipse cx="260" cy="250" rx="70" ry="28" fill="#f5f0e8" opacity=".35"/>
+  <text x="500" y="740" text-anchor="middle" fill="#f5f0e8" font-family="Georgia, serif" font-size="42">Ginger</text>
+</svg>

@@ -1,0 +1,13 @@
+{
+  "eyebrow": "Locations",
+  "title": "Where to find us.",
+  "subtitle": "A growing network. Today in Balneário Camboriú.",
+  "directions": "Get directions",
+  "openMap": "Open in maps",
+  "locations": {
+    "bcCentro": {
+      "name": "Golf Sport Bar — Downtown BC"
+    }
+  },
+  "whatsapp": "WhatsApp"
+}

@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+@import "leaflet/dist/leaflet.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-script: "Great Vibes", cursive;
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-cream: #f7f8f6;
+  --color-sage: #4d8f5f;
+  --color-forest: #143528;
+  --color-moss: #1f6b3a;
+  --color-fairway: #2f8f4e;
+  --color-charcoal: #0a0f0c;
+  --color-ink: #121816;
+}
+
+:root {
+  --gsb-bg: #f7f8f6;
+  --gsb-fg: #143528;
+  --gsb-muted: #5a6b60;
+  --gsb-accent: #1f6b3a;
+  --gsb-accent-soft: #4d8f5f;
+  --gsb-surface: rgba(255, 255, 255, 0.72);
+  --gsb-border: rgba(20, 53, 40, 0.1);
+  --gsb-glow: rgba(31, 107, 58, 0.18);
+  color-scheme: light;
+}
+
+.dark,
+[data-theme="dark"] {
+  --gsb-bg: #0a0f0c;
+  --gsb-fg: #f2f5f2;
+  --gsb-muted: #9aaba0;
+  --gsb-accent: #3db56a;
+  --gsb-accent-soft: #2f8f4e;
+  --gsb-surface: rgba(18, 28, 22, 0.78);
+  --gsb-border: rgba(242, 245, 242, 0.1);
+  --gsb-glow: rgba(61, 181, 106, 0.22);
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    font-family: var(--font-sans);
+    background: var(--gsb-bg);
+    color: var(--gsb-fg);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--gsb-accent) 32%, transparent);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-script {
+    font-family: var(--font-script);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gsb-atmosphere {
+    background:
+      radial-gradient(ellipse 70% 50% at 50% -10%, color-mix(in oklab, var(--gsb-accent) 12%, transparent), transparent 60%),
+      var(--gsb-bg);
+  }
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-sans);
+  background: var(--gsb-bg);
+}
+
+.gsb-map-marker {
+  background: transparent;
+  border: none;
+}
+
+/* Theme switch: force fairway green over HeroUI default accent */
+.gsb-theme-switch [data-slot="switch-control"],
+.gsb-theme-switch-control {
+  background: color-mix(in oklab, var(--gsb-accent-soft) 40%, var(--gsb-surface)) !important;
+}
+
+.gsb-theme-switch [data-slot="switch-control"][data-selected],
+.gsb-theme-switch [data-slot="switch-control"][data-selected="true"],
+.gsb-theme-switch[data-selected] [data-slot="switch-control"],
+.gsb-theme-switch [data-selected] [data-slot="switch-control"] {
+  background: var(--gsb-accent) !important;
+}
+
+.gsb-theme-switch [data-slot="switch-thumb"],
+.gsb-theme-switch-thumb {
+  background: #ffffff !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gsb-theme-switch [data-slot="switch-icon"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
