@@ -46,6 +46,8 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
 
   body {

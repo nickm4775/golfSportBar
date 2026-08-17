@@ -65,7 +65,7 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-[color-mix(in_oklab,var(--gsb-bg)_78%,transparent)] backdrop-blur-2xl">
+    <header className="fixed inset-x-0 top-0 z-50 bg-[color-mix(in_oklab,var(--gsb-bg)_78%,transparent)] pt-[env(safe-area-inset-top)] backdrop-blur-2xl">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-8">
         <a href="#top" className="shrink-0" aria-label="Golf Sport Bar">
           <BrandLogo compact />

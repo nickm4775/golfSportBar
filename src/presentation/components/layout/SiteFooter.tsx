@@ -7,7 +7,7 @@ export function SiteFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="border-t border-[var(--gsb-border)]">
+    <footer className="border-t border-[var(--gsb-border)] pb-[env(safe-area-inset-bottom)]">
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-4 py-14 md:flex-row md:items-end md:px-8">
         <div>
           <BrandLogo compact />

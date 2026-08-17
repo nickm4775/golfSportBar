@@ -22,7 +22,10 @@ Clean Architecture / SOLID:
 
 ## Características
 
+- PWA instalable (standalone, service worker, cache de app shell e imágenes)
 - Animaciones estilo Apple con GSAP ScrollTrigger
 - Light / dark mode
 - i18n: Português (default), Español, English, Italiano, 中文
 - Mapa Leaflet multi-sede (hoy: R. 3600, 235 — Centro, Balneário Camboriú, 88330-248)
+
+Para probar la PWA en local: `npm run build && npm run preview` (el service worker no se registra en `npm run dev`).

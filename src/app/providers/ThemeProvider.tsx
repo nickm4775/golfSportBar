@@ -18,6 +18,8 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 export const THEME_STORAGE_KEY = 'gsb-theme'
+export const THEME_COLOR_LIGHT = '#f7f8f6'
+export const THEME_COLOR_DARK = '#0a0f0c'
 
 function readStoredTheme(): ThemeMode | null {
   if (typeof window === 'undefined') return null
@@ -42,6 +44,10 @@ export function applyTheme(theme: ThemeMode) {
   }
   root.dataset.theme = theme
   root.style.colorScheme = theme
+  const meta = document.querySelector('meta[name="theme-color"]')
+  if (meta) {
+    meta.setAttribute('content', theme === 'dark' ? THEME_COLOR_DARK : THEME_COLOR_LIGHT)
+  }
 }
 
 // Avoid flash of wrong theme before React hydrates.
