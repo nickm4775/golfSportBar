@@ -1,0 +1,316 @@
+{
+  "nav": {
+    "dashboard": "总览",
+    "orders": "订单",
+    "catalog": "菜单",
+    "bays": "球位",
+    "reservations": "预约",
+    "sessions": "场次",
+    "business": "门店",
+    "staff": "团队",
+    "customers": "客户",
+    "caja": "收银台",
+    "notifications": "通知",
+    "settings": "设置"
+  },
+  "shell": {
+    "logout": "退出",
+    "account": "账户",
+    "backToSite": "网站",
+    "collapse": "收起菜单",
+    "expand": "展开菜单",
+    "business": "门店",
+    "noBusiness": "未分配门店"
+  },
+  "status": {
+    "DRAFT": "草稿",
+    "OPEN": "进行中",
+    "IN_PROGRESS": "制作中",
+    "COMPLETED": "已完成",
+    "CANCELLED": "已取消",
+    "PENDING": "待处理",
+    "PREPARING": "制作中",
+    "SERVED": "已上菜",
+    "CONFIRMED": "已确认",
+    "CHECKED_IN": "已签到",
+    "NO_SHOW": "未到",
+    "SCHEDULED": "已安排",
+    "ACTIVE": "进行中",
+    "PAUSED": "已暂停"
+  },
+  "kpis": {
+    "revenuePeriod": "本期营收",
+    "averageTicket": "客单价",
+    "ordersCompleted": "已完成订单",
+    "ordersOpen": "未完成订单",
+    "sessionsActive": "进行中场次",
+    "reservationsInPeriod": "本期预约"
+  },
+  "periods": {
+    "daily": "日",
+    "weekly": "周",
+    "quarterly": "季",
+    "semiannual": "半年",
+    "annual": "年"
+  },
+  "charts": {
+    "revenueTitle": "本期营收",
+    "statusTitle": "订单状态",
+    "revenue": "营收",
+    "orders": "订单",
+    "empty": "该时段暂无已完成订单。"
+  },
+  "recent": {
+    "title": "最近订单",
+    "table": "桌号",
+    "total": "合计",
+    "when": "时间",
+    "viewAll": "查看订单",
+    "empty": "暂无订单。"
+  },
+  "dashboard": {
+    "title": "总览",
+    "subtitle": "按门店和周期查看菜单营收与运营节奏。",
+    "business": "门店",
+    "period": "周期",
+    "live": "实时",
+    "offline": "未连接",
+    "vsPrevious": "较上一周期"
+  },
+  "realtime": {
+    "orderChanged": {
+      "title": "订单已更新",
+      "description": "该门店的订单有变动。"
+    },
+    "gsproChanged": {
+      "title": "GSPro 已更新",
+      "description": "预约或场次有变动。"
+    },
+    "catalogChanged": {
+      "title": "菜单已更新",
+      "description": "该门店的菜单有变动。"
+    }
+  },
+  "common": {
+    "save": "保存",
+    "create": "创建",
+    "cancel": "取消",
+    "loading": "加载中…",
+    "retry": "重试",
+    "actions": "操作",
+    "empty": "暂无数据。",
+    "error": "出错了。",
+    "available": "可售",
+    "unavailable": "停售",
+    "active": "启用",
+    "inactive": "停用",
+    "notes": "备注",
+    "name": "姓名",
+    "email": "邮箱",
+    "password": "密码",
+    "phone": "电话",
+    "role": "角色",
+    "price": "价格",
+    "quantity": "数量",
+    "filter": "筛选",
+    "search": "搜索",
+    "previous": "上一页",
+    "next": "下一页",
+    "page": "第 {{current}} / {{total}} 页",
+    "all": "全部",
+    "edit": "编辑",
+    "delete": "删除",
+    "confirmDelete": "此操作无法撤销。",
+    "close": "关闭",
+    "description": "描述",
+    "image": "图片",
+    "featured": "推荐"
+  },
+  "orders": {
+    "title": "交易",
+    "subtitle": "来自收银台和现场的订单。",
+    "new": "新建订单",
+    "openCaja": "打开收银台",
+    "tableLabel": "桌号或球位",
+    "addItem": "添加菜品",
+    "product": "产品",
+    "items": "明细",
+    "changeStatus": "状态",
+    "checkoutTitle": "核对收款",
+    "payment": "支付",
+    "paymentMethod": "支付方式",
+    "method": {
+      "PIX": "PIX",
+      "CASH": "现金"
+    },
+    "confirmPix": "确认 PIX",
+    "confirmCash": "确认现金收款",
+    "paid": "已登记收款，订单已完成。",
+    "details": "查看详情",
+    "detailTitle": "订单详情",
+    "paymentStatusLabel": "支付状态",
+    "paidAt": "支付时间",
+    "noPayment": "暂无支付记录",
+    "paymentStatus": {
+      "PENDING": "待支付",
+      "PAID": "已支付",
+      "FAILED": "失败",
+      "EXPIRED": "已过期",
+      "CANCELLED": "已取消"
+    }
+  },
+  "catalog": {
+    "title": "菜单",
+    "subtitle": "管理本店菜单。",
+    "new": "新增产品",
+    "edit": "编辑产品",
+    "deleteTitle": "删除产品",
+    "deleteConfirm": "将从本店菜单中移除。",
+    "category": "分类",
+    "prepStation": "出品站",
+    "prepStationDefault": "按分类",
+    "prepStationKitchen": "厨房",
+    "prepStationBar": "吧台"
+  },
+  "bays": {
+    "title": "球位",
+    "subtitle": "本店模拟器。",
+    "new": "新增球位",
+    "code": "编号",
+    "edit": "编辑球位",
+    "deleteTitle": "删除球位",
+    "deleteConfirm": "该球位将被停用。"
+  },
+  "reservations": {
+    "title": "预约",
+    "subtitle": "球位日程。",
+    "new": "新建预约",
+    "customer": "客人",
+    "start": "开始",
+    "end": "结束",
+    "bay": "球位",
+    "checkIn": "签到"
+  },
+  "sessions": {
+    "title": "场次",
+    "subtitle": "现场开台与签到。",
+    "walkIn": "现场开台",
+    "close": "结束",
+    "started": "开始"
+  },
+  "business": {
+    "title": "门店",
+    "subtitle": "你可访问的门店。",
+    "address": "地址",
+    "district": "街区",
+    "postalCode": "邮编",
+    "city": "城市",
+    "state": "州",
+    "slug": "标识",
+    "new": "新建门店",
+    "createTitle": "创建门店",
+    "baysTitle": "球位",
+    "editTitle": "编辑门店",
+    "deleteTitle": "删除门店",
+    "deleteConfirm": "该门店将被停用并从列表中移除。"
+  },
+  "staff": {
+    "title": "团队",
+    "subtitle": "成员与角色。",
+    "new": "添加成员",
+    "edit": "编辑成员",
+    "deleteTitle": "移除成员",
+    "deleteConfirm": "该成员将在本店停用。"
+  },
+  "customers": {
+    "title": "客户",
+    "subtitle": "巴西登记资料，用于点单和预订。",
+    "new": "新建客户",
+    "edit": "编辑客户",
+    "fullName": "全名",
+    "cpf": "CPF",
+    "birthDate": "出生日期",
+    "postalCode": "邮编 (CEP)",
+    "street": "街道",
+    "streetNumber": "门牌",
+    "complement": "补充",
+    "district": "街区",
+    "lgpd": "客户授权为点单和预订处理其个人数据（LGPD）。",
+    "searchPlaceholder": "按姓名、CPF 或手机搜索"
+  },
+  "pos": {
+    "title": "收银台",
+    "subtitle": "组建购物车、关联客户并登记订单。",
+    "searchProduct": "搜索产品",
+    "cart": "购物车",
+    "emptyCart": "点击产品即可加入。",
+    "checkout": "登记订单",
+    "registered": "订单已登记，可在交易列表中查看。"
+  },
+  "errors": {
+    "RESERVATION_OVERLAP": "该打位在该时段已有预约（{{customerName}}，{{startAt}} – {{endAt}}）。",
+    "INVALID_DURATION": "预约时长不能超过 6 小时。",
+    "INVALID_TIME_RANGE": "结束时间必须晚于开始时间。",
+    "PAYMENT_REQUIRED": "登记收款后才会关闭订单。",
+    "PIX_AMOUNT_INVALID": "PIX 要求总额大于零。",
+    "ORDER_NOT_PAYABLE": "此订单尚未到收款阶段。"
+  },
+  "toast": {
+    "created": "已创建。",
+    "updated": "已保存。",
+    "deleted": "已删除。",
+    "error": "操作未能完成。"
+  },
+  "notifications": {
+    "title": "通知",
+    "subtitle": "此面板的近期活动。",
+    "empty": "暂无通知。",
+    "markRead": "标为已读",
+    "markAllRead": "全部标为已读",
+    "clear": "清空",
+    "viewAll": "查看全部",
+    "unread": "未读"
+  },
+  "settings": {
+    "title": "打印",
+    "subtitle": "厨房与吧台打印机、执行模式与局域网发现。",
+    "modeTitle": "打印模式",
+    "modeHelpDirect": "服务器在同一局域网通过 TCP 打印，无需代理。",
+    "modeHelpAgent": "后端在云端：请在门店局域网设备上安装代理。",
+    "mode": {
+      "DIRECT": "服务器（同网）",
+      "AGENT": "本地代理（云端）"
+    },
+    "modeSaved": "打印模式已更新。",
+    "agentStatus": "代理",
+    "agentOnline": "在线",
+    "agentOffline": "离线",
+    "discoverTitle": "搜索网络",
+    "discoverHelp": "扫描局域网 9100 端口（ESC/POS 热敏打印机）。",
+    "discover": "查找打印机",
+    "discovering": "搜索中…",
+    "discoverDone": "找到：{{count}}",
+    "assignTo": "分配到{{station}}",
+    "assigned": "已分配到{{station}}",
+    "printersTitle": "打印机",
+    "station": {
+      "KITCHEN": "厨房",
+      "BAR": "吧台"
+    },
+    "connection": {
+      "UNKNOWN": "未知",
+      "ONLINE": "在线",
+      "OFFLINE": "离线"
+    },
+    "host": "IP / 主机",
+    "port": "端口",
+    "paperWidth": "纸宽",
+    "enabled": "启用",
+    "probe": "检测",
+    "testPrint": "试打印",
+    "printerSaved": "打印机已保存。",
+    "probeDone": "检测完成。",
+    "testQueued": "测试小票已入队。",
+    "lastSeen": "上次在线"
+  }
+}

@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: folf-postgres
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: folf
+      POSTGRES_PASSWORD: folf
+      POSTGRES_DB: folf
+    volumes:
+      - folf_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U folf -d folf']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: folf-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - folf_redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  centrifugo:
+    image: centrifugo/centrifugo:v6
+    container_name: folf-centrifugo
+    restart: unless-stopped
+    command: centrifugo --config=/centrifugo/config.json
+    ports:
+      - '8000:8000'
+    volumes:
+      - ../deploy/centrifugo/config.json:/centrifugo/config.json:ro
+    environment:
+      CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY: ${CENTRIFUGO_TOKEN_HMAC_SECRET:-folf-centrifugo-hmac-secret-change-me}
+      CENTRIFUGO_HTTP_API_KEY: ${CENTRIFUGO_API_KEY:-folf-centrifugo-api-key}
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  folf_pg_data:
+  folf_redis_data:

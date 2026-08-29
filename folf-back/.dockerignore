@@ -1,0 +1,14 @@
+# Dependencies
+node_modules
+dist
+coverage
+.env
+.env.local
+*.log
+.git
+.claude
+.windsurf
+.agents
+skills-lock.json
+test
+README.md

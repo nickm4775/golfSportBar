@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+dist/
+coverage/
+.env
+.env.local
+
+# TypeORM
+typeorm/_logs/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Skills installed by prisma init
+.claude/
+.windsurf/
+.agents/
+skills-lock.json

@@ -1,0 +1,152 @@
+# FOLF stack.
+# Local:        docker compose up -d --build
+# Producción:   docker compose --profile prod up -d
+#               Watchtower (perfil prod) recarga backend/frontend cuando CI
+#               publica imágenes nuevas en GHCR (push a main).
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: folf-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-folf}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-folf}
+      POSTGRES_DB: ${POSTGRES_DB:-folf}
+    volumes:
+      - folf_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-folf} -d ${POSTGRES_DB:-folf}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - folf
+
+  redis:
+    image: redis:7-alpine
+    container_name: folf-redis
+    restart: unless-stopped
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    command: ['redis-server', '--appendonly', 'yes']
+    volumes:
+      - folf_redis_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - folf
+
+  centrifugo:
+    image: centrifugo/centrifugo:v6
+    container_name: folf-centrifugo
+    restart: unless-stopped
+    command: centrifugo --config=/centrifugo/config.json
+    ports:
+      - '${CENTRIFUGO_PORT:-8000}:8000'
+    volumes:
+      - ./deploy/centrifugo/config.json:/centrifugo/config.json:ro
+    environment:
+      CENTRIFUGO_CLIENT_TOKEN_HMAC_SECRET_KEY: ${CENTRIFUGO_TOKEN_HMAC_SECRET:-folf-centrifugo-hmac-secret-change-me}
+      CENTRIFUGO_HTTP_API_KEY: ${CENTRIFUGO_API_KEY:-folf-centrifugo-api-key}
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - folf
+
+  backend:
+    image: ${BACKEND_IMAGE:-ghcr.io/nickm4775/golfsportbar-backend:latest}
+    build:
+      context: ./folf-back
+      dockerfile: Dockerfile
+    container_name: folf-backend
+    restart: unless-stopped
+    ports:
+      - '${BACKEND_PORT:-3000}:3000'
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      JWT_ACCESS_EXPIRES_IN: ${JWT_ACCESS_EXPIRES_IN:-15m}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
+      PORT: 3000
+      CORS_ORIGINS: ${CORS_ORIGINS:-}
+      RUN_DB_SEED: ${RUN_DB_SEED:-false}
+      SEED_ADMIN_EMAIL: ${SEED_ADMIN_EMAIL:-admin@folf.local}
+      SEED_ADMIN_PASSWORD: ${SEED_ADMIN_PASSWORD:-Admin123!}
+      SEED_OWNER_EMAIL: ${SEED_OWNER_EMAIL:-owner@folf.local}
+      SEED_OWNER_PASSWORD: ${SEED_OWNER_PASSWORD:-Owner123!}
+      SEED_MANAGER_EMAIL: ${SEED_MANAGER_EMAIL:-manager@folf.local}
+      SEED_MANAGER_PASSWORD: ${SEED_MANAGER_PASSWORD:-Manager123!}
+      SEED_WAITER_EMAIL: ${SEED_WAITER_EMAIL:-waiter@folf.local}
+      SEED_WAITER_PASSWORD: ${SEED_WAITER_PASSWORD:-Waiter123!}
+      SEED_COOK_EMAIL: ${SEED_COOK_EMAIL:-cook@folf.local}
+      SEED_COOK_PASSWORD: ${SEED_COOK_PASSWORD:-Cook123!}
+      SEED_BARTENDER_EMAIL: ${SEED_BARTENDER_EMAIL:-bartender@folf.local}
+      SEED_BARTENDER_PASSWORD: ${SEED_BARTENDER_PASSWORD:-Bartender123!}
+      SEED_CUSTOMER_EMAIL: ${SEED_CUSTOMER_EMAIL:-customer@folf.local}
+      SEED_CUSTOMER_PASSWORD: ${SEED_CUSTOMER_PASSWORD:-Customer123!}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      CENTRIFUGO_API_URL: ${CENTRIFUGO_API_URL:-http://centrifugo:8000/api}
+      CENTRIFUGO_API_KEY: ${CENTRIFUGO_API_KEY:-folf-centrifugo-api-key}
+      CENTRIFUGO_TOKEN_HMAC_SECRET: ${CENTRIFUGO_TOKEN_HMAC_SECRET:-folf-centrifugo-hmac-secret-change-me}
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      centrifugo:
+        condition: service_started
+    networks:
+      - folf
+
+  frontend:
+    image: ${FRONTEND_IMAGE:-ghcr.io/nickm4775/golfsportbar-frontend:latest}
+    build:
+      context: ./folf-front
+      dockerfile: Dockerfile
+    container_name: folf-frontend
+    restart: unless-stopped
+    ports:
+      - '${FRONTEND_PORT:-5173}:5173'
+    environment:
+      VITE_PORT: 5173
+      VITE_API_PROXY_TARGET: http://backend:3000
+      VITE_CENTRIFUGO_PROXY_TARGET: http://centrifugo:8000
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+    depends_on:
+      - backend
+      - centrifugo
+    networks:
+      - folf
+
+  watchtower:
+    image: containrrr/watchtower:1.7.1
+    container_name: folf-watchtower
+    restart: unless-stopped
+    profiles: ['prod']
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_CLEANUP: 'true'
+      WATCHTOWER_LABEL_ENABLE: 'true'
+      WATCHTOWER_INCLUDE_RESTARTING: 'true'
+      WATCHTOWER_POLL_INTERVAL: ${WATCHTOWER_POLL_INTERVAL:-300}
+      REPO_USER: ${GHCR_USER:-}
+      REPO_PASS: ${GHCR_TOKEN:-}
+    networks:
+      - folf
+
+networks:
+  folf:
+    driver: bridge
+
+volumes:
+  folf_pg_data:
+  folf_redis_data:

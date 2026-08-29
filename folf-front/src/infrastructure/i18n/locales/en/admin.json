@@ -1,0 +1,316 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "orders": "Orders",
+    "catalog": "Menu",
+    "bays": "Bays",
+    "reservations": "Reservations",
+    "sessions": "Sessions",
+    "business": "Venue",
+    "staff": "Staff",
+    "customers": "Customers",
+    "caja": "POS",
+    "notifications": "Notifications",
+    "settings": "Settings"
+  },
+  "shell": {
+    "logout": "Sign out",
+    "account": "Account",
+    "backToSite": "Site",
+    "collapse": "Collapse menu",
+    "expand": "Expand menu",
+    "business": "Venue",
+    "noBusiness": "No venue assigned"
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "OPEN": "Open",
+    "IN_PROGRESS": "In progress",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled",
+    "PENDING": "Pending",
+    "PREPARING": "Preparing",
+    "SERVED": "Served",
+    "CONFIRMED": "Confirmed",
+    "CHECKED_IN": "Checked in",
+    "NO_SHOW": "No-show",
+    "SCHEDULED": "Scheduled",
+    "ACTIVE": "Active",
+    "PAUSED": "Paused"
+  },
+  "kpis": {
+    "revenuePeriod": "Period revenue",
+    "averageTicket": "Average ticket",
+    "ordersCompleted": "Completed orders",
+    "ordersOpen": "Open orders",
+    "sessionsActive": "Active sessions",
+    "reservationsInPeriod": "Reservations in period"
+  },
+  "periods": {
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "quarterly": "Quarterly",
+    "semiannual": "Semiannual",
+    "annual": "Annual"
+  },
+  "charts": {
+    "revenueTitle": "Period revenue",
+    "statusTitle": "Orders by status",
+    "revenue": "Revenue",
+    "orders": "Orders",
+    "empty": "No completed orders in this period yet."
+  },
+  "recent": {
+    "title": "Recent orders",
+    "table": "Table",
+    "total": "Total",
+    "when": "When",
+    "viewAll": "View orders",
+    "empty": "No orders yet."
+  },
+  "dashboard": {
+    "title": "Overview",
+    "subtitle": "Menu revenue and operational pace by venue and period.",
+    "business": "Venue",
+    "period": "Period",
+    "live": "Live",
+    "offline": "Realtime off",
+    "vsPrevious": "vs previous period"
+  },
+  "realtime": {
+    "orderChanged": {
+      "title": "Order updated",
+      "description": "Orders changed for this venue."
+    },
+    "gsproChanged": {
+      "title": "GSPro updated",
+      "description": "Reservations or sessions changed."
+    },
+    "catalogChanged": {
+      "title": "Menu updated",
+      "description": "This venue's menu changed."
+    }
+  },
+  "common": {
+    "save": "Save",
+    "create": "Create",
+    "cancel": "Cancel",
+    "loading": "Loading…",
+    "retry": "Try again",
+    "actions": "Actions",
+    "empty": "Nothing to show.",
+    "error": "Something went wrong.",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "active": "Active",
+    "inactive": "Inactive",
+    "notes": "Notes",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Phone",
+    "role": "Role",
+    "price": "Price",
+    "quantity": "Qty",
+    "filter": "Filter",
+    "search": "Search",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page {{current}} of {{total}}",
+    "all": "All",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "This cannot be undone.",
+    "close": "Close",
+    "description": "Description",
+    "image": "Image",
+    "featured": "Featured"
+  },
+  "orders": {
+    "title": "Transactions",
+    "subtitle": "Orders from POS and the floor.",
+    "new": "New order",
+    "openCaja": "Open POS",
+    "tableLabel": "Table or bay",
+    "addItem": "Add item",
+    "product": "Product",
+    "items": "Items",
+    "changeStatus": "Status",
+    "checkoutTitle": "Review payment",
+    "payment": "Payment",
+    "paymentMethod": "Payment method",
+    "method": {
+      "PIX": "PIX",
+      "CASH": "Cash"
+    },
+    "confirmPix": "Confirm PIX",
+    "confirmCash": "Confirm cash payment",
+    "paid": "Payment recorded. Order completed.",
+    "details": "View details",
+    "detailTitle": "Order details",
+    "paymentStatusLabel": "Payment status",
+    "paidAt": "Paid at",
+    "noPayment": "No payment recorded",
+    "paymentStatus": {
+      "PENDING": "Pending",
+      "PAID": "Paid",
+      "FAILED": "Failed",
+      "EXPIRED": "Expired",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "catalog": {
+    "title": "Menu",
+    "subtitle": "Manage this venue's menu.",
+    "new": "New product",
+    "edit": "Edit product",
+    "deleteTitle": "Delete product",
+    "deleteConfirm": "It will be removed from this venue's menu.",
+    "category": "Category",
+    "prepStation": "Station",
+    "prepStationDefault": "From category",
+    "prepStationKitchen": "Kitchen",
+    "prepStationBar": "Bar"
+  },
+  "bays": {
+    "title": "Bays",
+    "subtitle": "Simulators at this venue.",
+    "new": "New bay",
+    "code": "Code",
+    "edit": "Edit bay",
+    "deleteTitle": "Delete bay",
+    "deleteConfirm": "The bay will be deactivated."
+  },
+  "reservations": {
+    "title": "Reservations",
+    "subtitle": "Bay schedule.",
+    "new": "New reservation",
+    "customer": "Guest",
+    "start": "Start",
+    "end": "End",
+    "bay": "Bay",
+    "checkIn": "Check-in"
+  },
+  "sessions": {
+    "title": "Sessions",
+    "subtitle": "Walk-ins and active check-ins.",
+    "walkIn": "Walk-in",
+    "close": "Close",
+    "started": "Started"
+  },
+  "business": {
+    "title": "Venues",
+    "subtitle": "Venues you can access.",
+    "address": "Address",
+    "district": "District",
+    "postalCode": "Postal code",
+    "city": "City",
+    "state": "State",
+    "slug": "Slug",
+    "new": "New venue",
+    "createTitle": "Create venue",
+    "baysTitle": "Bays",
+    "editTitle": "Edit venue",
+    "deleteTitle": "Delete venue",
+    "deleteConfirm": "This venue will be deactivated and removed from the list."
+  },
+  "staff": {
+    "title": "Staff",
+    "subtitle": "Members and roles.",
+    "new": "Add member",
+    "edit": "Edit member",
+    "deleteTitle": "Remove member",
+    "deleteConfirm": "The member will be deactivated at this venue."
+  },
+  "customers": {
+    "title": "Customers",
+    "subtitle": "Brazilian registration for orders and bay bookings.",
+    "new": "New customer",
+    "edit": "Edit customer",
+    "fullName": "Full name",
+    "cpf": "CPF",
+    "birthDate": "Date of birth",
+    "postalCode": "ZIP (CEP)",
+    "street": "Street",
+    "streetNumber": "Number",
+    "complement": "Complement",
+    "district": "District",
+    "lgpd": "The customer authorizes processing of their data (LGPD) for orders and reservations.",
+    "searchPlaceholder": "Search by name, CPF or phone"
+  },
+  "pos": {
+    "title": "POS",
+    "subtitle": "Build the cart, attach a customer and register the order.",
+    "searchProduct": "Search product",
+    "cart": "Cart",
+    "emptyCart": "Tap products to add them.",
+    "checkout": "Register order",
+    "registered": "Order registered. It now appears in transactions."
+  },
+  "errors": {
+    "RESERVATION_OVERLAP": "This bay already has a booking in that slot ({{customerName}}, {{startAt}} – {{endAt}}).",
+    "INVALID_DURATION": "A reservation cannot last more than 6 hours.",
+    "INVALID_TIME_RANGE": "End time must be after start time.",
+    "PAYMENT_REQUIRED": "The order is closed after payment is recorded.",
+    "PIX_AMOUNT_INVALID": "PIX requires a total greater than zero.",
+    "ORDER_NOT_PAYABLE": "This order is not ready to charge."
+  },
+  "toast": {
+    "created": "Created.",
+    "updated": "Changes saved.",
+    "deleted": "Deleted.",
+    "error": "Could not complete the action."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Recent activity from this panel.",
+    "empty": "There are no notifications.",
+    "markRead": "Mark as read",
+    "markAllRead": "Mark all as read",
+    "clear": "Clear",
+    "viewAll": "View all",
+    "unread": "Unread"
+  },
+  "settings": {
+    "title": "Printing",
+    "subtitle": "Kitchen and bar printers, execution mode and LAN discovery.",
+    "modeTitle": "Print mode",
+    "modeHelpDirect": "The server prints over TCP on the same LAN. No agent needed.",
+    "modeHelpAgent": "Backend is in the cloud: install the agent on a LAN machine at the venue.",
+    "mode": {
+      "DIRECT": "Server (same network)",
+      "AGENT": "Local agent (cloud)"
+    },
+    "modeSaved": "Print mode updated.",
+    "agentStatus": "Agent",
+    "agentOnline": "Online",
+    "agentOffline": "Offline",
+    "discoverTitle": "Search the network",
+    "discoverHelp": "Scans the LAN for port 9100 (ESC/POS thermal printers).",
+    "discover": "Find printers",
+    "discovering": "Searching…",
+    "discoverDone": "Found: {{count}}",
+    "assignTo": "Assign to {{station}}",
+    "assigned": "Assigned to {{station}}",
+    "printersTitle": "Printers",
+    "station": {
+      "KITCHEN": "Kitchen",
+      "BAR": "Bar"
+    },
+    "connection": {
+      "UNKNOWN": "Unknown",
+      "ONLINE": "Online",
+      "OFFLINE": "Offline"
+    },
+    "host": "IP / host",
+    "port": "Port",
+    "paperWidth": "Paper width",
+    "enabled": "Enabled",
+    "probe": "Check",
+    "testPrint": "Test print",
+    "printerSaved": "Printer saved.",
+    "probeDone": "Check complete.",
+    "testQueued": "Test ticket queued.",
+    "lastSeen": "Last seen"
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "nav": {
+    "dashboard": "Painel",
+    "orders": "Pedidos",
+    "catalog": "Carta",
+    "bays": "Bays",
+    "reservations": "Reservas",
+    "sessions": "Sessões",
+    "business": "Negócio",
+    "staff": "Equipe",
+    "customers": "Clientes",
+    "caja": "Caixa",
+    "notifications": "Notificações",
+    "settings": "Ajustes"
+  },
+  "shell": {
+    "logout": "Sair",
+    "account": "Conta",
+    "backToSite": "Site",
+    "collapse": "Recolher menu",
+    "expand": "Expandir menu",
+    "business": "Negócio",
+    "noBusiness": "Nenhum negócio atribuído"
+  },
+  "status": {
+    "DRAFT": "Rascunho",
+    "OPEN": "Aberto",
+    "IN_PROGRESS": "Em preparo",
+    "COMPLETED": "Concluído",
+    "CANCELLED": "Cancelado",
+    "PENDING": "Pendente",
+    "PREPARING": "Preparando",
+    "SERVED": "Servido",
+    "CONFIRMED": "Confirmada",
+    "CHECKED_IN": "Check-in",
+    "NO_SHOW": "No-show",
+    "SCHEDULED": "Agendada",
+    "ACTIVE": "Ativa",
+    "PAUSED": "Pausada"
+  },
+  "kpis": {
+    "revenuePeriod": "Receita do período",
+    "averageTicket": "Ticket médio",
+    "ordersCompleted": "Pedidos concluídos",
+    "ordersOpen": "Pedidos abertos",
+    "sessionsActive": "Sessões ativas",
+    "reservationsInPeriod": "Reservas do período"
+  },
+  "periods": {
+    "daily": "Diário",
+    "weekly": "Semanal",
+    "quarterly": "Trimestral",
+    "semiannual": "Semestral",
+    "annual": "Anual"
+  },
+  "charts": {
+    "revenueTitle": "Receita do período",
+    "statusTitle": "Pedidos por status",
+    "revenue": "Receita",
+    "orders": "Pedidos",
+    "empty": "Ainda não há pedidos concluídos neste período."
+  },
+  "recent": {
+    "title": "Pedidos recentes",
+    "table": "Mesa",
+    "total": "Total",
+    "when": "Data",
+    "viewAll": "Ver pedidos",
+    "empty": "Nenhum pedido ainda."
+  },
+  "dashboard": {
+    "title": "Resumo",
+    "subtitle": "Receita da carta e ritmo operacional por negócio e período.",
+    "business": "Negócio",
+    "period": "Período",
+    "live": "Ao vivo",
+    "offline": "Sem tempo real",
+    "vsPrevious": "vs período anterior"
+  },
+  "realtime": {
+    "orderChanged": {
+      "title": "Pedido atualizado",
+      "description": "Há mudanças nos pedidos deste negócio."
+    },
+    "gsproChanged": {
+      "title": "GSPro atualizado",
+      "description": "Reservas ou sessões mudaram."
+    },
+    "catalogChanged": {
+      "title": "Carta atualizada",
+      "description": "O cardápio deste negócio mudou."
+    }
+  },
+  "common": {
+    "save": "Salvar",
+    "create": "Criar",
+    "cancel": "Cancelar",
+    "loading": "Carregando…",
+    "retry": "Tentar de novo",
+    "actions": "Ações",
+    "empty": "Nada para mostrar.",
+    "error": "Algo deu errado.",
+    "available": "Disponível",
+    "unavailable": "Indisponível",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "notes": "Notas",
+    "name": "Nome",
+    "email": "E-mail",
+    "password": "Senha",
+    "phone": "Telefone",
+    "role": "Função",
+    "price": "Preço",
+    "quantity": "Qtd.",
+    "filter": "Filtro",
+    "search": "Buscar",
+    "previous": "Anterior",
+    "next": "Próxima",
+    "page": "Página {{current}} de {{total}}",
+    "all": "Todos",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "confirmDelete": "Esta ação não pode ser desfeita.",
+    "close": "Fechar",
+    "description": "Descrição",
+    "image": "Imagem",
+    "featured": "Destaque"
+  },
+  "orders": {
+    "title": "Transações",
+    "subtitle": "Pedidos criados na caixa e no salão.",
+    "new": "Novo pedido",
+    "openCaja": "Abrir caixa",
+    "tableLabel": "Mesa ou bay",
+    "addItem": "Adicionar item",
+    "product": "Produto",
+    "items": "Itens",
+    "changeStatus": "Status",
+    "checkoutTitle": "Revisar pagamento",
+    "payment": "Pagamento",
+    "paymentMethod": "Forma de pagamento",
+    "method": {
+      "PIX": "PIX",
+      "CASH": "Dinheiro"
+    },
+    "confirmPix": "Confirmar PIX",
+    "confirmCash": "Confirmar recebimento",
+    "paid": "Pagamento registrado. Pedido concluído.",
+    "details": "Ver detalhes",
+    "detailTitle": "Detalhes do pedido",
+    "paymentStatusLabel": "Status do pagamento",
+    "paidAt": "Pago em",
+    "noPayment": "Sem pagamento registrado",
+    "paymentStatus": {
+      "PENDING": "Pendente",
+      "PAID": "Pago",
+      "FAILED": "Falhou",
+      "EXPIRED": "Expirado",
+      "CANCELLED": "Cancelado"
+    }
+  },
+  "catalog": {
+    "title": "Carta",
+    "subtitle": "Gerencie a carta desta unidade.",
+    "new": "Novo produto",
+    "edit": "Editar produto",
+    "deleteTitle": "Excluir produto",
+    "deleteConfirm": "Ele será removido da carta desta unidade.",
+    "category": "Categoria",
+    "prepStation": "Estação",
+    "prepStationDefault": "Pela categoria",
+    "prepStationKitchen": "Cozinha",
+    "prepStationBar": "Bar"
+  },
+  "bays": {
+    "title": "Bays",
+    "subtitle": "Simuladores desta unidade.",
+    "new": "Novo bay",
+    "code": "Código",
+    "edit": "Editar bay",
+    "deleteTitle": "Excluir bay",
+    "deleteConfirm": "O bay será desativado."
+  },
+  "reservations": {
+    "title": "Reservas",
+    "subtitle": "Agenda dos bays.",
+    "new": "Nova reserva",
+    "customer": "Cliente",
+    "start": "Início",
+    "end": "Fim",
+    "bay": "Bay",
+    "checkIn": "Check-in"
+  },
+  "sessions": {
+    "title": "Sessões",
+    "subtitle": "Walk-in e check-in em andamento.",
+    "walkIn": "Walk-in",
+    "close": "Encerrar",
+    "started": "Início"
+  },
+  "business": {
+    "title": "Negócios",
+    "subtitle": "Unidades às quais você tem acesso.",
+    "address": "Endereço",
+    "district": "Bairro",
+    "postalCode": "CEP",
+    "city": "Cidade",
+    "state": "Estado",
+    "slug": "Slug",
+    "new": "Novo negócio",
+    "createTitle": "Criar negócio",
+    "baysTitle": "Bays",
+    "editTitle": "Editar negócio",
+    "deleteTitle": "Excluir negócio",
+    "deleteConfirm": "Esta unidade será desativada e sairá da lista."
+  },
+  "staff": {
+    "title": "Equipe",
+    "subtitle": "Membros e papéis.",
+    "new": "Adicionar membro",
+    "edit": "Editar membro",
+    "deleteTitle": "Remover membro",
+    "deleteConfirm": "O membro será desativado nesta unidade."
+  },
+  "customers": {
+    "title": "Clientes",
+    "subtitle": "Cadastro brasileiro para pedidos e reservas.",
+    "new": "Novo cliente",
+    "edit": "Editar cliente",
+    "fullName": "Nome completo",
+    "cpf": "CPF",
+    "birthDate": "Data de nascimento",
+    "postalCode": "CEP",
+    "street": "Logradouro",
+    "streetNumber": "Número",
+    "complement": "Complemento",
+    "district": "Bairro",
+    "lgpd": "O cliente autoriza o tratamento dos dados (LGPD) para pedidos e reservas.",
+    "searchPlaceholder": "Buscar por nome, CPF ou celular"
+  },
+  "pos": {
+    "title": "Caixa",
+    "subtitle": "Monte o carrinho, vincule um cliente e registre o pedido.",
+    "searchProduct": "Buscar produto",
+    "cart": "Carrinho",
+    "emptyCart": "Toque nos produtos para adicionar.",
+    "checkout": "Registrar pedido",
+    "registered": "Pedido registrado. Já aparece em transações."
+  },
+  "errors": {
+    "RESERVATION_OVERLAP": "Este bay já tem uma reserva nesse horário ({{customerName}}, {{startAt}} – {{endAt}}).",
+    "INVALID_DURATION": "A reserva não pode durar mais de 6 horas.",
+    "INVALID_TIME_RANGE": "O fim deve ser depois do início.",
+    "PAYMENT_REQUIRED": "O pedido é encerrado depois do pagamento.",
+    "PIX_AMOUNT_INVALID": "PIX exige um total maior que zero.",
+    "ORDER_NOT_PAYABLE": "Este pedido não está pronto para cobrança."
+  },
+  "toast": {
+    "created": "Criado com sucesso.",
+    "updated": "Alterações salvas.",
+    "deleted": "Excluído.",
+    "error": "Não foi possível concluir a ação."
+  },
+  "notifications": {
+    "title": "Notificações",
+    "subtitle": "Atividade recente deste painel.",
+    "empty": "Não há notificações.",
+    "markRead": "Marcar como lida",
+    "markAllRead": "Marcar todas como lidas",
+    "clear": "Limpar",
+    "viewAll": "Ver todas",
+    "unread": "Não lidas"
+  },
+  "settings": {
+    "title": "Impressão",
+    "subtitle": "Impressoras de cozinha e bar, modo de execução e descoberta na rede.",
+    "modeTitle": "Modo de impressão",
+    "modeHelpDirect": "O servidor imprime por TCP na mesma LAN. Não precisa de agente.",
+    "modeHelpAgent": "Backend na nuvem: instale o agente em um equipamento na LAN do bar.",
+    "mode": {
+      "DIRECT": "Servidor (mesma rede)",
+      "AGENT": "Agente local (nuvem)"
+    },
+    "modeSaved": "Modo de impressão atualizado.",
+    "agentStatus": "Agente",
+    "agentOnline": "Conectado",
+    "agentOffline": "Desconectado",
+    "discoverTitle": "Buscar na rede",
+    "discoverHelp": "Varre a LAN na porta 9100 (impressoras térmicas ESC/POS).",
+    "discover": "Buscar impressoras",
+    "discovering": "Buscando…",
+    "discoverDone": "Encontradas: {{count}}",
+    "assignTo": "Atribuir a {{station}}",
+    "assigned": "Atribuída a {{station}}",
+    "printersTitle": "Impressoras",
+    "station": {
+      "KITCHEN": "Cozinha",
+      "BAR": "Bar"
+    },
+    "connection": {
+      "UNKNOWN": "Desconhecido",
+      "ONLINE": "Online",
+      "OFFLINE": "Offline"
+    },
+    "host": "IP / host",
+    "port": "Porta",
+    "paperWidth": "Largura do papel",
+    "enabled": "Ativada",
+    "probe": "Verificar",
+    "testPrint": "Testar impressão",
+    "printerSaved": "Impressora salva.",
+    "probeDone": "Verificação pronta.",
+    "testQueued": "Ticket de teste enfileirado.",
+    "lastSeen": "Última vez"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "http_server": {
+    "port": 8000
+  },
+  "client": {
+    "token": {
+      "hmac_secret_key": "folf-centrifugo-hmac-secret-change-me"
+    },
+    "allowed_origins": [
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "http://192.168.24.16:5173",
+      "*"
+    ]
+  },
+  "http_api": {
+    "key": "folf-centrifugo-api-key"
+  },
+  "engine": {
+    "type": "redis",
+    "redis": {
+      "address": "redis:6379"
+    }
+  },
+  "channel": {
+    "without_namespace": {
+      "allow_subscribe_for_client": false
+    },
+    "namespaces": [
+      {
+        "name": "business",
+        "allow_subscribe_for_client": false
+      },
+      {
+        "name": "customer",
+        "allow_subscribe_for_client": false
+      }
+    ]
+  }
+}

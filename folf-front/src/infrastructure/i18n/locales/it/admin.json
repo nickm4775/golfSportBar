@@ -1,0 +1,316 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "orders": "Ordini",
+    "catalog": "Menu",
+    "bays": "Bay",
+    "reservations": "Prenotazioni",
+    "sessions": "Sessioni",
+    "business": "Locale",
+    "staff": "Team",
+    "customers": "Clienti",
+    "caja": "Cassa",
+    "notifications": "Notifiche",
+    "settings": "Impostazioni"
+  },
+  "shell": {
+    "logout": "Esci",
+    "account": "Account",
+    "backToSite": "Sito",
+    "collapse": "Comprimi menu",
+    "expand": "Espandi menu",
+    "business": "Locale",
+    "noBusiness": "Nessun locale assegnato"
+  },
+  "status": {
+    "DRAFT": "Bozza",
+    "OPEN": "Aperto",
+    "IN_PROGRESS": "In preparazione",
+    "COMPLETED": "Completato",
+    "CANCELLED": "Annullato",
+    "PENDING": "In attesa",
+    "PREPARING": "In preparazione",
+    "SERVED": "Servito",
+    "CONFIRMED": "Confermata",
+    "CHECKED_IN": "Check-in",
+    "NO_SHOW": "No-show",
+    "SCHEDULED": "Programmata",
+    "ACTIVE": "Attiva",
+    "PAUSED": "In pausa"
+  },
+  "kpis": {
+    "revenuePeriod": "Ricavi del periodo",
+    "averageTicket": "Scontrino medio",
+    "ordersCompleted": "Ordini completati",
+    "ordersOpen": "Ordini aperti",
+    "sessionsActive": "Sessioni attive",
+    "reservationsInPeriod": "Prenotazioni del periodo"
+  },
+  "periods": {
+    "daily": "Giornaliero",
+    "weekly": "Settimanale",
+    "quarterly": "Trimestrale",
+    "semiannual": "Semestrale",
+    "annual": "Annuale"
+  },
+  "charts": {
+    "revenueTitle": "Ricavi del periodo",
+    "statusTitle": "Ordini per stato",
+    "revenue": "Ricavi",
+    "orders": "Ordini",
+    "empty": "Nessun ordine completato in questo periodo."
+  },
+  "recent": {
+    "title": "Ordini recenti",
+    "table": "Tavolo",
+    "total": "Totale",
+    "when": "Data",
+    "viewAll": "Vedi ordini",
+    "empty": "Nessun ordine."
+  },
+  "dashboard": {
+    "title": "Riepilogo",
+    "subtitle": "Ricavi del menu e ritmo operativo per locale e periodo.",
+    "business": "Locale",
+    "period": "Periodo",
+    "live": "Live",
+    "offline": "Niente real-time",
+    "vsPrevious": "vs periodo precedente"
+  },
+  "realtime": {
+    "orderChanged": {
+      "title": "Ordine aggiornato",
+      "description": "Ci sono modifiche agli ordini di questo locale."
+    },
+    "gsproChanged": {
+      "title": "GSPro aggiornato",
+      "description": "Prenotazioni o sessioni sono cambiate."
+    },
+    "catalogChanged": {
+      "title": "Menu aggiornato",
+      "description": "Il menu di questo locale è cambiato."
+    }
+  },
+  "common": {
+    "save": "Salva",
+    "create": "Crea",
+    "cancel": "Annulla",
+    "loading": "Caricamento…",
+    "retry": "Riprova",
+    "actions": "Azioni",
+    "empty": "Niente da mostrare.",
+    "error": "Qualcosa è andato storto.",
+    "available": "Disponibile",
+    "unavailable": "Non disponibile",
+    "active": "Attivo",
+    "inactive": "Inattivo",
+    "notes": "Note",
+    "name": "Nome",
+    "email": "Email",
+    "password": "Password",
+    "phone": "Telefono",
+    "role": "Ruolo",
+    "price": "Prezzo",
+    "quantity": "Qtà",
+    "filter": "Filtro",
+    "search": "Cerca",
+    "previous": "Precedente",
+    "next": "Successiva",
+    "page": "Pagina {{current}} di {{total}}",
+    "all": "Tutti",
+    "edit": "Modifica",
+    "delete": "Elimina",
+    "confirmDelete": "Questa azione non può essere annullata.",
+    "close": "Chiudi",
+    "description": "Descrizione",
+    "image": "Immagine",
+    "featured": "In evidenza"
+  },
+  "orders": {
+    "title": "Transazioni",
+    "subtitle": "Ordini dalla cassa e dalla sala.",
+    "new": "Nuovo ordine",
+    "openCaja": "Apri cassa",
+    "tableLabel": "Tavolo o bay",
+    "addItem": "Aggiungi voce",
+    "product": "Prodotto",
+    "items": "Voci",
+    "changeStatus": "Stato",
+    "checkoutTitle": "Rivedi pagamento",
+    "payment": "Pagamento",
+    "paymentMethod": "Metodo di pagamento",
+    "method": {
+      "PIX": "PIX",
+      "CASH": "Contanti"
+    },
+    "confirmPix": "Conferma PIX",
+    "confirmCash": "Conferma incasso",
+    "paid": "Pagamento registrato. Ordine concluso.",
+    "details": "Vedi dettagli",
+    "detailTitle": "Dettaglio ordine",
+    "paymentStatusLabel": "Stato pagamento",
+    "paidAt": "Pagato il",
+    "noPayment": "Nessun pagamento registrato",
+    "paymentStatus": {
+      "PENDING": "In attesa",
+      "PAID": "Pagato",
+      "FAILED": "Fallito",
+      "EXPIRED": "Scaduto",
+      "CANCELLED": "Annullato"
+    }
+  },
+  "catalog": {
+    "title": "Menu",
+    "subtitle": "Gestisci il menu di questa sede.",
+    "new": "Nuovo prodotto",
+    "edit": "Modifica prodotto",
+    "deleteTitle": "Elimina prodotto",
+    "deleteConfirm": "Verrà rimosso dal menu di questa sede.",
+    "category": "Categoria",
+    "prepStation": "Stazione",
+    "prepStationDefault": "Dalla categoria",
+    "prepStationKitchen": "Cucina",
+    "prepStationBar": "Bar"
+  },
+  "bays": {
+    "title": "Bay",
+    "subtitle": "Simulatori di questa sede.",
+    "new": "Nuova bay",
+    "code": "Codice",
+    "edit": "Modifica bay",
+    "deleteTitle": "Elimina bay",
+    "deleteConfirm": "La bay verrà disattivata."
+  },
+  "reservations": {
+    "title": "Prenotazioni",
+    "subtitle": "Agenda delle bay.",
+    "new": "Nuova prenotazione",
+    "customer": "Ospite",
+    "start": "Inizio",
+    "end": "Fine",
+    "bay": "Bay",
+    "checkIn": "Check-in"
+  },
+  "sessions": {
+    "title": "Sessioni",
+    "subtitle": "Walk-in e check-in attivi.",
+    "walkIn": "Walk-in",
+    "close": "Chiudi",
+    "started": "Inizio"
+  },
+  "business": {
+    "title": "Sedi",
+    "subtitle": "Locali a cui hai accesso.",
+    "address": "Indirizzo",
+    "district": "Quartiere",
+    "postalCode": "CAP",
+    "city": "Città",
+    "state": "Stato",
+    "slug": "Slug",
+    "new": "Nuovo locale",
+    "createTitle": "Crea locale",
+    "baysTitle": "Bay",
+    "editTitle": "Modifica locale",
+    "deleteTitle": "Elimina locale",
+    "deleteConfirm": "Questa sede verrà disattivata e sparirà dall'elenco."
+  },
+  "staff": {
+    "title": "Team",
+    "subtitle": "Membri e ruoli.",
+    "new": "Aggiungi membro",
+    "edit": "Modifica membro",
+    "deleteTitle": "Rimuovi membro",
+    "deleteConfirm": "Il membro verrà disattivato in questa sede."
+  },
+  "customers": {
+    "title": "Clienti",
+    "subtitle": "Anagrafica brasiliana per ordini e prenotazioni.",
+    "new": "Nuovo cliente",
+    "edit": "Modifica cliente",
+    "fullName": "Nome completo",
+    "cpf": "CPF",
+    "birthDate": "Data di nascita",
+    "postalCode": "CEP",
+    "street": "Via",
+    "streetNumber": "Numero",
+    "complement": "Interno",
+    "district": "Quartiere",
+    "lgpd": "Il cliente autorizza il trattamento dei dati (LGPD) per ordini e prenotazioni.",
+    "searchPlaceholder": "Cerca per nome, CPF o telefono"
+  },
+  "pos": {
+    "title": "Cassa",
+    "subtitle": "Compila il carrello, associa un cliente e registra l'ordine.",
+    "searchProduct": "Cerca prodotto",
+    "cart": "Carrello",
+    "emptyCart": "Tocca i prodotti per aggiungerli.",
+    "checkout": "Registra ordine",
+    "registered": "Ordine registrato. Compare già nelle transazioni."
+  },
+  "errors": {
+    "RESERVATION_OVERLAP": "Questo bay ha già una prenotazione in quell'orario ({{customerName}}, {{startAt}} – {{endAt}}).",
+    "INVALID_DURATION": "La prenotazione non può durare più di 6 ore.",
+    "INVALID_TIME_RANGE": "La fine deve essere successiva all'inizio.",
+    "PAYMENT_REQUIRED": "L'ordine si chiude dopo la registrazione del pagamento.",
+    "PIX_AMOUNT_INVALID": "PIX richiede un totale maggiore di zero.",
+    "ORDER_NOT_PAYABLE": "Questo ordine non è pronto per l'incasso."
+  },
+  "toast": {
+    "created": "Creato.",
+    "updated": "Modifiche salvate.",
+    "deleted": "Eliminato.",
+    "error": "Impossibile completare l'azione."
+  },
+  "notifications": {
+    "title": "Notifiche",
+    "subtitle": "Attività recente di questo pannello.",
+    "empty": "Non ci sono notifiche.",
+    "markRead": "Segna come letta",
+    "markAllRead": "Segna tutte come lette",
+    "clear": "Svuota",
+    "viewAll": "Vedi tutte",
+    "unread": "Non lette"
+  },
+  "settings": {
+    "title": "Stampa",
+    "subtitle": "Stampanti cucina e bar, modalità e discovery in rete.",
+    "modeTitle": "Modalità di stampa",
+    "modeHelpDirect": "Il server stampa via TCP sulla stessa LAN. Nessun agente.",
+    "modeHelpAgent": "Backend in cloud: installa l'agente su un PC della LAN del locale.",
+    "mode": {
+      "DIRECT": "Server (stessa rete)",
+      "AGENT": "Agente locale (cloud)"
+    },
+    "modeSaved": "Modalità aggiornata.",
+    "agentStatus": "Agente",
+    "agentOnline": "Connesso",
+    "agentOffline": "Disconnesso",
+    "discoverTitle": "Cerca in rete",
+    "discoverHelp": "Scansiona la LAN sulla porta 9100 (stampanti ESC/POS).",
+    "discover": "Cerca stampanti",
+    "discovering": "Ricerca…",
+    "discoverDone": "Trovate: {{count}}",
+    "assignTo": "Assegna a {{station}}",
+    "assigned": "Assegnata a {{station}}",
+    "printersTitle": "Stampanti",
+    "station": {
+      "KITCHEN": "Cucina",
+      "BAR": "Bar"
+    },
+    "connection": {
+      "UNKNOWN": "Sconosciuto",
+      "ONLINE": "Online",
+      "OFFLINE": "Offline"
+    },
+    "host": "IP / host",
+    "port": "Porta",
+    "paperWidth": "Larghezza carta",
+    "enabled": "Abilitata",
+    "probe": "Verifica",
+    "testPrint": "Stampa di prova",
+    "printerSaved": "Stampante salvata.",
+    "probeDone": "Verifica completata.",
+    "testQueued": "Ticket di prova in coda.",
+    "lastSeen": "Ultimo contatto"
+  }
+}

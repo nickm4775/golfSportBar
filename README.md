@@ -1,31 +1,85 @@
-# Golf Sport Bar
+# FOLF — Golf Sport Bar
 
-Landing premium para la cadena **Golf Sport Bar** (React + Vite + TypeScript + Tailwind CSS + HeroUI + GSAP + Leaflet).
+Monorepo con frontend público (React/Vite) y backend de gestión (NestJS/PostgreSQL).
 
-## Scripts
+## Puertos
+
+| Servicio | Puerto | URL |
+|----------|--------|-----|
+| **Backend (API)** | `3000` | http://localhost:3000/api/v1 |
+| **Swagger** | `3000` | http://localhost:3000/api/docs |
+| **Frontend (Vite)** | `5173` | http://localhost:5173 |
+| **Redis** | `6379` | redis://localhost:6379 |
+| **Centrifugo** | `8000` | http://localhost:8000 |
+
+La API y Swagger viven **solo en el backend** (puerto 3000). En desarrollo, Vite proxyea `/api` a `localhost:3000`. En Docker, el front corre con `npm run preview` y el mismo proxy hacia `backend:3000`. Panel staff: http://localhost:5173/login
+
+## Despliegue con Docker
+
+### Requisitos
+
+- Docker Engine 24+
+- Docker Compose v2
+
+### Pasos
 
 ```bash
-npm install
-npm run dev
-npm run build
+cp .env.example .env
 ```
 
-## Arquitectura
+Editá `.env`:
 
-Clean Architecture / SOLID:
+- Cambiá `POSTGRES_PASSWORD`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `CENTRIFUGO_API_KEY` y `CENTRIFUGO_TOKEN_HMAC_SECRET`
+- Poné `RUN_DB_SEED=true` solo en el **primer** deploy
+- `BACKEND_PORT=3000` y `FRONTEND_PORT=5173` (defaults de Vite)
 
-- `src/domain` — entidades e interfaces
-- `src/application` — casos de uso
-- `src/infrastructure` — datos estáticos, i18n, tiles del mapa
-- `src/presentation` — UI, secciones y animaciones
-- `src/app` — composition root y providers
+```bash
+docker compose up -d --build
+```
 
-## Características
+### CI/CD (actualización automática)
 
-- PWA instalable (standalone, service worker, cache de app shell e imágenes)
-- Animaciones estilo Apple con GSAP ScrollTrigger
-- Light / dark mode
-- i18n: Português (default), Español, English, Italiano, 中文
-- Mapa Leaflet multi-sede (hoy: R. 3600, 235 — Centro, Balneário Camboriú, 88330-248)
+Cada push a `main` construye y publica imágenes en GHCR. En el servidor, Watchtower las aplica sin rebuild local:
 
-Para probar la PWA en local: `npm run build && npm run preview` (el service worker no se registra en `npm run dev`).
+```bash
+# Primer arranque en producción (incluye Watchtower)
+docker compose --profile prod up -d
+```
+
+Si los paquetes de GHCR son privados, completá `GHCR_USER` y `GHCR_TOKEN` (PAT con `read:packages`) en `.env`. Postgres no lo actualiza Watchtower.
+
+### Producción con dominio
+
+1. Apuntá el DNS de tu dominio a la IP del servidor.
+2. Opcional: colocá Caddy, Traefik o nginx + Certbot delante de los puertos publicados.
+3. Configurá `CORS_ORIGINS=http://localhost:5173,https://tudominio.com` si el front consume la API.
+
+### Comandos útiles
+
+```bash
+docker compose logs -f          # logs de todos los servicios
+docker compose logs -f backend  # solo backend
+docker compose ps               # estado
+docker compose down             # detener
+docker compose up -d --build    # rebuild y levantar
+```
+
+## Proyectos
+
+| Carpeta | Descripción | Docs |
+|---------|-------------|------|
+| [`folf-front/`](folf-front/) | Sitio público PWA | [`folf-front/README.md`](folf-front/README.md) |
+| [`folf-back/`](folf-back/) | API multi-tenant | [`folf-back/README.md`](folf-back/README.md) |
+
+## Desarrollo local
+
+```bash
+# Terminal 1 — PostgreSQL, Redis y Centrifugo
+cd folf-back && npm run docker:up
+
+# Terminal 2 — Backend (puerto 3000)
+cd folf-back && npm run start:dev
+
+# Terminal 3 — Frontend (puerto 5173)
+cd folf-front && npm run dev
+```
