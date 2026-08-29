@@ -50,7 +50,7 @@ const MISSING_PRICE_DEFAULTS = new Map([['camarao-crocante', 119]]);
 const STORE = {
   slug: 'bc-centro',
   name: 'Golf Sport Bar — Centro BC',
-  address: 'R. 3600, 235',
+  address: 'R. 3600, N205',
   district: 'Centro',
   postalCode: '88330-248',
   city: 'Balneário Camboriú',

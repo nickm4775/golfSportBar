@@ -347,7 +347,7 @@ async function seedDemoData(catalog: MenuCatalog) {
       organizationId: organization.id,
       slug: store?.slug ?? 'bc-centro',
       name: store?.name ?? 'FOLF BC Centro',
-      address: store?.address ?? 'R. 3600, 235',
+      address: store?.address ?? 'R. 3600, N205',
       district: store?.district,
       postalCode: store?.postalCode,
       city: store?.city ?? 'Balneário Camboriú',

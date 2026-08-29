@@ -32,6 +32,6 @@ Clean Architecture / SOLID:
 - Panel staff en `/login` (JWT) y dashboard en `/app`
 - Light / dark mode
 - i18n: Português (default), Español, English, Italiano, 中文
-- Mapa Leaflet multi-sede (hoy: R. 3600, 235 — Centro, Balneário Camboriú, 88330-248)
+- Mapa Leaflet multi-sede (hoy: R. 3600, N205 — Centro, Balneário Camboriú, 88330-248)
 
 Para probar la PWA en local: `npm run build && npm run preview` (el service worker no se registra en `npm run dev`).
