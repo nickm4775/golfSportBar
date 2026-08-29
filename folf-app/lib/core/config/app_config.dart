@@ -27,13 +27,24 @@ class AppConfig {
       ),
       instagramUrl: 'https://www.instagram.com/golfsportbarbc/',
       whatsappUrl: 'https://wa.me/5547960001878',
-      realtimeWsUrl: realtimeOverride.isNotEmpty ? realtimeOverride : realtimeWsFromApi(apiBaseUrl),
+      realtimeWsUrl: realtimeOverride.isNotEmpty
+          ? realtimeOverride
+          : realtimeWsFromApi(apiBaseUrl),
     );
   }
 }
 
+/// Deriva el WebSocket de Centrifugo a partir de la URL de la API.
+///
+/// - Dev (`http://host:3000/...`): Centrifugo en el puerto `8000`.
+/// - Prod detrás de Caddy (`https://golfsportbar.com.br/...`): mismo host,
+///   sin puerto extra → `wss://dominio/connection/websocket`.
 String realtimeWsFromApi(String apiBaseUrl) {
   final uri = Uri.parse(apiBaseUrl);
   final scheme = uri.scheme == 'https' ? 'wss' : 'ws';
-  return '$scheme://${uri.host}:8000/connection/websocket';
+  final useDevCentrifugoPort =
+      uri.hasPort && uri.port != 80 && uri.port != 443;
+  final authority =
+      useDevCentrifugoPort ? '${uri.host}:8000' : uri.host;
+  return '$scheme://$authority/connection/websocket';
 }

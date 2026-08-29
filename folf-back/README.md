@@ -9,7 +9,7 @@ La documentación interactiva de la API está en **Swagger UI**:
 | Entorno | URL |
 |---------|-----|
 | Desarrollo local | http://localhost:3000/api/docs |
-| Docker | http://localhost:3000/api/docs |
+| Producción (Caddy) | https://golfsportbar.com.br/api/docs |
 
 Desde Swagger podés:
 
@@ -54,22 +54,23 @@ curl http://localhost:3000/api/docs-json -o openapi.json
 
 ## Despliegue con Docker
 
-Stack completo desde la raíz del monorepo:
+Stack completo desde la raíz del monorepo (Caddy en `:80`/`:443`):
 
 ```bash
 cp .env.example .env
 docker compose up -d --build
+# Producción + Watchtower:
+docker compose --profile prod up -d
 ```
 
-| Servicio | URL |
-|----------|-----|
-| Frontend | http://localhost:5173 |
-| API | http://localhost:3000/api/v1 |
-| **Swagger** | **http://localhost:3000/api/docs** |
-| Redis | redis://localhost:6379 |
-| Centrifugo | http://localhost:8000 |
+| Servicio | URL (producción) |
+|----------|------------------|
+| Frontend | https://golfsportbar.com.br |
+| API | https://golfsportbar.com.br/api/v1 |
+| **Swagger** | **https://golfsportbar.com.br/api/docs** |
+| WebSocket | wss://golfsportbar.com.br/connection/websocket |
 
-Ver [README principal](../README.md) y [`.env.example`](../.env.example).
+Ver [README principal](../README.md), [runbook Hostinger](../deploy/HOSTINGER.md) y [`.env.example`](../.env.example).
 
 ---
 

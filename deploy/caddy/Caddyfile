@@ -1,0 +1,23 @@
+# Edge reverse proxy — TLS automático (Let's Encrypt) para el dominio de producción.
+# Local: SITE_ADDRESS=localhost (HTTP) o SITE_ADDRESS=:8080
+# Prod:  SITE_ADDRESS=golfsportbar.com.br (default)
+
+{$SITE_ADDRESS:golfsportbar.com.br} {
+	encode gzip
+
+	handle /api* {
+		reverse_proxy backend:3000
+	}
+
+	handle /connection* {
+		reverse_proxy centrifugo:8000
+	}
+
+	handle {
+		reverse_proxy frontend:5173
+	}
+}
+
+www.golfsportbar.com.br {
+	redir https://golfsportbar.com.br{uri} permanent
+}

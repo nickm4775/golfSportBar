@@ -3,6 +3,7 @@
 # Producción:   docker compose --profile prod up -d
 #               Watchtower (perfil prod) recarga backend/frontend cuando CI
 #               publica imágenes nuevas en GHCR (push a main).
+# Edge:         Caddy en :80/:443 → frontend, /api → backend, /connection → Centrifugo.
 services:
   postgres:
     image: postgres:16-alpine
@@ -26,8 +27,6 @@ services:
     image: redis:7-alpine
     container_name: folf-redis
     restart: unless-stopped
-    ports:
-      - '${REDIS_PORT:-6379}:6379'
     command: ['redis-server', '--appendonly', 'yes']
     volumes:
       - folf_redis_data:/data
@@ -44,8 +43,6 @@ services:
     container_name: folf-centrifugo
     restart: unless-stopped
     command: centrifugo --config=/centrifugo/config.json
-    ports:
-      - '${CENTRIFUGO_PORT:-8000}:8000'
     volumes:
       - ./deploy/centrifugo/config.json:/centrifugo/config.json:ro
     environment:
@@ -64,8 +61,6 @@ services:
       dockerfile: Dockerfile
     container_name: folf-backend
     restart: unless-stopped
-    ports:
-      - '${BACKEND_PORT:-3000}:3000'
     environment:
       DATABASE_URL: ${DATABASE_URL}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
@@ -112,8 +107,6 @@ services:
       dockerfile: Dockerfile
     container_name: folf-frontend
     restart: unless-stopped
-    ports:
-      - '${FRONTEND_PORT:-5173}:5173'
     environment:
       VITE_PORT: 5173
       VITE_API_PROXY_TARGET: http://backend:3000
@@ -121,6 +114,27 @@ services:
     labels:
       com.centurylinklabs.watchtower.enable: 'true'
     depends_on:
+      - backend
+      - centrifugo
+    networks:
+      - folf
+
+  caddy:
+    image: caddy:2-alpine
+    container_name: folf-caddy
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      SITE_ADDRESS: ${SITE_ADDRESS:-golfsportbar.com.br}
+    volumes:
+      - ./deploy/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - folf_caddy_data:/data
+      - folf_caddy_config:/config
+    depends_on:
+      - frontend
       - backend
       - centrifugo
     networks:
@@ -150,3 +164,5 @@ networks:
 volumes:
   folf_pg_data:
   folf_redis_data:
+  folf_caddy_data:
+  folf_caddy_config:

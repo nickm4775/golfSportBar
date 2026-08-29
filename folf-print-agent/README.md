@@ -21,11 +21,25 @@ Variables:
 
 | Variable | Descripción |
 |----------|-------------|
-| `API_URL` | API pública, p. ej. `https://api.ejemplo.com/api/v1` |
-| `CENTRIFUGO_WS` | WebSocket Centrifugo, p. ej. `wss://realtime.ejemplo.com/connection/websocket` |
+| `API_URL` | API pública, p. ej. `https://golfsportbar.com.br/api/v1` |
+| `CENTRIFUGO_WS` | WebSocket Centrifugo, p. ej. `wss://golfsportbar.com.br/connection/websocket` |
 | `BUSINESS_ID` | UUID del negocio |
 | `AGENT_EMAIL` / `AGENT_PASSWORD` | Credenciales staff |
 | `HEARTBEAT_MS` | Intervalo de presencia/probe (default 45000) |
+
+### Producción (Hostinger)
+
+```env
+API_URL=https://golfsportbar.com.br/api/v1
+CENTRIFUGO_WS=wss://golfsportbar.com.br/connection/websocket
+```
+
+### Desarrollo local
+
+```env
+API_URL=http://localhost:3000/api/v1
+CENTRIFUGO_WS=ws://localhost:8000/connection/websocket
+```
 
 ## Uso
 

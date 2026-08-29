@@ -4,15 +4,25 @@ Monorepo con frontend público (React/Vite) y backend de gestión (NestJS/Postgr
 
 ## Puertos
 
-| Servicio | Puerto | URL |
-|----------|--------|-----|
-| **Backend (API)** | `3000` | http://localhost:3000/api/v1 |
-| **Swagger** | `3000` | http://localhost:3000/api/docs |
-| **Frontend (Vite)** | `5173` | http://localhost:5173 |
-| **Redis** | `6379` | redis://localhost:6379 |
-| **Centrifugo** | `8000` | http://localhost:8000 |
+| Servicio | Puerto | Acceso |
+|----------|--------|--------|
+| **Caddy (edge)** | `80` / `443` | Único ingreso público (TLS) |
+| **Backend (API)** | `3000` | Solo red Docker → `https://dominio/api` |
+| **Frontend (Vite)** | `5173` | Solo red Docker → `https://dominio/` |
+| **Redis** | `6379` | Solo red Docker |
+| **Centrifugo** | `8000` | Solo red Docker → `wss://dominio/connection` |
 
-La API y Swagger viven **solo en el backend** (puerto 3000). En desarrollo, Vite proxyea `/api` a `localhost:3000`. En Docker, el front corre con `npm run preview` y el mismo proxy hacia `backend:3000`. Panel staff: http://localhost:5173/login
+Producción (`golfsportbar.com.br`):
+
+| Qué | URL |
+|-----|-----|
+| Sitio + panel | https://golfsportbar.com.br |
+| API | https://golfsportbar.com.br/api/v1 |
+| Swagger | https://golfsportbar.com.br/api/docs |
+| WebSocket | wss://golfsportbar.com.br/connection/websocket |
+| Login staff | https://golfsportbar.com.br/login |
+
+En desarrollo local (sin Caddy): API en http://localhost:3000, front en http://localhost:5173 (Vite proxyea `/api` y `/connection`).
 
 ## Despliegue con Docker
 
@@ -30,12 +40,15 @@ cp .env.example .env
 Editá `.env`:
 
 - Cambiá `POSTGRES_PASSWORD`, `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`, `CENTRIFUGO_API_KEY` y `CENTRIFUGO_TOKEN_HMAC_SECRET`
+- `SITE_ADDRESS=golfsportbar.com.br` (producción) o `localhost` (prueba local con Caddy)
+- `CORS_ORIGINS=https://golfsportbar.com.br`
 - Poné `RUN_DB_SEED=true` solo en el **primer** deploy
-- `BACKEND_PORT=3000` y `FRONTEND_PORT=5173` (defaults de Vite)
 
 ```bash
 docker compose up -d --build
 ```
+
+El tráfico público entra por **Caddy** (`deploy/caddy/Caddyfile`): `/` → frontend, `/api` → backend, `/connection` → Centrifugo.
 
 ### CI/CD (actualización automática)
 
@@ -48,17 +61,24 @@ docker compose --profile prod up -d
 
 Si los paquetes de GHCR son privados, completá `GHCR_USER` y `GHCR_TOKEN` (PAT con `read:packages`) en `.env`. Postgres no lo actualiza Watchtower.
 
-### Producción con dominio
+### Producción Hostinger (VPS)
 
-1. Apuntá el DNS de tu dominio a la IP del servidor.
-2. Opcional: colocá Caddy, Traefik o nginx + Certbot delante de los puertos publicados.
-3. Configurá `CORS_ORIGINS=http://localhost:5173,https://tudominio.com` si el front consume la API.
+DNS, firewall, secretos y verificación: ver **[deploy/HOSTINGER.md](deploy/HOSTINGER.md)**.
+
+Resumen:
+
+1. DNS `A` `@` y `www` → IP del VPS (`179.199.136.83`)
+2. Firewall: solo **22, 80, 443**
+3. `.env` con secretos + `CORS_ORIGINS=https://golfsportbar.com.br`
+4. `docker compose --profile prod up -d`
+5. Tras el seed: `RUN_DB_SEED=false` y recrear backend
 
 ### Comandos útiles
 
 ```bash
 docker compose logs -f          # logs de todos los servicios
 docker compose logs -f backend  # solo backend
+docker compose logs -f caddy    # TLS / proxy
 docker compose ps               # estado
 docker compose down             # detener
 docker compose up -d --build    # rebuild y levantar
@@ -70,6 +90,7 @@ docker compose up -d --build    # rebuild y levantar
 |---------|-------------|------|
 | [`folf-front/`](folf-front/) | Sitio público PWA | [`folf-front/README.md`](folf-front/README.md) |
 | [`folf-back/`](folf-back/) | API multi-tenant | [`folf-back/README.md`](folf-back/README.md) |
+| [`folf-print-agent/`](folf-print-agent/) | Impresión ESC/POS en LAN del bar | [`folf-print-agent/README.md`](folf-print-agent/README.md) |
 
 ## Desarrollo local
 
