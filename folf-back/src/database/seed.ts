@@ -235,8 +235,34 @@ export async function seedCatalog(catalog: MenuCatalog) {
   }
 }
 
-async function seedDemoData(catalog: MenuCatalog) {
+/** Inserta o actualiza usuario; siempre refresca passwordHash (upsert de TypeORM no lo garantiza bien). */
+async function ensureUser(input: {
+  email: string;
+  name: string;
+  password: string;
+  kind?: UserKind;
+}): Promise<User> {
   const userRepo = dataSource.getRepository(User);
+  const passwordHash = await bcrypt.hash(input.password, 10);
+  const kind = input.kind ?? UserKind.STAFF;
+  const existing = await userRepo.findOne({ where: { email: input.email } });
+  if (existing) {
+    existing.name = input.name;
+    existing.passwordHash = passwordHash;
+    existing.kind = kind;
+    existing.isActive = true;
+    return userRepo.save(existing);
+  }
+  return userRepo.save({
+    email: input.email,
+    name: input.name,
+    passwordHash,
+    kind,
+    isActive: true,
+  });
+}
+
+async function seedDemoData(catalog: MenuCatalog) {
   const organizationRepo = dataSource.getRepository(Organization);
   const businessRepo = dataSource.getRepository(Business);
   const roleRepo = dataSource.getRepository(Role);
@@ -258,76 +284,42 @@ async function seedDemoData(catalog: MenuCatalog) {
   const customerEmail = process.env.SEED_CUSTOMER_EMAIL ?? 'customer@folf.local';
   const customerPassword = process.env.SEED_CUSTOMER_PASSWORD ?? 'Customer123!';
 
-  await userRepo.upsert(
-    {
-      email: adminEmail,
-      name: 'Admin',
-      passwordHash: await bcrypt.hash(adminPassword, 10),
-    },
-    ['email'],
-  );
-  const admin = await userRepo.findOneByOrFail({ email: adminEmail });
-
-  await userRepo.upsert(
-    {
-      email: ownerEmail,
-      name: 'Owner Demo',
-      passwordHash: await bcrypt.hash(ownerPassword, 10),
-    },
-    ['email'],
-  );
-  const owner = await userRepo.findOneByOrFail({ email: ownerEmail });
-
-  await userRepo.upsert(
-    {
-      email: managerEmail,
-      name: 'Manager Demo',
-      passwordHash: await bcrypt.hash(managerPassword, 10),
-    },
-    ['email'],
-  );
-  const manager = await userRepo.findOneByOrFail({ email: managerEmail });
-
-  await userRepo.upsert(
-    {
-      email: waiterEmail,
-      name: 'Waiter Demo',
-      passwordHash: await bcrypt.hash(waiterPassword, 10),
-    },
-    ['email'],
-  );
-  const waiter = await userRepo.findOneByOrFail({ email: waiterEmail });
-
-  await userRepo.upsert(
-    {
-      email: cookEmail,
-      name: 'Cook Demo',
-      passwordHash: await bcrypt.hash(cookPassword, 10),
-    },
-    ['email'],
-  );
-  const cook = await userRepo.findOneByOrFail({ email: cookEmail });
-
-  await userRepo.upsert(
-    {
-      email: bartenderEmail,
-      name: 'Bartender Demo',
-      passwordHash: await bcrypt.hash(bartenderPassword, 10),
-    },
-    ['email'],
-  );
-  const bartender = await userRepo.findOneByOrFail({ email: bartenderEmail });
-
-  await userRepo.upsert(
-    {
-      email: customerEmail,
-      name: 'Ana Souza',
-      passwordHash: await bcrypt.hash(customerPassword, 10),
-      kind: UserKind.CUSTOMER,
-    },
-    ['email'],
-  );
-  const customerUser = await userRepo.findOneByOrFail({ email: customerEmail });
+  const admin = await ensureUser({
+    email: adminEmail,
+    name: 'Admin',
+    password: adminPassword,
+  });
+  const owner = await ensureUser({
+    email: ownerEmail,
+    name: 'Owner Demo',
+    password: ownerPassword,
+  });
+  const manager = await ensureUser({
+    email: managerEmail,
+    name: 'Manager Demo',
+    password: managerPassword,
+  });
+  const waiter = await ensureUser({
+    email: waiterEmail,
+    name: 'Waiter Demo',
+    password: waiterPassword,
+  });
+  const cook = await ensureUser({
+    email: cookEmail,
+    name: 'Cook Demo',
+    password: cookPassword,
+  });
+  const bartender = await ensureUser({
+    email: bartenderEmail,
+    name: 'Bartender Demo',
+    password: bartenderPassword,
+  });
+  const customerUser = await ensureUser({
+    email: customerEmail,
+    name: 'Ana Souza',
+    password: customerPassword,
+    kind: UserKind.CUSTOMER,
+  });
 
   await organizationRepo.upsert(
     {
