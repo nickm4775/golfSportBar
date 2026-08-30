@@ -1,14 +1,11 @@
 import { LogoAndroid } from '@gravity-ui/icons'
-import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { BrandLogo } from '@/presentation/components/brand/BrandLogo'
 import { LocaleSwitcher, ThemeSwitch } from '@/presentation/components/chrome/LocaleAndTheme'
-import { useAuthStore } from '@/presentation/stores/authStore'
 import { brandContact } from '@/shared/brand/contact'
 
 export function SiteHeader() {
   const { t } = useTranslation('common')
-  const isAuthenticated = useAuthStore((state) => state.status === 'authenticated')
   const downloadLabel = t('downloadAndroid')
 
   return (
@@ -43,12 +40,6 @@ export function SiteHeader() {
           </a>
           <LocaleSwitcher />
           <ThemeSwitch />
-          <Link
-            to={isAuthenticated ? '/app/dashboard' : '/login'}
-            className="rounded-full border border-[var(--gsb-border)] bg-[var(--gsb-surface)] px-3 py-1.5 text-[13px] font-medium text-[var(--gsb-fg)] transition hover:border-[var(--gsb-accent)]"
-          >
-            {t('nav.staff')}
-          </Link>
         </div>
       </div>
     </header>
