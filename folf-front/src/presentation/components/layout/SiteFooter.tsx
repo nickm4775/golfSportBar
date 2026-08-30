@@ -1,3 +1,4 @@
+import { LogoAndroid } from '@gravity-ui/icons'
 import { useTranslation } from 'react-i18next'
 import { BrandLogo } from '@/presentation/components/brand/BrandLogo'
 import { brandContact } from '@/shared/brand/contact'
@@ -28,6 +29,15 @@ export function SiteFooter() {
               rel="noreferrer"
             >
               {t('phone')}: {brandContact.phoneDisplay}
+            </a>
+            <a
+              className="inline-flex items-center gap-2 text-[var(--gsb-muted)] transition hover:text-[var(--gsb-accent)]"
+              href={brandContact.androidApkUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <LogoAndroid className="size-4 shrink-0" />
+              {t('downloadAndroid')}
             </a>
           </div>
         </div>
