@@ -131,7 +131,9 @@ Guards por endpoint de negocio: `JwtAuthGuard` → `BusinessContextGuard` → `P
 | Bartender | bartender@folf.local | Bartender123! |
 | **Cliente (folf-app)** | customer@folf.local | Customer123! |
 
-En **folf-app** el login acepta email o CPF (`52998224725`, Ana Souza). Si la base ya estaba sembrada, volvé a correr el seed para crear esta cuenta.
+El seed **limpia toda la base** (`TRUNCATE … CASCADE`) y solo deja: roles/permisos, usuarios, organización + negocio, carta vinculada y **3 bays**. Sin pedidos, reservas ni clientes demo.
+
+En producción: `RUN_DB_SEED=true` solo en el primer arranque (o cuando quieras resetear datos); después `false`.
 
 ---
 

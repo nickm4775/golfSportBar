@@ -19,11 +19,12 @@ interface GsproState {
     customerId: string
     startAt: string
     endAt: string
+    companionCount: number
     notes?: string
   }) => Promise<void>
   updateReservation: (reservationId: string, payload: { status?: ReservationStatus }) => Promise<void>
   loadSessions: (status?: SessionStatus) => Promise<void>
-  createWalkIn: (payload: { bayId: string; notes?: string }) => Promise<void>
+  createWalkIn: (payload: { bayId: string; companionCount: number; notes?: string }) => Promise<void>
   checkIn: (payload: { reservationId: string }) => Promise<void>
   updateSession: (sessionId: string, status: SessionStatus) => Promise<void>
 }

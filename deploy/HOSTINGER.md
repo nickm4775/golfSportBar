@@ -104,7 +104,7 @@ docker compose logs -f caddy backend
 
 Caddy pedirá el certificado a Let’s Encrypt automáticamente.
 
-Tras el primer boot exitoso (migraciones + seed):
+Tras el primer boot exitoso (migraciones + seed; el seed **TRUNCATE** la DB y deja solo usuarios, negocio, carta y 3 bays):
 
 ```bash
 # En .env

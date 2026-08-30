@@ -39,6 +39,7 @@ export class HttpGsproRepository implements IGsproRepository {
       customerId: string
       startAt: string
       endAt: string
+      companionCount: number
       notes?: string
     },
   ) {
@@ -52,7 +53,7 @@ export class HttpGsproRepository implements IGsproRepository {
   updateReservation(
     businessId: string,
     reservationId: string,
-    payload: { status?: ReservationStatus; notes?: string },
+    payload: { status?: ReservationStatus; notes?: string; companionCount?: number },
   ) {
     return apiRequest<Reservation>(
       `/businesses/${businessId}/reservations/${reservationId}`,
@@ -69,7 +70,10 @@ export class HttpGsproRepository implements IGsproRepository {
     return apiRequest<Session[]>(`/businesses/${businessId}/sessions${query}`, { businessId })
   }
 
-  createWalkIn(businessId: string, payload: { bayId: string; notes?: string }) {
+  createWalkIn(
+    businessId: string,
+    payload: { bayId: string; companionCount: number; notes?: string },
+  ) {
     return apiRequest<Session>(`/businesses/${businessId}/sessions`, {
       method: 'POST',
       businessId,

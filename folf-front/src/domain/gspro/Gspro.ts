@@ -18,6 +18,9 @@ export interface Reservation {
   endAt: string
   status: ReservationStatus
   notes: string | null
+  companionCount: number
+  unitPriceBrl: number
+  totalCostBrl: number
   bay?: Bay
   customer?: Pick<Customer, 'id' | 'fullName' | 'cpf' | 'phone'> | null
 }
@@ -30,8 +33,12 @@ export interface Session {
   startedAt: string
   endedAt: string | null
   durationMinutes: number | null
+  companionCount: number
+  unitPriceBrl: number | null
+  totalCostBrl: number | null
   notes: string | null
   bay?: Bay
+  reservation?: Pick<Reservation, 'id' | 'customerName' | 'companionCount' | 'totalCostBrl'> | null
 }
 
 export interface IGsproRepository {
@@ -50,16 +57,20 @@ export interface IGsproRepository {
       customerId: string
       startAt: string
       endAt: string
+      companionCount: number
       notes?: string
     },
   ): Promise<Reservation>
   updateReservation(
     businessId: string,
     reservationId: string,
-    payload: { status?: ReservationStatus; notes?: string },
+    payload: { status?: ReservationStatus; notes?: string; companionCount?: number },
   ): Promise<Reservation>
   listSessions(businessId: string, status?: SessionStatus): Promise<Session[]>
-  createWalkIn(businessId: string, payload: { bayId: string; notes?: string }): Promise<Session>
+  createWalkIn(
+    businessId: string,
+    payload: { bayId: string; companionCount: number; notes?: string },
+  ): Promise<Session>
   checkIn(businessId: string, payload: { reservationId: string; notes?: string }): Promise<Session>
   updateSession(
     businessId: string,

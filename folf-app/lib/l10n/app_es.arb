@@ -112,6 +112,28 @@
   },
   "notes": "Notas",
   "confirmBooking": "Confirmar reserva",
+  "companions": "Acompañantes",
+  "companionsCount": "{count} acompañantes",
+  "@companionsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "pricingPreview": "{party} × {unit}/h × {hours} h = {total}",
+  "@pricingPreview": {
+    "placeholders": {
+      "party": { "type": "int" },
+      "unit": { "type": "String" },
+      "hours": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "totalCostLabel": "Total: {value}",
+  "@totalCostLabel": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
   "noSlots": "No hay horarios libres este día.",
   "emptyReservations": "Aún no tienes reservas.",
   "cancelReservation": "Cancelar reserva",

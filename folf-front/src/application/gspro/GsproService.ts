@@ -35,6 +35,7 @@ export class GsproService {
       customerId: string
       startAt: string
       endAt: string
+      companionCount: number
       notes?: string
     },
   ) {
@@ -44,7 +45,7 @@ export class GsproService {
   updateReservation(
     businessId: string,
     reservationId: string,
-    payload: { status?: ReservationStatus; notes?: string },
+    payload: { status?: ReservationStatus; notes?: string; companionCount?: number },
   ) {
     return this.gspro.updateReservation(businessId, reservationId, payload)
   }
@@ -53,7 +54,10 @@ export class GsproService {
     return this.gspro.listSessions(businessId, status)
   }
 
-  createWalkIn(businessId: string, payload: { bayId: string; notes?: string }) {
+  createWalkIn(
+    businessId: string,
+    payload: { bayId: string; companionCount: number; notes?: string },
+  ) {
     return this.gspro.createWalkIn(businessId, payload)
   }
 

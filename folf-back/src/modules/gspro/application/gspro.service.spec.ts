@@ -74,6 +74,7 @@ describe('GsproService', () => {
           customerId: 'cust-1',
           startAt: '2026-08-18T18:00:00.000Z',
           endAt: '2026-08-19T01:00:00.000Z',
+          companionCount: 0,
         }),
       ).rejects.toMatchObject({ code: 'INVALID_DURATION' });
       expect(reservationRepo.createQueryBuilder).not.toHaveBeenCalled();
@@ -88,10 +89,17 @@ describe('GsproService', () => {
         customerId: 'cust-1',
         startAt: '2026-08-18T21:00:00.000Z',
         endAt: '2026-08-18T22:00:00.000Z',
+        companionCount: 1,
       });
 
       expect(overlapQuery.getOne).toHaveBeenCalled();
-      expect(reservationRepo.save).toHaveBeenCalled();
+      expect(reservationRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          companionCount: 1,
+          unitPriceBrl: 180,
+          totalCostBrl: 360,
+        }),
+      );
     });
 
     it('returns 409 details when the bay is already booked', async () => {
@@ -108,6 +116,7 @@ describe('GsproService', () => {
           customerId: 'cust-1',
           startAt: '2026-08-18T18:00:00.000Z',
           endAt: '2026-08-18T19:00:00.000Z',
+          companionCount: 0,
         }),
       ).rejects.toEqual(
         expect.objectContaining({
@@ -132,6 +141,7 @@ describe('GsproService', () => {
         businessId: 'biz-1',
         reservationId: 'res-1',
         startedAt: new Date('2026-08-18T18:00:00.000Z'),
+        companionCount: 0,
         notes: null,
       });
       sessionRepo.findOneOrFail.mockResolvedValue({ id: 'ses-1', status: SessionStatus.COMPLETED });
@@ -140,9 +150,13 @@ describe('GsproService', () => {
         status: SessionStatus.COMPLETED,
       });
 
-      expect(manager.update).toHaveBeenCalledWith(GsproReservation, 'res-1', {
-        status: ReservationStatus.COMPLETED,
-      });
+      expect(manager.update).toHaveBeenCalledWith(
+        GsproReservation,
+        'res-1',
+        expect.objectContaining({
+          status: ReservationStatus.COMPLETED,
+        }),
+      );
       expect(manager.update).toHaveBeenCalledWith(
         GsproSession,
         'ses-1',
@@ -161,6 +175,7 @@ describe('GsproService', () => {
         customerId: 'cust-1',
         startAt: '2026-08-18T19:00:00.000Z',
         endAt: '2026-08-18T18:00:00.000Z',
+        companionCount: 0,
       }),
     ).rejects.toBeInstanceOf(DomainException);
   });

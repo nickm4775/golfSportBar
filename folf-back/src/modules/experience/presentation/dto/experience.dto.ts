@@ -4,9 +4,12 @@ import {
   ArrayMinSize,
   IsArray,
   IsDateString,
+  IsInt,
   IsOptional,
   IsString,
   IsUUID,
+  Max,
+  Min,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -34,6 +37,18 @@ export class CustomerCreateReservationDto {
   @ApiProperty({ example: '2026-08-18T19:00:00.000Z' })
   @IsDateString()
   endAt!: string;
+
+  @ApiProperty({
+    example: 1,
+    minimum: 0,
+    maximum: 3,
+    description: 'Acompañantes (0–3). Personas totales = 1 + companionCount',
+  })
+  @IsInt()
+  @Min(0)
+  @Max(3)
+  @Type(() => Number)
+  companionCount!: number;
 
   @ApiPropertyOptional()
   @IsOptional()

@@ -260,16 +260,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bayAvailabilityTitle => '击球位可用情况';
 
   @override
-  String bayCount(int count) {
-    return '$count 个击球位';
-  }
-
-  @override
-  String baysAvailableNowSummary(int available, int total) {
-    return '当前 $available/$total 可用';
-  }
-
-  @override
   String get viewAllBays => '选择要预订的击球位';
 
   @override
@@ -314,6 +304,24 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get confirmBooking => '确认预订';
+
+  @override
+  String get companions => '同行人数';
+
+  @override
+  String companionsCount(int count) {
+    return '$count 位同行';
+  }
+
+  @override
+  String pricingPreview(int party, String unit, String hours, String total) {
+    return '$party × $unit/h × $hours h = $total';
+  }
+
+  @override
+  String totalCostLabel(String value) {
+    return '合计：$value';
+  }
 
   @override
   String get noSlots => '当天没有空档。';

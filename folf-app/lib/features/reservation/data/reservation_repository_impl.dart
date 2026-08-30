@@ -24,6 +24,7 @@ class ReservationRepositoryImpl implements ReservationRepository {
     required String bayId,
     required DateTime startAt,
     required DateTime endAt,
+    required int companionCount,
     String? notes,
   }) async {
     final json = await _api.postMap(
@@ -32,6 +33,7 @@ class ReservationRepositoryImpl implements ReservationRepository {
         'bayId': bayId,
         'startAt': startAt.toUtc().toIso8601String(),
         'endAt': endAt.toUtc().toIso8601String(),
+        'companionCount': companionCount,
         if (notes != null && notes.isNotEmpty) 'notes': notes,
       },
     );

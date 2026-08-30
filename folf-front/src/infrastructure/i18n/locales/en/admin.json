@@ -189,14 +189,27 @@
     "start": "Start",
     "end": "End",
     "bay": "Bay",
-    "checkIn": "Check-in"
+    "checkIn": "Check-in",
+    "companions": "Guests",
+    "partySize": "Players",
+    "unitPrice": "Price/person/h",
+    "totalCost": "Total",
+    "pricingPreview": "{{party}} × {{unit}}/h × {{hours}} h = {{total}}"
   },
   "sessions": {
     "title": "Sessions",
     "subtitle": "Walk-ins and active check-ins.",
     "walkIn": "Walk-in",
     "close": "Close",
-    "started": "Started"
+    "started": "Started",
+    "ended": "Ended",
+    "duration": "Duration",
+    "totalCost": "Total cost",
+    "companions": "Guests",
+    "viewTable": "Table",
+    "viewSchedule": "Schedule",
+    "scheduleDay": "Day",
+    "minutesShort": "{{count}} min"
   },
   "business": {
     "title": "Venues",

@@ -189,14 +189,27 @@
     "start": "开始",
     "end": "结束",
     "bay": "球位",
-    "checkIn": "签到"
+    "checkIn": "签到",
+    "companions": "同行人数",
+    "partySize": "人数",
+    "unitPrice": "每人/小时",
+    "totalCost": "合计",
+    "pricingPreview": "{{party}} × {{unit}}/h × {{hours}} h = {{total}}"
   },
   "sessions": {
     "title": "场次",
     "subtitle": "现场开台与签到。",
     "walkIn": "现场开台",
     "close": "结束",
-    "started": "开始"
+    "started": "开始",
+    "ended": "结束",
+    "duration": "时长",
+    "totalCost": "总费用",
+    "companions": "同行人数",
+    "viewTable": "表格",
+    "viewSchedule": "日程",
+    "scheduleDay": "日期",
+    "minutesShort": "{{count}} 分钟"
   },
   "business": {
     "title": "门店",

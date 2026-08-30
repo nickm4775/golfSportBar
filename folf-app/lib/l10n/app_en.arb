@@ -112,6 +112,28 @@
   },
   "notes": "Notes",
   "confirmBooking": "Confirm booking",
+  "companions": "Companions",
+  "companionsCount": "{count} companions",
+  "@companionsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "pricingPreview": "{party} × {unit}/h × {hours} h = {total}",
+  "@pricingPreview": {
+    "placeholders": {
+      "party": { "type": "int" },
+      "unit": { "type": "String" },
+      "hours": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "totalCostLabel": "Total: {value}",
+  "@totalCostLabel": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
   "noSlots": "No free slots on this day.",
   "emptyReservations": "You don't have any bookings yet.",
   "cancelReservation": "Cancel booking",

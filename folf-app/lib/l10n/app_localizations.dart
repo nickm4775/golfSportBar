@@ -602,18 +602,6 @@ abstract class AppLocalizations {
   /// **'Disponibilidade das bays'**
   String get bayAvailabilityTitle;
 
-  /// No description provided for @bayCount.
-  ///
-  /// In pt, this message translates to:
-  /// **'{count} bays'**
-  String bayCount(int count);
-
-  /// No description provided for @baysAvailableNowSummary.
-  ///
-  /// In pt, this message translates to:
-  /// **'{available} de {total} disponíveis agora'**
-  String baysAvailableNowSummary(int available, int total);
-
   /// No description provided for @viewAllBays.
   ///
   /// In pt, this message translates to:
@@ -697,6 +685,30 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'Confirmar reserva'**
   String get confirmBooking;
+
+  /// No description provided for @companions.
+  ///
+  /// In pt, this message translates to:
+  /// **'Acompanhantes'**
+  String get companions;
+
+  /// No description provided for @companionsCount.
+  ///
+  /// In pt, this message translates to:
+  /// **'{count} acompanhantes'**
+  String companionsCount(int count);
+
+  /// No description provided for @pricingPreview.
+  ///
+  /// In pt, this message translates to:
+  /// **'{party} × {unit}/h × {hours} h = {total}'**
+  String pricingPreview(int party, String unit, String hours, String total);
+
+  /// No description provided for @totalCostLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Total: {value}'**
+  String totalCostLabel(String value);
 
   /// No description provided for @noSlots.
   ///

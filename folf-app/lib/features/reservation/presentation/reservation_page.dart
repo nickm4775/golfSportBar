@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:folf/core/format/brl.dart';
 import 'package:folf/core/widgets/gsb_widgets.dart';
+import 'package:folf/features/reservation/domain/gspro_pricing.dart';
 import 'package:folf/features/reservation/domain/reservation.dart';
 import 'package:folf/features/reservation/presentation/reservation_cubit.dart';
 import 'package:folf/features/venue/presentation/venue_session_cubit.dart';
@@ -152,6 +154,39 @@ class _NewReservation extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
+        Text(l10n.companions),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          children: [
+            for (final count in [0, 1, 2, 3])
+              GsbChip(
+                label: '$count',
+                selected: state.companionCount == count,
+                onTap: () => cubit.selectCompanions(count),
+              ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Text(
+          l10n.pricingPreview(
+            1 + state.companionCount,
+            formatBrl(
+              pricePerPersonBrl(1 + state.companionCount),
+            ),
+            (state.duration.inMinutes / 60).toStringAsFixed(
+              state.duration.inMinutes % 60 == 0 ? 0 : 1,
+            ),
+            formatBrl(
+              computeReservationTotal(
+                companionCount: state.companionCount,
+                duration: state.duration,
+              ),
+            ),
+          ),
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        const SizedBox(height: 16),
         if (slots.isEmpty) Text(l10n.noSlots),
         Wrap(
           spacing: 8,
@@ -218,6 +253,8 @@ class _MyReservations extends StatelessWidget {
             children: [
               Text(item.bayName ?? item.bayId, style: Theme.of(context).textTheme.titleMedium),
               Text('${format.format(item.startAt)} – ${DateFormat.Hm().format(item.endAt)}'),
+              Text(l10n.companionsCount(item.companionCount)),
+              Text(l10n.totalCostLabel(formatBrl(item.totalCostBrl))),
               const SizedBox(height: 8),
               GsbStatusStepper(
                 current: current,

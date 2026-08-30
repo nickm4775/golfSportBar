@@ -1,13 +1,17 @@
-import { ReservationStatus, SessionStatus } from '../../../../shared/domain/enums';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
   IsEnum,
+  IsInt,
   IsOptional,
   IsString,
   IsUUID,
+  Max,
+  Min,
 } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { MAX_COMPANION_COUNT, MIN_COMPANION_COUNT } from '../../domain/gspro-pricing';
 
 export class CreateBayDto {
   @ApiProperty({ example: 'BAY-4', description: 'Código único del bay en el negocio' })
@@ -53,6 +57,18 @@ export class CreateReservationDto {
   @IsDateString()
   endAt!: string;
 
+  @ApiProperty({
+    example: 1,
+    minimum: MIN_COMPANION_COUNT,
+    maximum: MAX_COMPANION_COUNT,
+    description: 'Acompañantes (0–3). Personas totales = 1 + companionCount',
+  })
+  @IsInt()
+  @Min(MIN_COMPANION_COUNT)
+  @Max(MAX_COMPANION_COUNT)
+  @Type(() => Number)
+  companionCount!: number;
+
   @ApiPropertyOptional({
     enum: ReservationStatus,
     default: ReservationStatus.CONFIRMED,
@@ -84,6 +100,17 @@ export class UpdateReservationDto {
   @IsDateString()
   endAt?: string;
 
+  @ApiPropertyOptional({
+    minimum: MIN_COMPANION_COUNT,
+    maximum: MAX_COMPANION_COUNT,
+  })
+  @IsOptional()
+  @IsInt()
+  @Min(MIN_COMPANION_COUNT)
+  @Max(MAX_COMPANION_COUNT)
+  @Type(() => Number)
+  companionCount?: number;
+
   @ApiPropertyOptional({ enum: ReservationStatus })
   @IsOptional()
   @IsEnum(ReservationStatus)
@@ -99,6 +126,18 @@ export class CreateWalkInSessionDto {
   @ApiProperty({ format: 'uuid', description: 'Bay donde iniciar la sesión' })
   @IsUUID()
   bayId!: string;
+
+  @ApiProperty({
+    example: 1,
+    minimum: MIN_COMPANION_COUNT,
+    maximum: MAX_COMPANION_COUNT,
+    description: 'Acompañantes (0–3)',
+  })
+  @IsInt()
+  @Min(MIN_COMPANION_COUNT)
+  @Max(MAX_COMPANION_COUNT)
+  @Type(() => Number)
+  companionCount!: number;
 
   @ApiPropertyOptional()
   @IsOptional()

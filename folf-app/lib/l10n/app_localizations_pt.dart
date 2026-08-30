@@ -266,16 +266,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get bayAvailabilityTitle => 'Disponibilidade das bays';
 
   @override
-  String bayCount(int count) {
-    return '$count bays';
-  }
-
-  @override
-  String baysAvailableNowSummary(int available, int total) {
-    return '$available de $total disponíveis agora';
-  }
-
-  @override
   String get viewAllBays => 'Escolha uma bay para reservar';
 
   @override
@@ -320,6 +310,24 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get confirmBooking => 'Confirmar reserva';
+
+  @override
+  String get companions => 'Acompanhantes';
+
+  @override
+  String companionsCount(int count) {
+    return '$count acompanhantes';
+  }
+
+  @override
+  String pricingPreview(int party, String unit, String hours, String total) {
+    return '$party × $unit/h × $hours h = $total';
+  }
+
+  @override
+  String totalCostLabel(String value) {
+    return 'Total: $value';
+  }
 
   @override
   String get noSlots => 'Sem horários livres neste dia.';

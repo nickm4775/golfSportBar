@@ -15,6 +15,7 @@ class ReservationViewState extends Equatable {
     this.selectedBayId,
     this.day,
     this.duration = const Duration(hours: 1),
+    this.companionCount = 0,
     this.selectedStart,
     this.message,
     this.created,
@@ -28,6 +29,7 @@ class ReservationViewState extends Equatable {
   final String? selectedBayId;
   final DateTime? day;
   final Duration duration;
+  final int companionCount;
   final DateTime? selectedStart;
   final String? message;
   final Reservation? created;
@@ -41,6 +43,7 @@ class ReservationViewState extends Equatable {
     String? selectedBayId,
     DateTime? day,
     Duration? duration,
+    int? companionCount,
     DateTime? selectedStart,
     String? message,
     Reservation? created,
@@ -55,6 +58,7 @@ class ReservationViewState extends Equatable {
       selectedBayId: selectedBayId ?? this.selectedBayId,
       day: day ?? this.day,
       duration: duration ?? this.duration,
+      companionCount: companionCount ?? this.companionCount,
       selectedStart: clearStart ? null : (selectedStart ?? this.selectedStart),
       message: message,
       created: created,
@@ -71,6 +75,7 @@ class ReservationViewState extends Equatable {
         selectedBayId,
         day,
         duration,
+        companionCount,
         selectedStart,
         message,
         created?.id,
@@ -146,6 +151,10 @@ class ReservationCubit extends Cubit<ReservationViewState> {
     emit(state.copyWith(duration: duration, clearStart: true));
   }
 
+  void selectCompanions(int companionCount) {
+    emit(state.copyWith(companionCount: companionCount.clamp(0, 3)));
+  }
+
   void selectStart(DateTime start) {
     emit(state.copyWith(selectedStart: start));
   }
@@ -161,6 +170,7 @@ class ReservationCubit extends Cubit<ReservationViewState> {
         bayId: bayId,
         startAt: start,
         endAt: start.add(state.duration),
+        companionCount: state.companionCount,
       );
       final mine = await _reservations.listMine();
       emit(state.copyWith(submitting: false, created: created, mine: mine, clearStart: true));

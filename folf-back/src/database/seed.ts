@@ -4,18 +4,11 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { In } from 'typeorm';
 import dataSource from './data-source';
-import {
-  OrderItemStatus,
-  OrderStatus,
-  ReservationStatus,
-  RoleScope,
-  UserKind,
-} from '../shared/domain/enums';
+import { PrepStation, RoleScope, UserKind } from '../shared/domain/enums';
 import { Permission } from '../shared/infrastructure/database/entities/permission.entity';
 import { Role } from '../shared/infrastructure/database/entities/role.entity';
 import { RolePermission } from '../shared/infrastructure/database/entities/role-permission.entity';
 import { ProductCategory } from '../shared/infrastructure/database/entities/product-category.entity';
-import { PrepStation } from '../shared/domain/enums';
 import { Product } from '../shared/infrastructure/database/entities/product.entity';
 import { User } from '../shared/infrastructure/database/entities/user.entity';
 import { Organization } from '../shared/infrastructure/database/entities/organization.entity';
@@ -23,10 +16,6 @@ import { Business } from '../shared/infrastructure/database/entities/business.en
 import { BusinessMember } from '../shared/infrastructure/database/entities/business-member.entity';
 import { BusinessProduct } from '../shared/infrastructure/database/entities/business-product.entity';
 import { GsproBay } from '../shared/infrastructure/database/entities/gspro-bay.entity';
-import { Order } from '../shared/infrastructure/database/entities/order.entity';
-import { OrderItem } from '../shared/infrastructure/database/entities/order-item.entity';
-import { GsproReservation } from '../shared/infrastructure/database/entities/gspro-reservation.entity';
-import { Customer } from '../shared/infrastructure/database/entities/customer.entity';
 
 type MenuCatalog = {
   categories: Array<{ slug: string; namePt: string; sortOrder: number }>;
@@ -126,19 +115,23 @@ const ROLE_DEFINITIONS = [
   },
 ];
 
+/** Vacía todas las tablas de la app (respeta FKs) antes de sembrar. */
+async function clearDatabase() {
+  const tableNames = dataSource.entityMetadatas
+    .map((meta) => `"${meta.tableName}"`)
+    .join(', ');
+  if (!tableNames) {
+    throw new Error('No hay tablas para limpiar');
+  }
+  console.log('Limpiando base de datos...');
+  await dataSource.query(`TRUNCATE TABLE ${tableNames} RESTART IDENTITY CASCADE`);
+  console.log('Base de datos vacía.');
+}
+
 async function seedPermissionsAndRoles() {
   const permissionRepo = dataSource.getRepository(Permission);
   const roleRepo = dataSource.getRepository(Role);
   const rolePermissionRepo = dataSource.getRepository(RolePermission);
-
-  const removedPermissions = await permissionRepo.find({
-    where: { key: In(['warehouse:read', 'warehouse:write']) },
-  });
-  if (removedPermissions.length > 0) {
-    const permissionIds = removedPermissions.map((permission) => permission.id);
-    await rolePermissionRepo.delete({ permissionId: In(permissionIds) });
-    await permissionRepo.delete({ id: In(permissionIds) });
-  }
 
   for (const permission of PERMISSIONS) {
     await permissionRepo.upsert(permission, ['key']);
@@ -163,28 +156,6 @@ async function seedPermissionsAndRoles() {
         ['roleId', 'permissionId'],
       );
     }
-
-    const allowedPermissions = await permissionRepo.find({
-      where: { key: In(roleDef.permissions) },
-    });
-    const allowedIds = new Set(allowedPermissions.map((permission) => permission.id));
-    const currentLinks = await rolePermissionRepo.find({ where: { roleId: role.id } });
-    for (const link of currentLinks) {
-      if (!allowedIds.has(link.permissionId)) {
-        await rolePermissionRepo.delete({
-          roleId: role.id,
-          permissionId: link.permissionId,
-        });
-      }
-    }
-  }
-
-  const legacyRoles = ['STAFF', 'KITCHEN', 'BAR'];
-  for (const legacyName of legacyRoles) {
-    const legacyRole = await roleRepo.findOneBy({ name: legacyName });
-    if (!legacyRole) continue;
-    await rolePermissionRepo.delete({ roleId: legacyRole.id });
-    await roleRepo.delete({ id: legacyRole.id });
   }
 }
 
@@ -207,7 +178,9 @@ export async function seedCatalog(catalog: MenuCatalog) {
   for (const category of catalog.categories) {
     await categoryRepo.upsert(
       {
-        ...category,
+        slug: category.slug,
+        namePt: category.namePt,
+        sortOrder: category.sortOrder,
         prepStation: categoryPrepStation(category.slug),
       },
       ['slug'],
@@ -218,8 +191,9 @@ export async function seedCatalog(catalog: MenuCatalog) {
 
   for (const product of catalog.products) {
     const categoryId = categoryMap.get(product.categorySlug);
-    if (!categoryId) continue;
-
+    if (!categoryId) {
+      throw new Error(`Categoría no encontrada para producto ${product.slug}`);
+    }
     await productRepo.upsert(
       {
         slug: product.slug,
@@ -235,7 +209,6 @@ export async function seedCatalog(catalog: MenuCatalog) {
   }
 }
 
-/** Inserta o actualiza usuario; siempre refresca passwordHash (upsert de TypeORM no lo garantiza bien). */
 async function ensureUser(input: {
   email: string;
   name: string;
@@ -262,7 +235,8 @@ async function ensureUser(input: {
   });
 }
 
-async function seedDemoData(catalog: MenuCatalog) {
+/** Usuarios, organización, negocio, memberships, carta del local y 3 bays. */
+async function seedCoreData(catalog: MenuCatalog) {
   const organizationRepo = dataSource.getRepository(Organization);
   const businessRepo = dataSource.getRepository(Business);
   const roleRepo = dataSource.getRepository(Role);
@@ -291,65 +265,59 @@ async function seedDemoData(catalog: MenuCatalog) {
   });
   const owner = await ensureUser({
     email: ownerEmail,
-    name: 'Owner Demo',
+    name: 'Owner',
     password: ownerPassword,
   });
   const manager = await ensureUser({
     email: managerEmail,
-    name: 'Manager Demo',
+    name: 'Manager',
     password: managerPassword,
   });
   const waiter = await ensureUser({
     email: waiterEmail,
-    name: 'Waiter Demo',
+    name: 'Waiter',
     password: waiterPassword,
   });
   const cook = await ensureUser({
     email: cookEmail,
-    name: 'Cook Demo',
+    name: 'Cook',
     password: cookPassword,
   });
   const bartender = await ensureUser({
     email: bartenderEmail,
-    name: 'Bartender Demo',
+    name: 'Bartender',
     password: bartenderPassword,
   });
-  const customerUser = await ensureUser({
+  await ensureUser({
     email: customerEmail,
-    name: 'Ana Souza',
+    name: 'Customer',
     password: customerPassword,
     kind: UserKind.CUSTOMER,
   });
 
-  await organizationRepo.upsert(
-    {
-      id: '00000000-0000-4000-8000-000000000001',
-      name: 'FOLF Demo Org',
-      ownerId: admin.id,
-    },
-    ['id'],
-  );
+  await organizationRepo.save({
+    id: '00000000-0000-4000-8000-000000000001',
+    name: 'Golf Sport Bar',
+    ownerId: admin.id,
+  });
   const organization = await organizationRepo.findOneByOrFail({
     id: '00000000-0000-4000-8000-000000000001',
   });
 
   const store = catalog.stores[0];
-  await businessRepo.upsert(
-    {
-      organizationId: organization.id,
-      slug: store?.slug ?? 'bc-centro',
-      name: store?.name ?? 'FOLF BC Centro',
-      address: store?.address ?? 'R. 3600, N205',
-      district: store?.district,
-      postalCode: store?.postalCode,
-      city: store?.city ?? 'Balneário Camboriú',
-      state: store?.state ?? 'SC',
-      country: store?.country ?? 'Brasil',
-      lat: store?.lat,
-      lng: store?.lng,
-    },
-    ['slug'],
-  );
+  await businessRepo.save({
+    organizationId: organization.id,
+    slug: store?.slug ?? 'bc-centro',
+    name: store?.name ?? 'Golf Sport Bar — Centro BC',
+    address: store?.address ?? 'R. 3600, N205',
+    district: store?.district,
+    postalCode: store?.postalCode,
+    city: store?.city ?? 'Balneário Camboriú',
+    state: store?.state ?? 'SC',
+    country: store?.country ?? 'Brasil',
+    lat: store?.lat,
+    lng: store?.lng,
+  });
   const business = await businessRepo.findOneByOrFail({
     slug: store?.slug ?? 'bc-centro',
   });
@@ -361,50 +329,22 @@ async function seedDemoData(catalog: MenuCatalog) {
   const cookRole = await roleRepo.findOneByOrFail({ name: 'COOK' });
   const bartenderRole = await roleRepo.findOneByOrFail({ name: 'BARTENDER' });
 
-  await memberRepo.upsert(
+  await memberRepo.save([
     { businessId: business.id, userId: admin.id, roleId: adminRole.id, isActive: true },
-    ['businessId', 'userId'],
-  );
-  await memberRepo.upsert(
     { businessId: business.id, userId: owner.id, roleId: ownerRole.id, isActive: true },
-    ['businessId', 'userId'],
-  );
-  await memberRepo.upsert(
     { businessId: business.id, userId: manager.id, roleId: managerRole.id, isActive: true },
-    ['businessId', 'userId'],
-  );
-  await memberRepo.upsert(
     { businessId: business.id, userId: waiter.id, roleId: waiterRole.id, isActive: true },
-    ['businessId', 'userId'],
-  );
-  await memberRepo.upsert(
     { businessId: business.id, userId: cook.id, roleId: cookRole.id, isActive: true },
-    ['businessId', 'userId'],
-  );
-  await memberRepo.upsert(
     { businessId: business.id, userId: bartender.id, roleId: bartenderRole.id, isActive: true },
-    ['businessId', 'userId'],
-  );
+  ]);
 
-  const products = await linkCatalogToBusiness(business.id, catalog);
+  await linkCatalogToBusiness(business.id, catalog);
 
-  const bays = [
-    { code: 'BAY-1', name: 'Bay 1' },
-    { code: 'BAY-2', name: 'Bay 2' },
-    { code: 'BAY-3', name: 'Bay 3' },
-  ];
-
-  for (const bay of bays) {
-    await bayRepo.upsert(
-      { businessId: business.id, code: bay.code, name: bay.name, isActive: true },
-      ['businessId', 'code'],
-    );
-  }
-
-  const customers = await seedDemoCustomers(customerUser);
-
-  await seedDemoOrders(business.id, waiter.id, products, customers);
-  await seedDemoReservations(business.id, customers);
+  await bayRepo.save([
+    { businessId: business.id, code: 'BAY-1', name: 'Bay 1', isActive: true },
+    { businessId: business.id, code: 'BAY-2', name: 'Bay 2', isActive: true },
+    { businessId: business.id, code: 'BAY-3', name: 'Bay 3', isActive: true },
+  ]);
 }
 
 export async function linkCatalogToBusiness(businessId: string, catalog: MenuCatalog) {
@@ -415,195 +355,14 @@ export async function linkCatalogToBusiness(businessId: string, catalog: MenuCat
 
   const products = await productRepo.find({ where: { slug: In(slugs) } });
   for (const product of products) {
-    await businessProductRepo.upsert(
-      {
-        businessId,
-        productId: product.id,
-        priceBrl: product.basePriceBrl,
-        isAvailable: true,
-      },
-      ['businessId', 'productId'],
-    );
+    await businessProductRepo.save({
+      businessId,
+      productId: product.id,
+      priceBrl: product.basePriceBrl,
+      isAvailable: true,
+    });
   }
   return products;
-}
-
-async function seedDemoCustomers(appUser: User) {
-  const customerRepo = dataSource.getRepository(Customer);
-  const demos = [
-    {
-      fullName: 'Ana Souza',
-      cpf: '52998224725',
-      email: appUser.email,
-      phone: '5547999110011',
-      birthDate: '1994-03-12',
-      city: 'Balneário Camboriú',
-      state: 'SC',
-      userId: appUser.id,
-    },
-    {
-      fullName: 'Carlos Lima',
-      cpf: '39053344705',
-      email: 'carlos.lima@mail.com',
-      phone: '5547999220022',
-      birthDate: '1988-11-02',
-      city: 'Itajaí',
-      state: 'SC',
-    },
-    {
-      fullName: 'Marina Costa',
-      cpf: '11144477735',
-      email: 'marina.costa@mail.com',
-      phone: '5547999330033',
-      birthDate: '1999-07-21',
-      city: 'Balneário Camboriú',
-      state: 'SC',
-    },
-  ];
-
-  for (const demo of demos) {
-    await customerRepo.upsert(
-      {
-        ...demo,
-        lgpdAcceptedAt: new Date(),
-        isActive: true,
-      },
-      ['cpf'],
-    );
-  }
-
-  return customerRepo.find({ order: { fullName: 'ASC' } });
-}
-
-async function seedDemoOrders(
-  businessId: string,
-  createdById: string,
-  products: Product[],
-  customers: Customer[],
-) {
-  const orderRepo = dataSource.getRepository(Order);
-  const itemRepo = dataSource.getRepository(OrderItem);
-
-  const existing = await orderRepo.count({ where: { businessId } });
-  if (existing > 0 || products.length === 0) return;
-
-  const now = new Date();
-  const scenarios: Array<{
-    daysAgo: number;
-    tableLabel: string;
-    status: OrderStatus;
-    itemCount: number;
-  }> = [
-    { daysAgo: 0, tableLabel: 'Mesa 1', status: OrderStatus.OPEN, itemCount: 2 },
-    { daysAgo: 0, tableLabel: 'Mesa 4', status: OrderStatus.IN_PROGRESS, itemCount: 3 },
-    { daysAgo: 0, tableLabel: 'Bay 2', status: OrderStatus.COMPLETED, itemCount: 2 },
-    { daysAgo: 1, tableLabel: 'Mesa 3', status: OrderStatus.COMPLETED, itemCount: 4 },
-    { daysAgo: 1, tableLabel: 'Mesa 6', status: OrderStatus.COMPLETED, itemCount: 2 },
-    { daysAgo: 2, tableLabel: 'Mesa 2', status: OrderStatus.COMPLETED, itemCount: 3 },
-    { daysAgo: 3, tableLabel: 'Mesa 5', status: OrderStatus.CANCELLED, itemCount: 1 },
-    { daysAgo: 4, tableLabel: 'Bay 1', status: OrderStatus.COMPLETED, itemCount: 5 },
-    { daysAgo: 5, tableLabel: 'Mesa 1', status: OrderStatus.COMPLETED, itemCount: 2 },
-    { daysAgo: 6, tableLabel: 'Mesa 8', status: OrderStatus.COMPLETED, itemCount: 3 },
-    { daysAgo: 8, tableLabel: 'Mesa 4', status: OrderStatus.COMPLETED, itemCount: 2 },
-    { daysAgo: 10, tableLabel: 'Bay 3', status: OrderStatus.COMPLETED, itemCount: 4 },
-    { daysAgo: 12, tableLabel: 'Mesa 2', status: OrderStatus.COMPLETED, itemCount: 1 },
-    { daysAgo: 13, tableLabel: 'Mesa 7', status: OrderStatus.COMPLETED, itemCount: 3 },
-  ];
-
-  for (const [index, scenario] of scenarios.entries()) {
-    const createdAt = new Date(now);
-    createdAt.setUTCDate(createdAt.getUTCDate() - scenario.daysAgo);
-    createdAt.setUTCHours(18 + (index % 4), (index * 11) % 60, 0, 0);
-
-    const selected = products.slice(index % products.length, (index % products.length) + scenario.itemCount);
-    const items = (selected.length ? selected : products.slice(0, scenario.itemCount)).map(
-      (product, itemIndex) => ({
-        product,
-        quantity: 1 + (itemIndex % 2),
-      }),
-    );
-    const totalBrl = items.reduce(
-      (sum, item) => sum + Number(item.product.basePriceBrl) * item.quantity,
-      0,
-    );
-
-    const order = await orderRepo.save({
-      businessId,
-      createdById,
-      customerId: customers.length ? customers[index % customers.length].id : null,
-      tableLabel: scenario.tableLabel,
-      status: scenario.status,
-      totalBrl: scenario.status === OrderStatus.CANCELLED ? 0 : totalBrl,
-      createdAt,
-      updatedAt: createdAt,
-    });
-
-    for (const item of items) {
-      const itemStatus =
-        scenario.status === OrderStatus.COMPLETED
-          ? OrderItemStatus.SERVED
-          : scenario.status === OrderStatus.CANCELLED
-            ? OrderItemStatus.CANCELLED
-            : scenario.status === OrderStatus.IN_PROGRESS
-              ? OrderItemStatus.PREPARING
-              : OrderItemStatus.PENDING;
-
-      await itemRepo.save({
-        orderId: order.id,
-        productId: item.product.id,
-        quantity: item.quantity,
-        unitPriceBrl: item.product.basePriceBrl,
-        status: itemStatus,
-        createdAt,
-        updatedAt: createdAt,
-      });
-    }
-  }
-}
-
-async function seedDemoReservations(businessId: string, customers: Customer[]) {
-  const bayRepo = dataSource.getRepository(GsproBay);
-  const reservationRepo = dataSource.getRepository(GsproReservation);
-  const bays = await bayRepo.find({ where: { businessId }, order: { code: 'ASC' } });
-  if (bays.length === 0 || customers.length === 0) return;
-
-  const existing = await reservationRepo.count({ where: { businessId } });
-  if (existing > 0) return;
-
-  const today = new Date();
-  today.setUTCHours(20, 0, 0, 0);
-  const later = new Date(today);
-  later.setUTCHours(21, 0, 0, 0);
-  const tomorrow = new Date(today);
-  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
-  const tomorrowEnd = new Date(tomorrow);
-  tomorrowEnd.setUTCHours(22, 0, 0, 0);
-
-  const ana = customers.find((customer) => customer.cpf === '52998224725') ?? customers[0];
-  const carlos = customers.find((customer) => customer.cpf === '39053344705') ?? customers[1] ?? customers[0];
-
-  await reservationRepo.save([
-    {
-      businessId,
-      bayId: bays[0].id,
-      customerId: ana.id,
-      customerName: ana.fullName,
-      customerPhone: ana.phone,
-      startAt: today,
-      endAt: later,
-      status: ReservationStatus.CONFIRMED,
-    },
-    {
-      businessId,
-      bayId: bays[1]?.id ?? bays[0].id,
-      customerId: carlos.id,
-      customerName: carlos.fullName,
-      customerPhone: carlos.phone,
-      startAt: tomorrow,
-      endAt: tomorrowEnd,
-      status: ReservationStatus.PENDING,
-    },
-  ]);
 }
 
 async function main() {
@@ -611,16 +370,17 @@ async function main() {
   const catalogPath = join(__dirname, 'seed', 'menu-catalog.json');
   const catalog = JSON.parse(readFileSync(catalogPath, 'utf8')) as MenuCatalog;
 
+  await clearDatabase();
   await seedPermissionsAndRoles();
   await seedCatalog(catalog);
-  await seedDemoData(catalog);
+  await seedCoreData(catalog);
 
   const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@folf.local';
   const waiterEmail = process.env.SEED_WAITER_EMAIL ?? 'waiter@folf.local';
   const cookEmail = process.env.SEED_COOK_EMAIL ?? 'cook@folf.local';
   const bartenderEmail = process.env.SEED_BARTENDER_EMAIL ?? 'bartender@folf.local';
   const customerEmail = process.env.SEED_CUSTOMER_EMAIL ?? 'customer@folf.local';
-  console.log('Seed completed successfully');
+  console.log('Seed completed successfully (users + business + menu + 3 bays)');
   console.log(`Admin user: ${adminEmail}`);
   console.log(`Waiter user: ${waiterEmail}`);
   console.log(`Cook user: ${cookEmail}`);

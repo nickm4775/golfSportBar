@@ -112,6 +112,28 @@
   },
   "notes": "备注",
   "confirmBooking": "确认预订",
+  "companions": "同行人数",
+  "companionsCount": "{count} 位同行",
+  "@companionsCount": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "pricingPreview": "{party} × {unit}/h × {hours} h = {total}",
+  "@pricingPreview": {
+    "placeholders": {
+      "party": { "type": "int" },
+      "unit": { "type": "String" },
+      "hours": { "type": "String" },
+      "total": { "type": "String" }
+    }
+  },
+  "totalCostLabel": "合计：{value}",
+  "@totalCostLabel": {
+    "placeholders": {
+      "value": { "type": "String" }
+    }
+  },
   "noSlots": "当天没有空档。",
   "emptyReservations": "你还没有任何预订。",
   "cancelReservation": "取消预订",

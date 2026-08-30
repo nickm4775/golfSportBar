@@ -14,6 +14,7 @@ import { GsproBay } from './gspro-bay.entity';
 import { GsproSession } from './gspro-session.entity';
 import { Customer } from './customer.entity';
 import { ReservationStatus } from '../../../domain/enums';
+import { decimalTransformer } from '../decimal.transformer';
 
 @Entity('gspro_reservations')
 @Index(['businessId', 'bayId', 'startAt', 'endAt'])
@@ -52,6 +53,27 @@ export class GsproReservation {
 
   @Column({ type: 'text', nullable: true })
   notes!: string | null;
+
+  @Column({ name: 'companion_count', type: 'int', default: 0 })
+  companionCount!: number;
+
+  @Column({
+    name: 'unit_price_brl',
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: decimalTransformer,
+  })
+  unitPriceBrl!: number;
+
+  @Column({
+    name: 'total_cost_brl',
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    transformer: decimalTransformer,
+  })
+  totalCostBrl!: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;

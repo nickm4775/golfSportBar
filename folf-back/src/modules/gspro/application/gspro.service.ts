@@ -18,8 +18,35 @@ import {
   UpdateSessionDto,
 } from '../presentation/dto/gspro.dto';
 import { BusinessRealtimeService } from '../../realtime/application/business-realtime.service';
+import {
+  pricingForReservationRange,
+  pricingForSessionDuration,
+} from '../domain/gspro-pricing';
 
 const MAX_RESERVATION_MS = 6 * 60 * 60 * 1000;
+
+const SESSION_SELECT = {
+  id: true,
+  businessId: true,
+  bayId: true,
+  reservationId: true,
+  status: true,
+  openedById: true,
+  closedById: true,
+  startedAt: true,
+  endedAt: true,
+  durationMinutes: true,
+  companionCount: true,
+  unitPriceBrl: true,
+  totalCostBrl: true,
+  notes: true,
+  createdAt: true,
+  updatedAt: true,
+  bay: true,
+  reservation: true,
+  openedBy: { id: true, name: true },
+  closedBy: { id: true, name: true },
+} as const;
 
 function toIso(value: Date | string) {
   return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
@@ -109,13 +136,17 @@ export class GsproService {
   async createCustomerReservation(
     businessId: string,
     customerId: string,
-    dto: Pick<CreateReservationDto, 'bayId' | 'startAt' | 'endAt' | 'notes'>,
+    dto: Pick<
+      CreateReservationDto,
+      'bayId' | 'startAt' | 'endAt' | 'notes' | 'companionCount'
+    >,
   ) {
     const saved = await this.createReservation(businessId, {
       bayId: dto.bayId,
       customerId,
       startAt: dto.startAt,
       endAt: dto.endAt,
+      companionCount: dto.companionCount,
       notes: dto.notes,
       status: ReservationStatus.CONFIRMED,
     });
@@ -169,6 +200,9 @@ export class GsproService {
       endAt: toIso(reservation.endAt),
       status: reservation.status,
       notes: reservation.notes,
+      companionCount: reservation.companionCount,
+      unitPriceBrl: Number(reservation.unitPriceBrl),
+      totalCostBrl: Number(reservation.totalCostBrl),
       createdAt: toIso(reservation.createdAt),
       bay: reservation.bay
         ? { id: reservation.bay.id, code: reservation.bay.code, name: reservation.bay.name }
@@ -211,11 +245,11 @@ export class GsproService {
   async createReservation(businessId: string, dto: CreateReservationDto) {
     await this.ensureBayBelongsToBusiness(businessId, dto.bayId);
     const customer = await this.requireCustomer(dto.customerId);
-    await this.ensureNoReservationOverlap(
-      dto.bayId,
-      new Date(dto.startAt),
-      new Date(dto.endAt),
-    );
+    const startAt = new Date(dto.startAt);
+    const endAt = new Date(dto.endAt);
+    await this.ensureNoReservationOverlap(dto.bayId, startAt, endAt);
+
+    const pricing = pricingForReservationRange(dto.companionCount, startAt, endAt);
 
     const reservation = await this.reservationRepo.save({
       businessId,
@@ -223,8 +257,11 @@ export class GsproService {
       customerId: customer.id,
       customerName: customer.fullName,
       customerPhone: customer.phone,
-      startAt: new Date(dto.startAt),
-      endAt: new Date(dto.endAt),
+      startAt,
+      endAt,
+      companionCount: dto.companionCount,
+      unitPriceBrl: pricing.unitPriceBrl,
+      totalCostBrl: pricing.totalCostBrl,
       status: dto.status ?? ReservationStatus.CONFIRMED,
       notes: dto.notes,
     });
@@ -263,6 +300,14 @@ export class GsproService {
       );
     }
 
+    const nextStart = dto.startAt ? new Date(dto.startAt) : reservation.startAt;
+    const nextEnd = dto.endAt ? new Date(dto.endAt) : reservation.endAt;
+    const nextCompanions = dto.companionCount ?? reservation.companionCount;
+    const pricing =
+      dto.startAt || dto.endAt || dto.companionCount !== undefined
+        ? pricingForReservationRange(nextCompanions, nextStart, nextEnd)
+        : null;
+
     await this.reservationRepo.update(reservationId, {
       customerId,
       customerName,
@@ -271,6 +316,10 @@ export class GsproService {
       notes: dto.notes,
       startAt: dto.startAt ? new Date(dto.startAt) : undefined,
       endAt: dto.endAt ? new Date(dto.endAt) : undefined,
+      companionCount: dto.companionCount,
+      ...(pricing
+        ? { unitPriceBrl: pricing.unitPriceBrl, totalCostBrl: pricing.totalCostBrl }
+        : {}),
     });
 
     const updated = await this.reservationRepo.findOneOrFail({
@@ -290,25 +339,7 @@ export class GsproService {
         openedBy: true,
         closedBy: true,
       },
-      select: {
-        id: true,
-        businessId: true,
-        bayId: true,
-        reservationId: true,
-        status: true,
-        openedById: true,
-        closedById: true,
-        startedAt: true,
-        endedAt: true,
-        durationMinutes: true,
-        notes: true,
-        createdAt: true,
-        updatedAt: true,
-        bay: true,
-        reservation: true,
-        openedBy: { id: true, name: true },
-        closedBy: { id: true, name: true },
-      },
+      select: { ...SESSION_SELECT },
       order: { startedAt: 'DESC' },
     });
   }
@@ -321,34 +352,23 @@ export class GsproService {
     await this.ensureBayBelongsToBusiness(businessId, dto.bayId);
     await this.ensureBayAvailable(dto.bayId);
 
+    // Estimación inicial a 1h; se recalcula al cerrar con duración real
+    const pricing = pricingForSessionDuration(dto.companionCount, 60);
+
     const session = await this.sessionRepo.save({
       businessId,
       bayId: dto.bayId,
       status: SessionStatus.ACTIVE,
       openedById: userId,
       notes: dto.notes,
+      companionCount: dto.companionCount,
+      unitPriceBrl: pricing.unitPriceBrl,
+      totalCostBrl: pricing.totalCostBrl,
     });
 
     const saved = await this.sessionRepo.findOneOrFail({
       where: { id: session.id },
       relations: { bay: true, openedBy: true },
-      select: {
-        id: true,
-        businessId: true,
-        bayId: true,
-        reservationId: true,
-        status: true,
-        openedById: true,
-        closedById: true,
-        startedAt: true,
-        endedAt: true,
-        durationMinutes: true,
-        notes: true,
-        createdAt: true,
-        updatedAt: true,
-        bay: true,
-        openedBy: { id: true, name: true },
-      },
     });
     await this.emitChanged(businessId, saved.id, userId);
     return saved;
@@ -389,29 +409,14 @@ export class GsproService {
         status: SessionStatus.ACTIVE,
         openedById: userId,
         notes: dto.notes,
+        companionCount: reservation.companionCount,
+        unitPriceBrl: reservation.unitPriceBrl,
+        totalCostBrl: reservation.totalCostBrl,
       });
 
       return manager.findOneOrFail(GsproSession, {
         where: { id: created.id },
         relations: { bay: true, reservation: true, openedBy: true },
-        select: {
-          id: true,
-          businessId: true,
-          bayId: true,
-          reservationId: true,
-          status: true,
-          openedById: true,
-          closedById: true,
-          startedAt: true,
-          endedAt: true,
-          durationMinutes: true,
-          notes: true,
-          createdAt: true,
-          updatedAt: true,
-          bay: true,
-          reservation: true,
-          openedBy: { id: true, name: true },
-        },
       });
     });
     await this.emitChanged(businessId, session.id, userId);
@@ -432,11 +437,14 @@ export class GsproService {
         1,
         Math.round((endedAt.getTime() - session.startedAt.getTime()) / 60000),
       );
+      const pricing = pricingForSessionDuration(session.companionCount, durationMinutes);
 
       await this.dataSource.transaction(async (manager) => {
         if (session.reservationId) {
           await manager.update(GsproReservation, session.reservationId, {
             status: ReservationStatus.COMPLETED,
+            totalCostBrl: pricing.totalCostBrl,
+            unitPriceBrl: pricing.unitPriceBrl,
           });
         }
         await manager.update(GsproSession, sessionId, {
@@ -444,6 +452,8 @@ export class GsproService {
           closedById: userId,
           endedAt,
           durationMinutes,
+          unitPriceBrl: pricing.unitPriceBrl,
+          totalCostBrl: pricing.totalCostBrl,
           notes: dto.notes ?? session.notes,
         });
       });
@@ -499,25 +509,7 @@ export class GsproService {
         openedBy: true,
         closedBy: true,
       },
-      select: {
-        id: true,
-        businessId: true,
-        bayId: true,
-        reservationId: true,
-        status: true,
-        openedById: true,
-        closedById: true,
-        startedAt: true,
-        endedAt: true,
-        durationMinutes: true,
-        notes: true,
-        createdAt: true,
-        updatedAt: true,
-        bay: true,
-        reservation: true,
-        openedBy: { id: true, name: true },
-        closedBy: { id: true, name: true },
-      },
+      select: { ...SESSION_SELECT },
     });
   }
 

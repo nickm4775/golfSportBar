@@ -3,6 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { Check, Funnel, Xmark } from '@gravity-ui/icons'
 import { ReservationStatus } from '@/shared/domain/enums'
 import type { Customer } from '@/domain/customer/Customer'
+import {
+  MAX_COMPANION_COUNT,
+  MIN_COMPANION_COUNT,
+  computeReservationPreview,
+  formatBrl,
+} from '@/domain/gspro/gsproPricing'
 import { useGsproStore } from '@/presentation/stores/gsproStore'
 import { useAuthStore } from '@/presentation/stores/authStore'
 import { notify, notifyError } from '@/presentation/lib/notify'
@@ -32,6 +38,7 @@ import {
 export function ReservationsPage() {
   const { t, i18n } = useTranslation('admin')
   const locale = i18n.language.split('-')[0]
+  const currencyLocale = locale === 'pt' ? 'pt-BR' : locale === 'es' ? 'es-BR' : 'en-US'
   const reservations = useGsproStore((state) => state.reservations)
   const bays = useGsproStore((state) => state.bays)
   const loading = useGsproStore((state) => state.loading)
@@ -113,13 +120,15 @@ export function ReservationsPage() {
         <EmptyState message={t('common.empty')} />
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-[var(--gsb-border)] bg-[var(--gsb-surface)]">
-          <table className="w-full min-w-[44rem] text-left text-sm">
+          <table className="w-full min-w-[56rem] text-left text-sm">
             <thead className="text-xs uppercase tracking-wider text-[var(--gsb-muted)]">
               <tr>
                 <th className="px-4 py-3">{t('reservations.customer')}</th>
                 <th>{t('reservations.bay')}</th>
                 <th>{t('reservations.start')}</th>
                 <th>{t('reservations.end')}</th>
+                <th>{t('reservations.companions')}</th>
+                <th>{t('reservations.totalCost')}</th>
                 <th>{t('orders.changeStatus')}</th>
                 <th className="px-4">{t('common.actions')}</th>
               </tr>
@@ -133,6 +142,13 @@ export function ReservationsPage() {
                   <td>{reservation.bay?.code ?? reservation.bayId.slice(0, 8)}</td>
                   <td>{formatDateTime(reservation.startAt, locale)}</td>
                   <td>{formatDateTime(reservation.endAt, locale)}</td>
+                  <td>
+                    {reservation.companionCount}{' '}
+                    <span className="text-[var(--gsb-muted)]">
+                      ({1 + reservation.companionCount})
+                    </span>
+                  </td>
+                  <td>{formatBrl(Number(reservation.totalCostBrl ?? 0), currencyLocale)}</td>
                   <td>
                     <StatusBadge label={t(`status.${reservation.status}`)} />
                   </td>
@@ -195,6 +211,7 @@ export function ReservationsPage() {
       {createOpen ? (
         <ReservationCreateModal
           bays={bays}
+          currencyLocale={currencyLocale}
           onClose={() => setCreateOpen(false)}
           onCreate={async (payload) => {
             try {
@@ -213,16 +230,19 @@ export function ReservationsPage() {
 
 function ReservationCreateModal({
   bays,
+  currencyLocale,
   onClose,
   onCreate,
 }: {
   bays: { id: string; code: string; name: string }[]
+  currencyLocale: string
   onClose: () => void
   onCreate: (payload: {
     bayId: string
     customerId: string
     startAt: string
     endAt: string
+    companionCount: number
   }) => Promise<void>
 }) {
   const { t } = useTranslation('admin')
@@ -230,8 +250,18 @@ function ReservationCreateModal({
   const [customer, setCustomer] = useState<Customer | null>(null)
   const [startAt, setStartAt] = useState('')
   const [endAt, setEndAt] = useState('')
+  const [companionCount, setCompanionCount] = useState(0)
   const [saving, setSaving] = useState(false)
   const autoEndRef = useRef('')
+
+  const preview =
+    startAt && endAt
+      ? computeReservationPreview(
+          companionCount,
+          new Date(startAt).toISOString(),
+          new Date(endAt).toISOString(),
+        )
+      : null
 
   const handleStartChange = (value: string) => {
     setStartAt(value)
@@ -256,6 +286,7 @@ function ReservationCreateModal({
         customerId: customer.id,
         startAt: new Date(startAt).toISOString(),
         endAt: new Date(endAt).toISOString(),
+        companionCount,
       })
     } finally {
       setSaving(false)
@@ -274,6 +305,22 @@ function ReservationCreateModal({
                 {bay.code} · {bay.name}
               </option>
             ))}
+          </select>
+        </label>
+        <label className="text-xs text-[var(--gsb-muted)]">
+          {t('reservations.companions')}
+          <select
+            className={`${inputClass} mt-1`}
+            value={companionCount}
+            onChange={(event) => setCompanionCount(Number(event.target.value))}
+          >
+            {Array.from({ length: MAX_COMPANION_COUNT - MIN_COMPANION_COUNT + 1 }, (_, i) => i).map(
+              (count) => (
+                <option key={count} value={count}>
+                  {count} (+{count + 1} {t('reservations.partySize').toLowerCase()})
+                </option>
+              ),
+            )}
           </select>
         </label>
         <label className="text-xs text-[var(--gsb-muted)] sm:col-span-2">
@@ -300,6 +347,16 @@ function ReservationCreateModal({
             onChange={(event) => setEndAt(event.target.value)}
           />
         </label>
+        {preview ? (
+          <p className="sm:col-span-2 rounded-xl border border-[var(--gsb-border)] bg-[var(--gsb-bg)] px-3 py-2 text-sm text-[var(--gsb-fg)]">
+            {t('reservations.pricingPreview', {
+              party: preview.partySize,
+              unit: formatBrl(preview.unitPriceBrl, currencyLocale),
+              hours: preview.hours.toFixed(2),
+              total: formatBrl(preview.totalCostBrl, currencyLocale),
+            })}
+          </p>
+        ) : null}
         <div className="flex gap-2 sm:col-span-2">
           <button type="submit" className={primaryButtonClass} disabled={saving || !customer}>
             {t('common.create')}

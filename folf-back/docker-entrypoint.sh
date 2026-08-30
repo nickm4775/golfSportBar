@@ -46,6 +46,7 @@ client
 fi
 
 if [ "$SHOULD_SEED" = "true" ]; then
+  echo "ATENCIÓN: el seed vacía la base y carga usuarios + negocio + carta + 3 bays"
   node dist/database/seed.js
 fi
 

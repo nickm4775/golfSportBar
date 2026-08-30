@@ -189,14 +189,27 @@
     "start": "Inizio",
     "end": "Fine",
     "bay": "Bay",
-    "checkIn": "Check-in"
+    "checkIn": "Check-in",
+    "companions": "Accompagnatori",
+    "partySize": "Persone",
+    "unitPrice": "Prezzo/persona/h",
+    "totalCost": "Totale",
+    "pricingPreview": "{{party}} × {{unit}}/h × {{hours}} h = {{total}}"
   },
   "sessions": {
     "title": "Sessioni",
     "subtitle": "Walk-in e check-in attivi.",
     "walkIn": "Walk-in",
     "close": "Chiudi",
-    "started": "Inizio"
+    "started": "Inizio",
+    "ended": "Fine",
+    "duration": "Durata",
+    "totalCost": "Costo totale",
+    "companions": "Accompagnatori",
+    "viewTable": "Tabella",
+    "viewSchedule": "Agenda",
+    "scheduleDay": "Giorno",
+    "minutesShort": "{{count}} min"
   },
   "business": {
     "title": "Sedi",
