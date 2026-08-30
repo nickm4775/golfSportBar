@@ -1,6 +1,8 @@
 import { lazy, Suspense } from 'react'
 import { SiteHeader } from '@/presentation/components/layout/SiteHeader'
 import { SiteFooter } from '@/presentation/components/layout/SiteFooter'
+import { HomeDocumentSeo } from '@/presentation/components/seo/DocumentSeo'
+import { LocalBusinessJsonLd } from '@/presentation/components/seo/LocalBusinessJsonLd'
 import { HeroSection } from '@/presentation/sections/Hero/HeroSection'
 import { SimulatorScrollSection } from '@/presentation/sections/SimulatorScroll/SimulatorScrollSection'
 import { MenuScrollSection } from '@/presentation/sections/MenuScroll/MenuScrollSection'
@@ -14,6 +16,8 @@ const StoresMapSection = lazy(() =>
 export function HomePage() {
   return (
     <>
+      <HomeDocumentSeo />
+      <LocalBusinessJsonLd />
       <SiteHeader />
       <main>
         <HeroSection />

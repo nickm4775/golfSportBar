@@ -5,15 +5,18 @@
   "slides": {
     "bay": {
       "title": "Gioca. Competi. Divertiti.",
-      "copy": "Bay privati per te, amici e gruppi — allenamento o partita, tutto l'anno."
+      "copy": "Bay privati per te, amici e gruppi — allenamento o partita, tutto l'anno.",
+      "imageAlt": "Bay privato del simulatore di golf indoor al Golf Sport Bar"
     },
     "tech": {
       "title": "La sensazione di un campo vero.",
-      "copy": "Fisica della palla precisa e dati in tempo reale; migliaia di campi da esplorare."
+      "copy": "Fisica della palla precisa e dati in tempo reale; migliaia di campi da esplorare.",
+      "imageAlt": "Tecnologia del simulatore di golf con fisica realistica"
     },
     "night": {
       "title": "Notti che si giocano insieme.",
-      "copy": "Tornei, afterwork e multiplayer: il simulatore riunisce; menu e drink chiudono la sera."
+      "copy": "Tornei, afterwork e multiplayer: il simulatore riunisce; menu e drink chiudono la sera.",
+      "imageAlt": "Atmosfera notturna dello sport bar con simulatore di golf"
     }
   }
 }

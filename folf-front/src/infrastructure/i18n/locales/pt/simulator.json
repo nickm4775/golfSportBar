@@ -1,19 +1,22 @@
 {
   "eyebrow": "Simulador",
   "title": "Mais do que um swing.",
-  "subtitle": "Física realista, milhares de campos e partidas com amigos — golf indoor com a energia de um sport bar.",
+  "subtitle": "Física realista, milhares de campos e partidas com amigos — simulador de golfe indoor com a energia de um sport bar em Balneário Camboriú.",
   "slides": {
     "bay": {
       "title": "Jogue. Compita. Divirta-se.",
-      "copy": "Bays privativos para você, amigos e grupos — treino ou partida, o ano inteiro."
+      "copy": "Bays privativos para você, amigos e grupos — treino ou partida de golfe indoor, o ano inteiro.",
+      "imageAlt": "Bay privativo do simulador de golfe indoor no Golf Sport Bar"
     },
     "tech": {
       "title": "Sensação de campo de verdade.",
-      "copy": "Física de bola precisa e dados em tempo real; milhares de campos para explorar."
+      "copy": "Física de bola precisa e dados em tempo real; milhares de campos para explorar no simulador.",
+      "imageAlt": "Tecnologia do simulador de golfe com física realista"
     },
     "night": {
       "title": "Noites que se jogam juntas.",
-      "copy": "Torneios, afterwork e multiplayer: o simulador reúne; a carta e os drinks fecham a noite."
+      "copy": "Torneios, afterwork e multiplayer: o simulador reúne; a carta e os drinks fecham a noite.",
+      "imageAlt": "Ambiente noturno do sport bar com simulador de golfe"
     }
   }
 }

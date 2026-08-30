@@ -5,15 +5,18 @@
   "slides": {
     "bay": {
       "title": "Play. Compete. Enjoy.",
-      "copy": "Private bays for you, friends, and groups — practice or a full round, year-round."
+      "copy": "Private bays for you, friends, and groups — practice or a full round, year-round.",
+      "imageAlt": "Private indoor golf simulator bay at Golf Sport Bar"
     },
     "tech": {
       "title": "The feel of a real course.",
-      "copy": "Precise ball physics and real-time data; thousands of courses to explore."
+      "copy": "Precise ball physics and real-time data; thousands of courses to explore.",
+      "imageAlt": "Indoor golf simulator technology with realistic physics"
     },
     "night": {
       "title": "Nights played together.",
-      "copy": "Tournaments, after-work, and multiplayer: the simulator brings everyone in; food and drinks close the night."
+      "copy": "Tournaments, after-work, and multiplayer: the simulator brings everyone in; food and drinks close the night.",
+      "imageAlt": "Evening sport-bar atmosphere with golf simulator"
     }
   }
 }

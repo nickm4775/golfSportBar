@@ -4,6 +4,7 @@ import { BrandLogo } from '@/presentation/components/brand/BrandLogo'
 import { LocaleSwitcher, ThemeSwitch } from '@/presentation/components/chrome/LocaleAndTheme'
 import { UserMenu } from '@/presentation/components/chrome/UserMenu'
 import { NotificationsBell } from '@/presentation/components/chrome/NotificationsBell'
+import { AppDocumentSeo } from '@/presentation/components/seo/DocumentSeo'
 import { useAuthStore } from '@/presentation/stores/authStore'
 import { useUiStore } from '@/presentation/stores/uiStore'
 import { filterNavItems } from '@/presentation/lib/appNav'
@@ -14,9 +15,12 @@ export function ProtectedApp() {
 
   if (status === 'idle' || status === 'loading') {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-[var(--gsb-bg)]">
-        <div className="h-10 w-10 animate-pulse rounded-full bg-[var(--gsb-accent-soft)] opacity-40" />
-      </div>
+      <>
+        <AppDocumentSeo />
+        <div className="flex min-h-dvh items-center justify-center bg-[var(--gsb-bg)]">
+          <div className="h-10 w-10 animate-pulse rounded-full bg-[var(--gsb-accent-soft)] opacity-40" />
+        </div>
+      </>
     )
   }
 
@@ -47,6 +51,7 @@ function AppShell() {
 
   return (
     <div className="flex min-h-dvh bg-[var(--gsb-bg)] text-[var(--gsb-fg)]">
+      <AppDocumentSeo />
       <aside
         className={`sticky top-0 flex h-dvh flex-col border-r border-[var(--gsb-border)] bg-[var(--gsb-surface)] pt-[env(safe-area-inset-top)] transition-[width] ${
           collapsed ? 'w-[4.5rem]' : 'w-60'

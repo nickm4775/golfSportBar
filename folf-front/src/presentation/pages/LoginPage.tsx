@@ -4,6 +4,7 @@ import { Button } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { BrandLogo } from '@/presentation/components/brand/BrandLogo'
 import { LocaleSwitcher, ThemeSwitch } from '@/presentation/components/chrome/LocaleAndTheme'
+import { LoginDocumentSeo } from '@/presentation/components/seo/DocumentSeo'
 import { useAuthStore } from '@/presentation/stores/authStore'
 import { ApiError } from '@/infrastructure/http/apiClient'
 
@@ -19,15 +20,23 @@ export function LoginPage() {
 
   if (status === 'idle' || status === 'loading') {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-[var(--gsb-bg)]">
-        <div className="h-10 w-10 animate-pulse rounded-full bg-[var(--gsb-accent-soft)] opacity-40" />
-      </div>
+      <>
+        <LoginDocumentSeo />
+        <div className="flex min-h-dvh items-center justify-center bg-[var(--gsb-bg)]">
+          <div className="h-10 w-10 animate-pulse rounded-full bg-[var(--gsb-accent-soft)] opacity-40" />
+        </div>
+      </>
     )
   }
 
   if (status === 'authenticated') {
     const from = (location.state as { from?: string } | null)?.from
-    return <Navigate to={from && from.startsWith('/app') ? from : '/app/dashboard'} replace />
+    return (
+      <>
+        <LoginDocumentSeo />
+        <Navigate to={from && from.startsWith('/app') ? from : '/app/dashboard'} replace />
+      </>
+    )
   }
 
   const handleSubmit = async (event: FormEvent) => {
@@ -53,6 +62,7 @@ export function LoginPage() {
 
   return (
     <div className="gsb-atmosphere flex min-h-dvh">
+      <LoginDocumentSeo />
       <div className="relative hidden flex-1 overflow-hidden lg:block">
         <div className="absolute inset-0 bg-[linear-gradient(160deg,color-mix(in_oklab,var(--gsb-accent)_28%,transparent),transparent_55%)]" />
         <div className="relative flex h-full flex-col justify-between p-12">

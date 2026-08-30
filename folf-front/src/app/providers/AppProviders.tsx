@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { useEffect } from 'react'
+import { HelmetProvider } from 'react-helmet-async'
 import { Toast } from '@heroui/react'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import i18n from '@/infrastructure/i18n/i18n'
@@ -29,16 +30,18 @@ function AuthHydrate({ children }: { children: ReactNode }) {
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
-    <I18nextProvider i18n={i18n}>
-      <ThemeProvider>
-        <Toast.Provider placement="top end" />
-        <DocumentLangSync>
-          <AuthHydrate>
-            <RealtimeProvider />
-            {children}
-          </AuthHydrate>
-        </DocumentLangSync>
-      </ThemeProvider>
-    </I18nextProvider>
+    <HelmetProvider>
+      <I18nextProvider i18n={i18n}>
+        <ThemeProvider>
+          <Toast.Provider placement="top end" />
+          <DocumentLangSync>
+            <AuthHydrate>
+              <RealtimeProvider />
+              {children}
+            </AuthHydrate>
+          </DocumentLangSync>
+        </ThemeProvider>
+      </I18nextProvider>
+    </HelmetProvider>
   )
 }

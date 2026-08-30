@@ -113,7 +113,7 @@ export function SimulatorScrollSection() {
               <div className="sim-media w-full overflow-hidden rounded-[1.75rem] shadow-[0_24px_80px_-48px_var(--gsb-glow)] md:rounded-[2.25rem]">
                 <img
                   src={slide.image}
-                  alt=""
+                  alt={t(`slides.${slide.key}.imageAlt`)}
                   className="aspect-[16/10] w-full object-cover"
                 />
               </div>

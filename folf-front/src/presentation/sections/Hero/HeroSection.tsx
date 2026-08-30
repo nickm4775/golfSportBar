@@ -55,7 +55,7 @@ export function HeroSection() {
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <img
           src="/images/simulator/hero-bay.png"
-          alt=""
+          alt="Simulador de golfe indoor Golf Sport Bar em Balneário Camboriú"
           className="hero-media h-full w-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--gsb-bg)] via-[color-mix(in_oklab,var(--gsb-bg)_45%,transparent)] to-[color-mix(in_oklab,var(--gsb-bg)_15%,transparent)]" />

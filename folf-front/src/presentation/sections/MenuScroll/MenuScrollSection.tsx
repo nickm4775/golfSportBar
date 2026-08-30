@@ -149,7 +149,7 @@ export function MenuScrollSection() {
             <div className="menu-media mt-8 w-full overflow-hidden rounded-[1.75rem] md:mt-10 md:rounded-[2.25rem]">
               <img
                 src={item.imageSrc}
-                alt=""
+                alt={t(item.nameKey)}
                 className="aspect-[16/10] w-full object-cover"
                 loading="lazy"
               />
