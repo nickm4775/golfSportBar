@@ -11,6 +11,7 @@ import {
   Max,
   Min,
 } from 'class-validator';
+import { ReservationStatus, SessionStatus } from '../../../../shared/domain/enums';
 import { MAX_COMPANION_COUNT, MIN_COMPANION_COUNT } from '../../domain/gspro-pricing';
 
 export class CreateBayDto {
