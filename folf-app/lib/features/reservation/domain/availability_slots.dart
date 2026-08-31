@@ -2,6 +2,7 @@ import 'package:folf/features/venue/domain/venue.dart';
 
 const Duration kDefaultSlotDuration = Duration(hours: 1);
 const Duration kSlotStep = Duration(minutes: 30);
+const int kMaxReservationHours = 6;
 
 DateTime dayOpens(DateTime day) => DateTime(day.year, day.month, day.day, 10);
 

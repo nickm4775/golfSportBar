@@ -272,6 +272,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get bayNoSlotsToday => '今天无空档';
 
   @override
+  String get bayAvailable => '可用';
+
+  @override
+  String get bayOccupied => '占用';
+
+  @override
   String bayNextSlot(String time) {
     return '下一空档：$time';
   }
@@ -298,6 +304,53 @@ class AppLocalizationsZh extends AppLocalizations {
   String minutes(int count) {
     return '$count 分钟';
   }
+
+  @override
+  String hours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count 小时',
+      one: '1 小时',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationHoursHint(int max) {
+    return '最多 $max 小时';
+  }
+
+  @override
+  String get estimatedTotal => '预估总价';
+
+  @override
+  String reservationSummary(int party, String duration) {
+    return '$party 人 · $duration';
+  }
+
+  @override
+  String get pickStartTime => '开始时间';
+
+  @override
+  String get timePeriodMorning => '上午';
+
+  @override
+  String get timePeriodAfternoon => '下午';
+
+  @override
+  String get timePeriodEvening => '晚上';
+
+  @override
+  String get selectedTimeSlotLabel => '已选时间';
+
+  @override
+  String timeSlotRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get noSlotsInPeriod => '该时段暂无可用时间。';
 
   @override
   String get notes => '备注';

@@ -1,24 +1,24 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folf/core/error/failures.dart';
-import 'package:folf/features/reservation/domain/availability_slots.dart';
+import 'package:folf/features/reservation/domain/bay_live_status.dart';
 import 'package:folf/features/venue/domain/venue.dart';
-
-enum BayAvailabilityStatus { availableNow, busy, noSlotsToday }
 
 class BayAvailabilityRow extends Equatable {
   const BayAvailabilityRow({
     required this.bay,
     required this.status,
-    this.nextSlot,
+    required this.canReserve,
   });
 
   final Bay bay;
-  final BayAvailabilityStatus status;
-  final DateTime? nextSlot;
+  final BayLiveStatus status;
+  final bool canReserve;
 
   @override
-  List<Object?> get props => [bay.id, status, nextSlot];
+  List<Object?> get props => [bay.id, status, canReserve];
 }
 
 class BayAvailabilityViewState extends Equatable {
@@ -54,14 +54,29 @@ class BayAvailabilityCubit extends Cubit<BayAvailabilityViewState> {
         super(const BayAvailabilityViewState());
 
   final VenueRepository _venues;
+  Timer? _refreshTimer;
+  String? _businessId;
 
   Future<void> bootstrap(String businessId) async {
+    _businessId = businessId;
     emit(state.copyWith(loading: true, message: null));
     await _load(businessId);
+    _startLiveRefresh();
   }
 
   Future<void> refresh(String businessId) async {
+    _businessId = businessId;
     await _load(businessId, showLoading: false);
+  }
+
+  void _startLiveRefresh() {
+    _refreshTimer?.cancel();
+    _refreshTimer = Timer.periodic(kBayStatusRefreshInterval, (_) {
+      final businessId = _businessId;
+      if (businessId != null) {
+        unawaited(_load(businessId, showLoading: false));
+      }
+    });
   }
 
   Future<void> _load(String businessId, {bool showLoading = true}) async {
@@ -74,34 +89,21 @@ class BayAvailabilityCubit extends Cubit<BayAvailabilityViewState> {
       final availability = await _venues.getAvailability(businessId, date);
       final rows = availability.bays.map((row) {
         final busy = row.busy;
-        if (isFreeNow(day: day, duration: kDefaultSlotDuration, busy: busy, now: now)) {
-          return BayAvailabilityRow(
-            bay: row.bay,
-            status: BayAvailabilityStatus.availableNow,
-            nextSlot: now,
-          );
-        }
-        final next = nextFreeStart(
-          day: day,
-          duration: kDefaultSlotDuration,
-          busy: busy,
-          now: now,
-        );
-        if (next != null) {
-          return BayAvailabilityRow(
-            bay: row.bay,
-            status: BayAvailabilityStatus.busy,
-            nextSlot: next,
-          );
-        }
         return BayAvailabilityRow(
           bay: row.bay,
-          status: BayAvailabilityStatus.noSlotsToday,
+          status: resolveBayLiveStatus(busy: busy, now: now),
+          canReserve: bayCanReserveToday(busy: busy, now: now),
         );
       }).toList();
       emit(state.copyWith(loading: false, rows: rows));
     } on Failure catch (error) {
       emit(state.copyWith(loading: false, message: error.message));
     }
+  }
+
+  @override
+  Future<void> close() {
+    _refreshTimer?.cancel();
+    return super.close();
   }
 }

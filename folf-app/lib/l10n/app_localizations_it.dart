@@ -279,6 +279,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get bayNoSlotsToday => 'Nessun orario oggi';
 
   @override
+  String get bayAvailable => 'Disponibile';
+
+  @override
+  String get bayOccupied => 'Occupato';
+
+  @override
   String bayNextSlot(String time) {
     return 'Prossimo orario: $time';
   }
@@ -305,6 +311,53 @@ class AppLocalizationsIt extends AppLocalizations {
   String minutes(int count) {
     return '$count min';
   }
+
+  @override
+  String hours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ore',
+      one: '1 ora',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationHoursHint(int max) {
+    return 'Fino a $max ore';
+  }
+
+  @override
+  String get estimatedTotal => 'Totale stimato';
+
+  @override
+  String reservationSummary(int party, String duration) {
+    return '$party giocatori · $duration';
+  }
+
+  @override
+  String get pickStartTime => 'Ora di inizio';
+
+  @override
+  String get timePeriodMorning => 'Mattina';
+
+  @override
+  String get timePeriodAfternoon => 'Pomeriggio';
+
+  @override
+  String get timePeriodEvening => 'Sera';
+
+  @override
+  String get selectedTimeSlotLabel => 'Orario selezionato';
+
+  @override
+  String timeSlotRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get noSlotsInPeriod => 'Nessun orario in questa fascia.';
 
   @override
   String get notes => 'Note';

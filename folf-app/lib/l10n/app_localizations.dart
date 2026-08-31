@@ -626,6 +626,18 @@ abstract class AppLocalizations {
   /// **'Sem horários hoje'**
   String get bayNoSlotsToday;
 
+  /// No description provided for @bayAvailable.
+  ///
+  /// In pt, this message translates to:
+  /// **'Disponível'**
+  String get bayAvailable;
+
+  /// No description provided for @bayOccupied.
+  ///
+  /// In pt, this message translates to:
+  /// **'Ocupado'**
+  String get bayOccupied;
+
   /// No description provided for @bayNextSlot.
   ///
   /// In pt, this message translates to:
@@ -673,6 +685,72 @@ abstract class AppLocalizations {
   /// In pt, this message translates to:
   /// **'{count} min'**
   String minutes(int count);
+
+  /// No description provided for @hours.
+  ///
+  /// In pt, this message translates to:
+  /// **'{count, plural, =1{1 hora}other{{count} horas}}'**
+  String hours(int count);
+
+  /// No description provided for @durationHoursHint.
+  ///
+  /// In pt, this message translates to:
+  /// **'Até {max} horas'**
+  String durationHoursHint(int max);
+
+  /// No description provided for @estimatedTotal.
+  ///
+  /// In pt, this message translates to:
+  /// **'Total estimado'**
+  String get estimatedTotal;
+
+  /// No description provided for @reservationSummary.
+  ///
+  /// In pt, this message translates to:
+  /// **'{party} jogadores · {duration}'**
+  String reservationSummary(int party, String duration);
+
+  /// No description provided for @pickStartTime.
+  ///
+  /// In pt, this message translates to:
+  /// **'Horário de início'**
+  String get pickStartTime;
+
+  /// No description provided for @timePeriodMorning.
+  ///
+  /// In pt, this message translates to:
+  /// **'Manhã'**
+  String get timePeriodMorning;
+
+  /// No description provided for @timePeriodAfternoon.
+  ///
+  /// In pt, this message translates to:
+  /// **'Tarde'**
+  String get timePeriodAfternoon;
+
+  /// No description provided for @timePeriodEvening.
+  ///
+  /// In pt, this message translates to:
+  /// **'Noite'**
+  String get timePeriodEvening;
+
+  /// No description provided for @selectedTimeSlotLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Horário selecionado'**
+  String get selectedTimeSlotLabel;
+
+  /// No description provided for @timeSlotRange.
+  ///
+  /// In pt, this message translates to:
+  /// **'{start} – {end}'**
+  String timeSlotRange(String start, String end);
+
+  /// No description provided for @noSlotsInPeriod.
+  ///
+  /// In pt, this message translates to:
+  /// **'Sem horários neste período.'**
+  String get noSlotsInPeriod;
 
   /// No description provided for @notes.
   ///

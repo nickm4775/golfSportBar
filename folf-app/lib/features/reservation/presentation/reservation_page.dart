@@ -1,10 +1,16 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folf/core/format/brl.dart';
 import 'package:folf/core/widgets/gsb_widgets.dart';
-import 'package:folf/features/reservation/domain/gspro_pricing.dart';
 import 'package:folf/features/reservation/domain/reservation.dart';
 import 'package:folf/features/reservation/presentation/reservation_cubit.dart';
+import 'package:folf/features/reservation/presentation/widgets/bay_option_card.dart';
+import 'package:folf/features/reservation/presentation/widgets/bay_status_style.dart';
+import 'package:folf/features/reservation/presentation/widgets/duration_stepper.dart';
+import 'package:folf/features/reservation/presentation/widgets/reservation_price_summary.dart';
+import 'package:folf/features/reservation/presentation/widgets/time_slot_picker.dart';
 import 'package:folf/features/venue/presentation/venue_session_cubit.dart';
 import 'package:folf/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -17,12 +23,13 @@ class ReservationPage extends StatefulWidget {
   State<ReservationPage> createState() => _ReservationPageState();
 }
 
-class _ReservationPageState extends State<ReservationPage> with SingleTickerProviderStateMixin {
+class _ReservationPageState extends State<ReservationPage> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late final TabController _tabs;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _tabs = TabController(length: 2, vsync: this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final venue = context.read<VenueSessionCubit>().state.venue;
@@ -32,8 +39,19 @@ class _ReservationPageState extends State<ReservationPage> with SingleTickerProv
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _tabs.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      final venue = context.read<VenueSessionCubit>().state.venue;
+      if (venue != null) {
+        unawaited(context.read<ReservationCubit>().refreshAvailability(venue.id));
+      }
+    }
   }
 
   @override
@@ -108,24 +126,37 @@ class _NewReservation extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ReservationCubit>();
     final slots = cubit.freeStarts();
-    final time = DateFormat.Hm();
+    final hasBay = state.selectedBayId != null;
+    final durationHours = state.duration.inHours;
+
     return ListView(
       padding: const EdgeInsets.only(top: 16, bottom: 120),
       children: [
-        Text(l10n.pickBay),
+        Text(l10n.pickBay, style: Theme.of(context).textTheme.titleSmall),
+        const SizedBox(height: 10),
+        for (final bay in state.bays) ...[
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Builder(
+              builder: (context) {
+                final liveStatus = cubit.liveStatusForBay(bay.id);
+                final style = liveStatus == null
+                    ? null
+                    : bayStatusStyle(context: context, l10n: l10n, status: liveStatus);
+                return BayOptionCard(
+                  name: bay.name,
+                  selected: bay.id == state.selectedBayId,
+                  badgeLabel: style?.label,
+                  badgeColor: style?.badgeColor,
+                  badgeForeground: style?.badgeForeground,
+                  accentColor: style?.accent,
+                  onTap: () => cubit.selectBay(venueId, bay.id),
+                );
+              },
+            ),
+          ),
+        ],
         const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          children: [
-            for (final bay in state.bays)
-              GsbChip(
-                label: bay.name,
-                selected: bay.id == state.selectedBayId,
-                onTap: () => cubit.selectBay(venueId, bay.id),
-              ),
-          ],
-        ),
-        const SizedBox(height: 16),
         ListTile(
           contentPadding: EdgeInsets.zero,
           title: Text(l10n.pickDay),
@@ -141,65 +172,43 @@ class _NewReservation extends StatelessWidget {
             if (picked != null) cubit.selectDay(venueId, picked);
           },
         ),
-        Text(l10n.duration),
-        Wrap(
-          spacing: 8,
-          children: [
-            for (final minutes in [60, 90, 120])
-              GsbChip(
-                label: l10n.minutes(minutes),
-                selected: state.duration.inMinutes == minutes,
-                onTap: () => cubit.selectDuration(Duration(minutes: minutes)),
-              ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Text(l10n.companions),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          children: [
-            for (final count in [0, 1, 2, 3])
-              GsbChip(
-                label: '$count',
-                selected: state.companionCount == count,
-                onTap: () => cubit.selectCompanions(count),
-              ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Text(
-          l10n.pricingPreview(
-            1 + state.companionCount,
-            formatBrl(
-              pricePerPersonBrl(1 + state.companionCount),
-            ),
-            (state.duration.inMinutes / 60).toStringAsFixed(
-              state.duration.inMinutes % 60 == 0 ? 0 : 1,
-            ),
-            formatBrl(
-              computeReservationTotal(
-                companionCount: state.companionCount,
-                duration: state.duration,
-              ),
-            ),
+        if (hasBay) ...[
+          const SizedBox(height: 8),
+          Text(l10n.duration, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 10),
+          DurationStepper(
+            hours: durationHours,
+            onChanged: (hours) => cubit.selectDuration(Duration(hours: hours)),
           ),
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        const SizedBox(height: 16),
-        if (slots.isEmpty) Text(l10n.noSlots),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final slot in slots)
-              GsbChip(
-                label: time.format(slot),
-                selected: state.selectedStart == slot,
-                onTap: () => cubit.selectStart(slot),
-              ),
-          ],
-        ),
+          const SizedBox(height: 16),
+          Text(l10n.companions, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 8),
+          Wrap(
+            spacing: 8,
+            children: [
+              for (final count in [0, 1, 2, 3])
+                GsbChip(
+                  label: '$count',
+                  selected: state.companionCount == count,
+                  onTap: () => cubit.selectCompanions(count),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          ReservationPriceSummary(
+            companionCount: state.companionCount,
+            durationHours: durationHours,
+          ),
+          const SizedBox(height: 16),
+          Text(l10n.pickStartTime, style: Theme.of(context).textTheme.titleSmall),
+          const SizedBox(height: 10),
+          TimeSlotPicker(
+            slots: slots,
+            duration: state.duration,
+            selectedStart: state.selectedStart,
+            onSelected: cubit.selectStart,
+          ),
+        ],
         const SizedBox(height: 24),
         FilledButton(
           onPressed: state.submitting || state.selectedStart == null

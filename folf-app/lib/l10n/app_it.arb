@@ -92,6 +92,8 @@
   "bayAvailableNow": "Disponibile ora",
   "bayBusyNow": "Occupata",
   "bayNoSlotsToday": "Nessun orario oggi",
+  "bayAvailable": "Disponibile",
+  "bayOccupied": "Occupato",
   "bayNextSlot": "Prossimo orario: {time}",
   "@bayNextSlot": {
     "placeholders": {
@@ -110,6 +112,39 @@
       "count": { "type": "int" }
     }
   },
+  "hours": "{count, plural, =1{1 ora}other{{count} ore}}",
+  "@hours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "durationHoursHint": "Fino a {max} ore",
+  "@durationHoursHint": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "estimatedTotal": "Totale stimato",
+  "reservationSummary": "{party} giocatori · {duration}",
+  "@reservationSummary": {
+    "placeholders": {
+      "party": { "type": "int" },
+      "duration": { "type": "String" }
+    }
+  },
+  "pickStartTime": "Ora di inizio",
+  "timePeriodMorning": "Mattina",
+  "timePeriodAfternoon": "Pomeriggio",
+  "timePeriodEvening": "Sera",
+  "selectedTimeSlotLabel": "Orario selezionato",
+  "timeSlotRange": "{start} – {end}",
+  "@timeSlotRange": {
+    "placeholders": {
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "noSlotsInPeriod": "Nessun orario in questa fascia.",
   "notes": "Note",
   "confirmBooking": "Conferma prenotazione",
   "companions": "Accompagnatori",

@@ -92,6 +92,8 @@
   "bayAvailableNow": "Available now",
   "bayBusyNow": "Busy",
   "bayNoSlotsToday": "No slots today",
+  "bayAvailable": "Available",
+  "bayOccupied": "Occupied",
   "bayNextSlot": "Next slot: {time}",
   "@bayNextSlot": {
     "placeholders": {
@@ -110,6 +112,39 @@
       "count": { "type": "int" }
     }
   },
+  "hours": "{count, plural, =1{1 hour}other{{count} hours}}",
+  "@hours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "durationHoursHint": "Up to {max} hours",
+  "@durationHoursHint": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "estimatedTotal": "Estimated total",
+  "reservationSummary": "{party} players · {duration}",
+  "@reservationSummary": {
+    "placeholders": {
+      "party": { "type": "int" },
+      "duration": { "type": "String" }
+    }
+  },
+  "pickStartTime": "Start time",
+  "timePeriodMorning": "Morning",
+  "timePeriodAfternoon": "Afternoon",
+  "timePeriodEvening": "Evening",
+  "selectedTimeSlotLabel": "Selected time",
+  "timeSlotRange": "{start} – {end}",
+  "@timeSlotRange": {
+    "placeholders": {
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "noSlotsInPeriod": "No slots in this period.",
   "notes": "Notes",
   "confirmBooking": "Confirm booking",
   "companions": "Companions",

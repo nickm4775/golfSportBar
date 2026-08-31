@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folf/core/widgets/gsb_widgets.dart';
 import 'package:folf/features/reservation/presentation/bay_availability_cubit.dart';
+import 'package:folf/features/reservation/presentation/widgets/bay_option_card.dart';
+import 'package:folf/features/reservation/presentation/widgets/bay_status_style.dart';
 import 'package:folf/features/venue/presentation/venue_session_cubit.dart';
 import 'package:folf/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class BayAvailabilityPage extends StatefulWidget {
   const BayAvailabilityPage({super.key});
@@ -14,16 +17,30 @@ class BayAvailabilityPage extends StatefulWidget {
   State<BayAvailabilityPage> createState() => _BayAvailabilityPageState();
 }
 
-class _BayAvailabilityPageState extends State<BayAvailabilityPage> {
+class _BayAvailabilityPageState extends State<BayAvailabilityPage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final venue = context.read<VenueSessionCubit>().state.venue;
       if (venue != null) {
         context.read<BayAvailabilityCubit>().bootstrap(venue.id);
       }
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      unawaited(_refresh());
+    }
   }
 
   Future<void> _refresh() async {
@@ -81,9 +98,9 @@ class _BayAvailabilityPageState extends State<BayAvailabilityPage> {
                         child: _BayCard(
                           row: row,
                           l10n: l10n,
-                          onReserve: row.status == BayAvailabilityStatus.noSlotsToday
-                              ? null
-                              : () => context.go('/app/reserve/book?bayId=${row.bay.id}'),
+                          onReserve: row.canReserve
+                              ? () => context.go('/app/reserve/book?bayId=${row.bay.id}')
+                              : null,
                         ),
                       )),
               ],
@@ -108,72 +125,21 @@ class _BayCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    final time = DateFormat.Hm();
-    final (label, badgeColor, badgeFg) = switch (row.status) {
-      BayAvailabilityStatus.availableNow => (
-          l10n.bayAvailableNow,
-          colors.primary.withValues(alpha: 0.14),
-          colors.primary,
-        ),
-      BayAvailabilityStatus.busy => (
-          l10n.bayBusyNow,
-          colors.tertiary.withValues(alpha: 0.18),
-          colors.tertiary,
-        ),
-      BayAvailabilityStatus.noSlotsToday => (
-          l10n.bayNoSlotsToday,
-          colors.onSurface.withValues(alpha: 0.08),
-          colors.onSurface.withValues(alpha: 0.62),
-        ),
-    };
+    final style = bayStatusStyle(context: context, l10n: l10n, status: row.status);
 
-    return GsbCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  row.bay.name,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  color: badgeColor,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: Text(
-                  label,
-                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                        color: badgeFg,
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-              ),
-            ],
-          ),
-          if (row.status == BayAvailabilityStatus.busy && row.nextSlot != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              l10n.bayNextSlot(time.format(row.nextSlot!)),
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colors.onSurface.withValues(alpha: 0.72),
-                  ),
-            ),
-          ],
-          if (onReserve != null) ...[
-            const SizedBox(height: 14),
-            FilledButton(
+    return BayOptionCard(
+      name: row.bay.name,
+      badgeLabel: style.label,
+      badgeColor: style.badgeColor,
+      badgeForeground: style.badgeForeground,
+      accentColor: style.accent,
+      onTap: onReserve,
+      action: onReserve == null
+          ? null
+          : FilledButton(
               onPressed: onReserve,
               child: Text(l10n.reserveThisBay),
             ),
-          ],
-        ],
-      ),
     );
   }
 }

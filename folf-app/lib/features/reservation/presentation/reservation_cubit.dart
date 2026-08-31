@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:folf/core/error/failures.dart';
 import 'package:folf/features/reservation/domain/availability_slots.dart' as slots;
+import 'package:folf/features/reservation/domain/bay_live_status.dart';
 import 'package:folf/features/reservation/domain/reservation.dart';
 import 'package:folf/features/venue/domain/venue.dart';
 
@@ -93,12 +96,15 @@ class ReservationCubit extends Cubit<ReservationViewState> {
   final VenueRepository _venues;
   final ReservationRepository _reservations;
   String? _initialBayId;
+  Timer? _refreshTimer;
+  String? _businessId;
 
   void setInitialBayId(String? bayId) {
     _initialBayId = bayId;
   }
 
   Future<void> bootstrap(String businessId) async {
+    _businessId = businessId;
     emit(state.copyWith(loading: true, message: null));
     try {
       final bays = await _venues.listBays(businessId);
@@ -116,30 +122,52 @@ class ReservationCubit extends Cubit<ReservationViewState> {
       );
       if (bays.isNotEmpty) {
         await loadAvailability(businessId);
+        _startLiveRefresh();
       }
     } on Failure catch (error) {
       emit(state.copyWith(loading: false, message: error.message));
     }
   }
 
-  Future<void> loadAvailability(String businessId) async {
+  Future<void> refreshAvailability(String businessId) async {
+    _businessId = businessId;
+    await loadAvailability(businessId, clearStart: false);
+  }
+
+  Future<void> loadAvailability(String businessId, {bool clearStart = true}) async {
     final day = state.day ?? DateTime.now();
     final date = '${day.year.toString().padLeft(4, '0')}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}';
     try {
-      final availability = await _venues.getAvailability(
-        businessId,
-        date,
-        bayId: state.selectedBayId,
-      );
-      emit(state.copyWith(availability: availability, clearStart: true));
+      final availability = await _venues.getAvailability(businessId, date);
+      emit(state.copyWith(availability: availability, clearStart: clearStart));
     } on Failure catch (error) {
       emit(state.copyWith(message: error.message));
     }
   }
 
+  void _startLiveRefresh() {
+    _refreshTimer?.cancel();
+    _refreshTimer = Timer.periodic(kBayStatusRefreshInterval, (_) {
+      final businessId = _businessId;
+      if (businessId != null) {
+        unawaited(loadAvailability(businessId, clearStart: false));
+      }
+    });
+  }
+
+  BayLiveStatus? liveStatusForBay(String bayId) {
+    final day = state.day;
+    if (day == null || !isSameCalendarDay(day, DateTime.now())) return null;
+    final busy = state.availability?.bays
+        .where((row) => row.bay.id == bayId)
+        .expand((row) => row.busy)
+        .toList();
+    if (busy == null) return null;
+    return resolveBayLiveStatus(busy: busy);
+  }
+
   void selectBay(String businessId, String bayId) {
     emit(state.copyWith(selectedBayId: bayId, clearStart: true));
-    loadAvailability(businessId);
   }
 
   void selectDay(String businessId, DateTime day) {
@@ -148,7 +176,8 @@ class ReservationCubit extends Cubit<ReservationViewState> {
   }
 
   void selectDuration(Duration duration) {
-    emit(state.copyWith(duration: duration, clearStart: true));
+    final hours = duration.inHours.clamp(1, slots.kMaxReservationHours);
+    emit(state.copyWith(duration: Duration(hours: hours), clearStart: true));
   }
 
   void selectCompanions(int companionCount) {
@@ -212,5 +241,11 @@ class ReservationCubit extends Cubit<ReservationViewState> {
       duration: state.duration,
       busy: busy,
     );
+  }
+
+  @override
+  Future<void> close() {
+    _refreshTimer?.cancel();
+    return super.close();
   }
 }

@@ -92,6 +92,8 @@
   "bayAvailableNow": "现在可用",
   "bayBusyNow": "使用中",
   "bayNoSlotsToday": "今天无空档",
+  "bayAvailable": "可用",
+  "bayOccupied": "占用",
   "bayNextSlot": "下一空档：{time}",
   "@bayNextSlot": {
     "placeholders": {
@@ -110,6 +112,39 @@
       "count": { "type": "int" }
     }
   },
+  "hours": "{count, plural, =1{1 小时}other{{count} 小时}}",
+  "@hours": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "durationHoursHint": "最多 {max} 小时",
+  "@durationHoursHint": {
+    "placeholders": {
+      "max": { "type": "int" }
+    }
+  },
+  "estimatedTotal": "预估总价",
+  "reservationSummary": "{party} 人 · {duration}",
+  "@reservationSummary": {
+    "placeholders": {
+      "party": { "type": "int" },
+      "duration": { "type": "String" }
+    }
+  },
+  "pickStartTime": "开始时间",
+  "timePeriodMorning": "上午",
+  "timePeriodAfternoon": "下午",
+  "timePeriodEvening": "晚上",
+  "selectedTimeSlotLabel": "已选时间",
+  "timeSlotRange": "{start} – {end}",
+  "@timeSlotRange": {
+    "placeholders": {
+      "start": { "type": "String" },
+      "end": { "type": "String" }
+    }
+  },
+  "noSlotsInPeriod": "该时段暂无可用时间。",
   "notes": "备注",
   "confirmBooking": "确认预订",
   "companions": "同行人数",

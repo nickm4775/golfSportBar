@@ -52,6 +52,22 @@ function toIso(value: Date | string) {
   return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
 }
 
+function activeSessionBusyEnd(
+  session: GsproSession,
+  dayEnd: Date,
+  reservation?: GsproReservation | null,
+): Date {
+  if (session.endedAt) return session.endedAt;
+  const capped = new Date(
+    Math.min(dayEnd.getTime(), session.startedAt.getTime() + MAX_RESERVATION_MS),
+  );
+  const reservationEnd = reservation?.endAt;
+  if (reservationEnd && reservationEnd.getTime() > capped.getTime()) {
+    return reservationEnd;
+  }
+  return capped;
+}
+
 @Injectable()
 export class GsproService {
   constructor(
@@ -97,6 +113,23 @@ export class GsproService {
       .orderBy('reservation.startAt', 'ASC')
       .getMany();
 
+    const activeSessions = await this.sessionRepo
+      .createQueryBuilder('session')
+      .leftJoinAndSelect('session.reservation', 'reservation')
+      .where('session.businessId = :businessId', { businessId })
+      .andWhere('session.status IN (:...statuses)', {
+        statuses: [SessionStatus.ACTIVE, SessionStatus.PAUSED],
+      })
+      .andWhere('session.startedAt < :end', { end })
+      .andWhere('(session.endedAt IS NULL OR session.endedAt > :start)', { start })
+      .getMany();
+
+    const activeSessionReservationIds = new Set(
+      activeSessions
+        .map((session) => session.reservationId)
+        .filter((id): id is string => id != null),
+    );
+
     return {
       date,
       timezone: timeZone,
@@ -104,13 +137,30 @@ export class GsproService {
         id: bay.id,
         code: bay.code,
         name: bay.name,
-        busy: reservations
-          .filter((reservation) => reservation.bayId === bay.id)
-          .map((reservation) => ({
-            reservationId: reservation.id,
-            startAt: toIso(reservation.startAt),
-            endAt: toIso(reservation.endAt),
-          })),
+        busy: [
+          ...reservations
+            .filter(
+              (reservation) =>
+                reservation.bayId === bay.id &&
+                !(
+                  reservation.status === ReservationStatus.CHECKED_IN &&
+                  activeSessionReservationIds.has(reservation.id)
+                ),
+            )
+            .map((reservation) => ({
+              reservationId: reservation.id,
+              startAt: toIso(reservation.startAt),
+              endAt: toIso(reservation.endAt),
+            })),
+          ...activeSessions
+            .filter((session) => session.bayId === bay.id)
+            .map((session) => ({
+              sessionId: session.id,
+              reservationId: session.reservationId,
+              startAt: toIso(session.startedAt),
+              endAt: toIso(activeSessionBusyEnd(session, end, session.reservation)),
+            })),
+        ],
       })),
     };
   }

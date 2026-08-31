@@ -279,6 +279,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get bayNoSlotsToday => 'No slots today';
 
   @override
+  String get bayAvailable => 'Available';
+
+  @override
+  String get bayOccupied => 'Occupied';
+
+  @override
   String bayNextSlot(String time) {
     return 'Next slot: $time';
   }
@@ -305,6 +311,53 @@ class AppLocalizationsEn extends AppLocalizations {
   String minutes(int count) {
     return '$count min';
   }
+
+  @override
+  String hours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours',
+      one: '1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationHoursHint(int max) {
+    return 'Up to $max hours';
+  }
+
+  @override
+  String get estimatedTotal => 'Estimated total';
+
+  @override
+  String reservationSummary(int party, String duration) {
+    return '$party players · $duration';
+  }
+
+  @override
+  String get pickStartTime => 'Start time';
+
+  @override
+  String get timePeriodMorning => 'Morning';
+
+  @override
+  String get timePeriodAfternoon => 'Afternoon';
+
+  @override
+  String get timePeriodEvening => 'Evening';
+
+  @override
+  String get selectedTimeSlotLabel => 'Selected time';
+
+  @override
+  String timeSlotRange(String start, String end) {
+    return '$start – $end';
+  }
+
+  @override
+  String get noSlotsInPeriod => 'No slots in this period.';
 
   @override
   String get notes => 'Notes';
