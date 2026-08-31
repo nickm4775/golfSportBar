@@ -1,3 +1,4 @@
+import { brandAssets } from '@/shared/brand/assets'
 import { brandContact } from '@/shared/brand/contact'
 import { storeCatalog } from '@/infrastructure/store/storeCatalog'
 
@@ -10,7 +11,12 @@ export const DEFAULT_TITLE =
 export const DEFAULT_DESCRIPTION =
   'Simulador de golfe indoor com física realista, bays privativos, gastronomia e drinks no Centro de Balneário Camboriú — R. 3600, N205. Reserve sua partida.' as const
 
-export const DEFAULT_OG_IMAGE = '/og-image.jpg' as const
+export const SITE_LOGO = brandAssets.logoOnLight
+export const DEFAULT_OG_IMAGE = brandAssets.ogImage
+export const OG_IMAGE_WIDTH = 1200
+export const OG_IMAGE_HEIGHT = 630
+export const SITE_LOGO_WIDTH = 1024
+export const SITE_LOGO_HEIGHT = 820
 
 const primaryStore = storeCatalog[0]
 
@@ -47,6 +53,12 @@ export function buildLocalBusinessJsonLd(): Record<string, unknown> {
     '@id': `${SITE_URL}/#business`,
     name: SITE_NAME,
     url: SITE_URL,
+    logo: {
+      '@type': 'ImageObject',
+      url: absoluteUrl(SITE_LOGO),
+      width: SITE_LOGO_WIDTH,
+      height: SITE_LOGO_HEIGHT,
+    },
     image: absoluteUrl(DEFAULT_OG_IMAGE),
     description: DEFAULT_DESCRIPTION,
     telephone: `+${siteTelephone}`,

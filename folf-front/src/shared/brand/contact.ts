@@ -5,5 +5,5 @@ export const brandContact = {
   phoneDisplay: '+55 47 96000-1878',
   whatsappUrl: 'https://wa.me/5547960001878',
   androidApkUrl:
-    'https://drive.google.com/uc?export=download&id=1RHa5wqbsxO7QqzHJdG9RD3942zu0xYma',
+    'https://drive.google.com/file/d/1csKws2xLObELm4Z2FqmAVK5DLv6U68Ka/view?usp=sharing',
 } as const

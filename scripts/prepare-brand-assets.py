@@ -247,6 +247,20 @@ def save_png(im: Image.Image, path: Path) -> None:
     im.save(path, format="PNG", optimize=True)
 
 
+def build_og_image(logo: Image.Image, path: Path, width: int = 1200, height: int = 630) -> None:
+    canvas = Image.new("RGBA", (width, height), CREAM)
+    logo_rgba = logo.convert("RGBA")
+    max_w = int(width * 0.72)
+    max_h = int(height * 0.55)
+    scale = min(max_w / logo_rgba.width, max_h / logo_rgba.height)
+    new_size = (max(1, round(logo_rgba.width * scale)), max(1, round(logo_rgba.height * scale)))
+    logo_resized = logo_rgba.resize(new_size, Image.Resampling.LANCZOS)
+    x = (width - new_size[0]) // 2
+    y = (height - new_size[1]) // 2
+    canvas.alpha_composite(logo_resized, (x, y))
+    save_png(canvas.convert("RGB"), path)
+
+
 def main() -> None:
     white_path = SOURCE_DIR / WHITE_NAME
     dark_path = SOURCE_DIR / DARK_NAME
@@ -280,6 +294,8 @@ def main() -> None:
         save_png(on_dark, dest / "logo-on-dark.png")
         save_png(mark, dest / "mark.png")
         save_png(icon, dest / "icon.png")
+
+    build_og_image(on_light, FRONT_BRAND / "og-image.png")
 
     save_png(icon, ROOT / "folf-front" / "public" / "favicon.png")
 

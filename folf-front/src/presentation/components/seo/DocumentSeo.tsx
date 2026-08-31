@@ -3,6 +3,8 @@ import {
   DEFAULT_DESCRIPTION,
   DEFAULT_OG_IMAGE,
   DEFAULT_TITLE,
+  OG_IMAGE_HEIGHT,
+  OG_IMAGE_WIDTH,
   SITE_NAME,
   absoluteUrl,
 } from '@/shared/seo/siteSeo'
@@ -42,6 +44,12 @@ export function DocumentSeo({
           <meta property="og:title" content={title} />
           <meta property="og:description" content={description} />
           <meta property="og:image" content={imageUrl} />
+          <meta property="og:image:width" content={String(OG_IMAGE_WIDTH)} />
+          <meta property="og:image:height" content={String(OG_IMAGE_HEIGHT)} />
+          <meta
+            property="og:image:alt"
+            content={`${SITE_NAME} — simulador de golfe indoor em Balneário Camboriú`}
+          />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content={title} />
           <meta name="twitter:description" content={description} />
