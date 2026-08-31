@@ -152,6 +152,37 @@ class AppLocalizationsIt extends AppLocalizations {
       'Ho letto e accetto il trattamento dei miei dati (LGPD).';
 
   @override
+  String get fieldRequired => 'Questo campo è obbligatorio.';
+
+  @override
+  String get invalidEmail => 'Inserisci un indirizzo e-mail valido.';
+
+  @override
+  String get invalidCpf => 'Inserisci un CPF valido.';
+
+  @override
+  String get invalidPhone =>
+      'Inserisci un numero di cellulare brasiliano valido.';
+
+  @override
+  String get invalidBirthDate => 'Usa il formato AAAA-MM-DD.';
+
+  @override
+  String get underage => 'Devi avere almeno 18 anni.';
+
+  @override
+  String get passwordMinLength => 'La password deve avere almeno 6 caratteri.';
+
+  @override
+  String get fullNameMinLength => 'Inserisci il tuo nome completo.';
+
+  @override
+  String get lgpdRequired => 'Accetta il trattamento dei dati per continuare.';
+
+  @override
+  String get invalidState => 'Usa al massimo 2 lettere per lo stato.';
+
+  @override
   String get haveAccount => 'Hai già un account? Accedi';
 
   @override

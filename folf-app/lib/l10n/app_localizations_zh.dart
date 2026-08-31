@@ -150,6 +150,36 @@ class AppLocalizationsZh extends AppLocalizations {
   String get lgpdLabel => '我已阅读并同意处理我的个人数据（LGPD）。';
 
   @override
+  String get fieldRequired => '此字段为必填项。';
+
+  @override
+  String get invalidEmail => '请输入有效的邮箱地址。';
+
+  @override
+  String get invalidCpf => '请输入有效的 CPF。';
+
+  @override
+  String get invalidPhone => '请输入有效的巴西手机号码。';
+
+  @override
+  String get invalidBirthDate => '请使用 YYYY-MM-DD 格式。';
+
+  @override
+  String get underage => '必须年满 18 岁。';
+
+  @override
+  String get passwordMinLength => '密码至少需要 6 个字符。';
+
+  @override
+  String get fullNameMinLength => '请输入您的全名。';
+
+  @override
+  String get lgpdRequired => '请同意数据处理后再继续。';
+
+  @override
+  String get invalidState => '州/省代码最多 2 个字母。';
+
+  @override
   String get haveAccount => '已有账号？去登录';
 
   @override

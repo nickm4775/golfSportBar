@@ -386,6 +386,66 @@ abstract class AppLocalizations {
   /// **'Li e aceito o tratamento dos meus dados (LGPD).'**
   String get lgpdLabel;
 
+  /// No description provided for @fieldRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Este campo é obrigatório.'**
+  String get fieldRequired;
+
+  /// No description provided for @invalidEmail.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe um e-mail válido.'**
+  String get invalidEmail;
+
+  /// No description provided for @invalidCpf.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe um CPF válido.'**
+  String get invalidCpf;
+
+  /// No description provided for @invalidPhone.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe um celular brasileiro válido.'**
+  String get invalidPhone;
+
+  /// No description provided for @invalidBirthDate.
+  ///
+  /// In pt, this message translates to:
+  /// **'Use o formato AAAA-MM-DD.'**
+  String get invalidBirthDate;
+
+  /// No description provided for @underage.
+  ///
+  /// In pt, this message translates to:
+  /// **'É necessário ter pelo menos 18 anos.'**
+  String get underage;
+
+  /// No description provided for @passwordMinLength.
+  ///
+  /// In pt, this message translates to:
+  /// **'A senha deve ter pelo menos 6 caracteres.'**
+  String get passwordMinLength;
+
+  /// No description provided for @fullNameMinLength.
+  ///
+  /// In pt, this message translates to:
+  /// **'Informe seu nome completo.'**
+  String get fullNameMinLength;
+
+  /// No description provided for @lgpdRequired.
+  ///
+  /// In pt, this message translates to:
+  /// **'Aceite o tratamento de dados para continuar.'**
+  String get lgpdRequired;
+
+  /// No description provided for @invalidState.
+  ///
+  /// In pt, this message translates to:
+  /// **'Use no máximo 2 letras (UF).'**
+  String get invalidState;
+
   /// No description provided for @haveAccount.
   ///
   /// In pt, this message translates to:
