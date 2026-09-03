@@ -19,6 +19,7 @@ class ReservationPriceSummary extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final colors = Theme.of(context).colorScheme;
     final partySize = 1 + companionCount;
+    final unitPriceBrl = pricePerPersonBrl(partySize);
     final total = computeReservationTotal(
       companionCount: companionCount,
       duration: Duration(hours: durationHours),
@@ -43,6 +44,18 @@ class ReservationPriceSummary extends StatelessWidget {
                   l10n.reservationSummary(partySize, l10n.hours(durationHours)),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: colors.onSurface.withValues(alpha: 0.72),
+                      ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.pricingPreview(
+                    partySize,
+                    formatBrl(unitPriceBrl),
+                    '$durationHours',
+                    formatBrl(total),
+                  ),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colors.onSurface.withValues(alpha: 0.6),
                       ),
                 ),
               ],
