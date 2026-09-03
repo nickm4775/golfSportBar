@@ -121,6 +121,12 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                     '${line.quantity}× ${line.name} · ${itemStatusLabel(l10n, line.status)}',
                   ),
                 ),
+              if (detailed.serviceChargeBrl > 0) ...[
+                const SizedBox(height: 8),
+                Text('${l10n.orderSubtotal}: ${formatBrl(detailed.subtotalBrl)}'),
+                Text('${l10n.serviceChargeLabel}: ${formatBrl(detailed.serviceChargeBrl)}'),
+                Text(l10n.totalCostLabel(formatBrl(detailed.totalBrl))),
+              ],
             ],
           ),
         );

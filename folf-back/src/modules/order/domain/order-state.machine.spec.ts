@@ -3,6 +3,7 @@ import {
   assertItemTransition,
   assertOrderTransition,
   calculateOrderTotal,
+  calculateServiceCharge,
 } from './order-state.machine';
 
 describe('OrderStateMachine', () => {
@@ -30,5 +31,15 @@ describe('OrderStateMachine', () => {
         { quantity: 1, unitPriceBrl: 15.5 },
       ]),
     ).toBe(95.5);
+  });
+
+  it('calculates 10% service charge when included', () => {
+    expect(calculateServiceCharge(95.5, true)).toBe(9.55);
+    expect(calculateServiceCharge(10, true)).toBe(1);
+    expect(calculateServiceCharge(0.05, true)).toBe(0.01);
+  });
+
+  it('returns zero service charge when not included', () => {
+    expect(calculateServiceCharge(95.5, false)).toBe(0);
   });
 });

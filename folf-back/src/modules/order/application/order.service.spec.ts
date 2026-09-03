@@ -117,11 +117,58 @@ describe('OrderService.create', () => {
       expect.objectContaining({
         status: OrderStatus.IN_PROGRESS,
         customerId: 'cust-1',
+        includeServiceCharge: false,
       }),
     );
-    expect(manager.update).toHaveBeenCalledWith(Order, 'order-1', { totalBrl: 55 });
+    expect(manager.update).toHaveBeenCalledWith(Order, 'order-1', {
+      serviceChargeBrl: 0,
+      totalBrl: 55,
+    });
     expect(result.totalBrl).toBe(55);
     expect(result.customer?.fullName).toBe('Ana Souza');
+  });
+
+  it('adds 10% service charge when requested', async () => {
+    customerRepo.findOne.mockResolvedValue({ id: 'cust-1', isActive: true });
+    manager.save.mockImplementation(async (entity: unknown, data: Record<string, unknown>) => {
+      if (entity === Order) return { id: 'order-1', ...data };
+      return { id: 'item-1', ...data };
+    });
+    manager.findOne.mockResolvedValue({
+      businessId: 'biz-1',
+      productId: 'p1',
+      isAvailable: true,
+      priceBrl: 20,
+    });
+    manager.find.mockResolvedValue([{ quantity: 2, unitPriceBrl: 20 }]);
+    manager.findOneOrFail.mockResolvedValue({
+      id: 'order-1',
+      businessId: 'biz-1',
+      status: OrderStatus.IN_PROGRESS,
+      includeServiceCharge: true,
+      serviceChargeBrl: 4,
+      totalBrl: 44,
+      customer: null,
+      items: [],
+      payments: [],
+    });
+
+    const result = await service.create('biz-1', 'staff-1', {
+      customerId: 'cust-1',
+      includeServiceCharge: true,
+      items: [{ productId: 'p1', quantity: 2 }],
+    });
+
+    expect(manager.save).toHaveBeenCalledWith(
+      Order,
+      expect.objectContaining({ includeServiceCharge: true }),
+    );
+    expect(manager.update).toHaveBeenCalledWith(Order, 'order-1', {
+      serviceChargeBrl: 4,
+      totalBrl: 44,
+    });
+    expect(result.totalBrl).toBe(44);
+    expect(result.serviceChargeBrl).toBe(4);
   });
 
   it('requires a table and items for customer self-service orders', async () => {

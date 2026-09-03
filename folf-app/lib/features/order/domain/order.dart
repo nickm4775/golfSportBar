@@ -37,6 +37,8 @@ class CustomerOrder {
     required this.totalBrl,
     required this.items,
     required this.createdAt,
+    this.includeServiceCharge = false,
+    this.serviceChargeBrl = 0,
   });
 
   final String id;
@@ -44,8 +46,12 @@ class CustomerOrder {
   final String status;
   final String? tableLabel;
   final double totalBrl;
+  final bool includeServiceCharge;
+  final double serviceChargeBrl;
   final List<OrderLine> items;
   final DateTime createdAt;
+
+  double get subtotalBrl => totalBrl - serviceChargeBrl;
 
   bool get isActive => status == 'OPEN' || status == 'IN_PROGRESS' || status == 'DRAFT';
 
@@ -56,6 +62,8 @@ class CustomerOrder {
       status: json['status'] as String,
       tableLabel: json['tableLabel'] as String?,
       totalBrl: (json['totalBrl'] as num?)?.toDouble() ?? 0,
+      includeServiceCharge: json['includeServiceCharge'] as bool? ?? false,
+      serviceChargeBrl: (json['serviceChargeBrl'] as num?)?.toDouble() ?? 0,
       createdAt: DateTime.parse(json['createdAt'] as String).toLocal(),
       items: (json['items'] as List<dynamic>? ?? [])
           .map((row) => OrderLine.fromJson(row as Map<String, dynamic>))
@@ -94,6 +102,7 @@ abstract class OrderRepository {
     required String tableLabel,
     required List<CartItem> items,
     String? notes,
+    bool includeServiceCharge = false,
   });
   Future<CustomerOrder> addItem({
     required String orderId,

@@ -469,6 +469,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emptyCart => '购物车是空的。';
 
   @override
+  String get serviceCharge10 => '包含 10% 服务费（服务员）';
+
+  @override
+  String get serviceChargeLabel => '服务费 10%';
+
+  @override
+  String get orderSubtotal => '小计';
+
+  @override
   String get emptyOrders => '还没有订单。';
 
   @override

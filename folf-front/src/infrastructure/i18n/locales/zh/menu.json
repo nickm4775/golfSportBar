@@ -77,6 +77,10 @@
       "name": "Paper Plane",
       "description": "Aperol、波本威士忌、西西里柠檬与 Cynar。"
     },
+    "alabamaSlammer": {
+      "name": "Alabama Slammer",
+      "description": "Southern Comfort、杏仁利口酒、黑刺李金酒与橙汁。"
+    },
     "ginCitric": {
       "name": "Gin Citric Tropical",
       "description": "Beefeater、百香果、糖浆、西西里柠檬、汤力与迷迭香。"
@@ -192,6 +196,10 @@
     "refrigerantes": {
       "name": "碳酸饮料",
       "description": "可口可乐、零度可乐、瓜拉纳、零度瓜拉纳或雪碧。"
+    },
+    "sucoNatural": {
+      "name": "鲜榨果汁",
+      "description": "新鲜水果原汁。"
     },
     "aguaSemGas": {
       "name": "无气矿泉水",

@@ -121,6 +121,23 @@ export function OrderDetailsModal({
           </div>
 
           <div className="grid gap-2 rounded-xl border border-[var(--gsb-border)] bg-[var(--gsb-surface)] p-4 text-sm">
+            {Number(order.serviceChargeBrl ?? 0) > 0 ? (
+              <>
+                <div className="flex justify-between gap-4">
+                  <span className="text-[var(--gsb-muted)]">{t('orders.subtotal')}</span>
+                  <span>
+                    {formatBrl(
+                      Number(order.totalBrl) - Number(order.serviceChargeBrl ?? 0),
+                      locale,
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-4">
+                  <span className="text-[var(--gsb-muted)]">{t('orders.serviceCharge')}</span>
+                  <span>{formatBrl(Number(order.serviceChargeBrl), locale)}</span>
+                </div>
+              </>
+            ) : null}
             <div className="flex justify-between font-medium">
               <span>{t('recent.total')}</span>
               <span>{formatBrl(Number(order.totalBrl), locale)}</span>

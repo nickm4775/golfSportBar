@@ -12,6 +12,7 @@ import {
   assertItemTransition,
   assertOrderTransition,
   calculateOrderTotal,
+  calculateServiceCharge,
 } from '../domain/order-state.machine';
 import {
   AddOrderItemDto,
@@ -57,6 +58,7 @@ export class OrderService {
         customerId: dto.customerId ?? null,
         tableLabel: dto.tableLabel,
         notes: dto.notes,
+        includeServiceCharge: Boolean(dto.includeServiceCharge),
         status: hasItems ? OrderStatus.IN_PROGRESS : OrderStatus.OPEN,
       });
 
@@ -302,19 +304,30 @@ export class OrderService {
   }
 
   private async recalculateTotal(orderId: string) {
+    const order = await this.orderRepo.findOneOrFail({ where: { id: orderId } });
     const items = await this.orderItemRepo.find({
       where: { orderId, status: Not(OrderItemStatus.CANCELLED) },
     });
-    const total = calculateOrderTotal(items);
-    await this.orderRepo.update(orderId, { totalBrl: total });
+    const subtotal = calculateOrderTotal(items);
+    const serviceChargeBrl = calculateServiceCharge(subtotal, order.includeServiceCharge);
+    await this.orderRepo.update(orderId, {
+      serviceChargeBrl,
+      totalBrl: subtotal + serviceChargeBrl,
+    });
     return this.findOneById(orderId);
   }
 
   private async recalculateTotalWith(manager: EntityManager, orderId: string) {
+    const order = await manager.findOneOrFail(Order, { where: { id: orderId } });
     const items = await manager.find(OrderItem, {
       where: { orderId, status: Not(OrderItemStatus.CANCELLED) },
     });
-    await manager.update(Order, orderId, { totalBrl: calculateOrderTotal(items) });
+    const subtotal = calculateOrderTotal(items);
+    const serviceChargeBrl = calculateServiceCharge(subtotal, order.includeServiceCharge);
+    await manager.update(Order, orderId, {
+      serviceChargeBrl,
+      totalBrl: subtotal + serviceChargeBrl,
+    });
   }
 
   private async findOneById(orderId: string) {

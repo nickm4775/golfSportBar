@@ -477,6 +477,15 @@ class AppLocalizationsEs extends AppLocalizations {
   String get emptyCart => 'Tu carrito está vacío.';
 
   @override
+  String get serviceCharge10 => 'Incluir tasa de servicio 10% (camarero)';
+
+  @override
+  String get serviceChargeLabel => 'Tasa de servicio 10%';
+
+  @override
+  String get orderSubtotal => 'Subtotal';
+
+  @override
   String get emptyOrders => 'Todavía no hay pedidos.';
 
   @override

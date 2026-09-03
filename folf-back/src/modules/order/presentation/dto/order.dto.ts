@@ -2,6 +2,7 @@ import { OrderItemStatus, OrderStatus } from '../../../../shared/domain/enums';
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsEnum,
   IsInt,
   IsOptional,
@@ -45,6 +46,14 @@ export class CreateOrderDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @ApiPropertyOptional({
+    default: false,
+    description: 'Incluir taxa de serviço de 10% (gorjeta) no total',
+  })
+  @IsOptional()
+  @IsBoolean()
+  includeServiceCharge?: boolean;
 
   @ApiPropertyOptional({ type: [CreateOrderItemDto] })
   @IsOptional()

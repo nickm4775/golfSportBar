@@ -144,6 +144,7 @@ class OrderCubit extends Cubit<OrderViewState> {
     required String tableLabel,
     required List<CartItem> items,
     String? notes,
+    bool includeServiceCharge = false,
   }) async {
     emit(state.copyWith(submitting: true, message: null));
     try {
@@ -152,6 +153,7 @@ class OrderCubit extends Cubit<OrderViewState> {
         tableLabel: tableLabel,
         items: items,
         notes: notes,
+        includeServiceCharge: includeServiceCharge,
       );
       final orders = await _orders.listMine();
       emit(state.copyWith(submitting: false, placed: placed, orders: orders));

@@ -96,8 +96,8 @@ describe('GsproService', () => {
       expect(reservationRepo.save).toHaveBeenCalledWith(
         expect.objectContaining({
           companionCount: 1,
-          unitPriceBrl: 180,
-          totalCostBrl: 360,
+          unitPriceBrl: 150,
+          totalCostBrl: 300,
         }),
       );
     });

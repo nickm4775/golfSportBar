@@ -24,12 +24,14 @@ class OrderRepositoryImpl implements OrderRepository {
     required String tableLabel,
     required List<CartItem> items,
     String? notes,
+    bool includeServiceCharge = false,
   }) async {
     final json = await _api.postMap(
       '/me/venues/$businessId/orders',
       data: {
         'tableLabel': tableLabel,
         if (notes != null && notes.isNotEmpty) 'notes': notes,
+        if (includeServiceCharge) 'includeServiceCharge': true,
         'items': items
             .map(
               (item) => {

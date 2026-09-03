@@ -103,7 +103,7 @@
       "slug": "mojito",
       "categorySlug": "classicos",
       "namePt": "Mojito",
-      "descriptionPt": "Rum, limão Taiti, xarope simples, água com gás e folhas de hortela.",
+      "descriptionPt": "Rum, limão Taiti, xarope simples, água com gás e folhas de hortelã.",
       "priceBrl": 39,
       "featured": false,
       "imageSrc": "/images/menu/mojito.png"
@@ -121,7 +121,7 @@
       "slug": "negroni",
       "categorySlug": "classicos",
       "namePt": "Negroni + Negroni Coffee",
-      "descriptionPt": "Beefeater London Dry, Campari, Vermouth Rosso. Campari passa por infusão com grãos de café",
+      "descriptionPt": "Beefeater London Dry, Campari, Vermouth Rosso. (Campari passa por infusão com grãos de café)",
       "priceBrl": 50,
       "featured": false,
       "imageSrc": "/images/menu/negroni.png"
@@ -190,12 +190,21 @@
       "imageSrc": "/images/menu/paper-plane.png"
     },
     {
+      "slug": "alabama-slammer",
+      "categorySlug": "classicos",
+      "namePt": "Alabama Slammer",
+      "descriptionPt": "Southern Comfort, licor amaretto, sloe gin e suco de laranja.",
+      "priceBrl": 40,
+      "featured": false,
+      "imageSrc": "/images/menu/alabama-slammer.png"
+    },
+    {
       "slug": "gin-citric",
       "categorySlug": "autorais",
       "namePt": "Gin Citric Tropical",
       "descriptionPt": "Beefeater London Dry, maracujá, xarope simples, limão siciliano, água tônica e ramo de alecrim.",
       "priceBrl": 45,
-      "featured": false,
+      "featured": true,
       "imageSrc": "/images/menu/gin-citric.png"
     },
     {
@@ -214,7 +223,7 @@
       "descriptionPt": "Beefeater London Dry, infusão de hibisco, Licor 43, água com gás, limão siciliano e tangerina.",
       "priceBrl": 48,
       "featured": false,
-      "imageSrc": "/images/menu/ressaca-43.png"
+      "imageSrc": "/images/menu/ressaca.png"
     },
     {
       "slug": "light-breeze",
@@ -232,7 +241,7 @@
       "descriptionPt": "Southern Comfort, licor amaretto, sloe gin e suco de laranja.",
       "priceBrl": 49,
       "featured": false,
-      "imageSrc": "/images/menu/scottie-scheffler.png"
+      "imageSrc": "/images/menu/scottie.png"
     },
     {
       "slug": "victoria-lovelady",
@@ -246,11 +255,11 @@
     {
       "slug": "rory-mcilroy",
       "categorySlug": "autorais",
-      "namePt": "Rory Mcilroy",
+      "namePt": "Rory McIlroy",
       "descriptionPt": "Absolut Vodka, Monin banana verde, suco de manga, suco de limão, clara de ovo pasteurizada e bitter.",
       "priceBrl": 45,
-      "featured": false,
-      "imageSrc": "/images/menu/rory-mcilroy.png"
+      "featured": true,
+      "imageSrc": "/images/menu/rory.png"
     },
     {
       "slug": "james-salad",
@@ -264,11 +273,11 @@
     {
       "slug": "burrata-pesto",
       "categorySlug": "petiscos",
-      "namePt": "Burrata Ao Pesto",
+      "namePt": "Burrata ao Pesto",
       "descriptionPt": "Com tomate confitado, molho pesto e torradas de pão ciabatta.",
       "priceBrl": 78,
-      "featured": false,
-      "imageSrc": "/images/menu/burrata-pesto.png"
+      "featured": true,
+      "imageSrc": "/images/menu/burrata.png"
     },
     {
       "slug": "batata-frita",
@@ -283,7 +292,7 @@
       "slug": "pastel-brie",
       "categorySlug": "petiscos",
       "namePt": "Pastel de Brie",
-      "descriptionPt": "Servido com Sweet Chilli",
+      "descriptionPt": "Servido com Sweet Chilli.",
       "priceBrl": 42,
       "featured": false,
       "imageSrc": "/images/menu/pastel-brie.png"
@@ -295,7 +304,7 @@
       "descriptionPt": "Com emulsão de cebola caramelizada na cerveja.",
       "priceBrl": 49,
       "featured": false,
-      "imageSrc": "/images/menu/croquete-costela.png"
+      "imageSrc": "/images/menu/croquete.png"
     },
     {
       "slug": "camarao-alho",
@@ -310,10 +319,10 @@
       "slug": "camarao-crocante",
       "categorySlug": "petiscos",
       "namePt": "Camarão Crocante",
-      "descriptionPt": "",
+      "descriptionPt": "Acompanhado de molho especial e fatias de pão ciabatta.",
       "priceBrl": 119,
-      "featured": false,
-      "imageSrc": "/images/menu/camarao-crocante.png"
+      "featured": true,
+      "imageSrc": "/images/menu/camarao.png"
     },
     {
       "slug": "calabresa-acebolada",
@@ -343,6 +352,15 @@
       "imageSrc": "/images/menu/isca-picanha.png"
     },
     {
+      "slug": "taboa-frios",
+      "categorySlug": "petiscos",
+      "namePt": "Taboa de Frios",
+      "descriptionPt": "Queijo Brie, parmesão, presunto Parma, salame, azeitonas pretas, castanha do Pará e damascos.",
+      "priceBrl": 119,
+      "featured": false,
+      "imageSrc": "/images/menu/taboa-frios.png"
+    },
+    {
       "slug": "pizza-pepperoni",
       "categorySlug": "pizzas",
       "namePt": "Pizza Pepperoni",
@@ -364,7 +382,7 @@
       "slug": "pizza-napolitana",
       "categorySlug": "pizzas",
       "namePt": "Pizza Napolitana",
-      "descriptionPt": "Massa napolitana, molho de tomate, mussarela de búfala, tomate cereja e majericão fresco.",
+      "descriptionPt": "Massa napolitana, molho de tomate, mussarela de búfala, tomate cereja e manjericão fresco.",
       "priceBrl": 73,
       "featured": false,
       "imageSrc": "/images/menu/pizza-napolitana.png"
@@ -373,7 +391,7 @@
       "slug": "pizza-calabresa",
       "categorySlug": "pizzas",
       "namePt": "Pizza Calabresa",
-      "descriptionPt": "Massa napolitana, molho de tomate, mussarela, calabres‹ cebola fina",
+      "descriptionPt": "Massa napolitana, molho de tomate, mussarela, calabresa e cebola fina.",
       "priceBrl": 72,
       "featured": false,
       "imageSrc": "/images/menu/pizza-calabresa.png"
@@ -406,15 +424,6 @@
       "imageSrc": "/images/menu/chicken-burger.png"
     },
     {
-      "slug": "taboa-frios",
-      "categorySlug": "petiscos",
-      "namePt": "Taboa de Frios",
-      "descriptionPt": "",
-      "priceBrl": 119,
-      "featured": false,
-      "imageSrc": "/images/menu/taboa-frios.png"
-    },
-    {
       "slug": "cafe-expresso",
       "categorySlug": "sobremesas",
       "namePt": "Café Expresso",
@@ -445,15 +454,24 @@
       "slug": "refrigerantes",
       "categorySlug": "refrigerantes",
       "namePt": "Refrigerantes",
-      "descriptionPt": "COCA-COLA, COCA-COLA ZERO, GUARANÁ, GUARANÁ ZERO OU SPRITE.",
+      "descriptionPt": "Coca-Cola, Coca-Cola Zero, Guaraná, Guaraná Zero ou Sprite.",
       "priceBrl": 9,
       "featured": false,
       "imageSrc": "/images/menu/refrigerantes.png"
     },
     {
+      "slug": "suco-natural",
+      "categorySlug": "refrigerantes",
+      "namePt": "Suco natural",
+      "descriptionPt": "Suco natural de fruta.",
+      "priceBrl": 15,
+      "featured": false,
+      "imageSrc": "/images/menu/suco-natural.png"
+    },
+    {
       "slug": "agua-sem-gas",
       "categorySlug": "aguas",
-      "namePt": "Água Sem Gas",
+      "namePt": "Água sem gás",
       "descriptionPt": "",
       "priceBrl": 8,
       "featured": false,
@@ -462,7 +480,7 @@
     {
       "slug": "agua-com-gas",
       "categorySlug": "aguas",
-      "namePt": "Água Com Gás",
+      "namePt": "Água com gás",
       "descriptionPt": "",
       "priceBrl": 8,
       "featured": false,
@@ -471,7 +489,7 @@
     {
       "slug": "agua-coco",
       "categorySlug": "aguas",
-      "namePt": "Água de Coco",
+      "namePt": "Água de coco",
       "descriptionPt": "",
       "priceBrl": 12,
       "featured": false,
@@ -481,7 +499,7 @@
       "slug": "red-bull",
       "categorySlug": "energeticos",
       "namePt": "Red Bull",
-      "descriptionPt": "TRADICIONAL, SUGAR FREE OU TROPICAL",
+      "descriptionPt": "Tradicional, Sugar Free ou Tropical.",
       "priceBrl": 20,
       "featured": false,
       "imageSrc": "/images/menu/red-bull.png"
@@ -490,34 +508,34 @@
       "slug": "mock-mojito",
       "categorySlug": "mocktails",
       "namePt": "Mojito",
-      "descriptionPt": "Sprite, limão Taiti e folhas de hortela.",
+      "descriptionPt": "Sprite, limão Taiti e folhas de hortelã.",
       "priceBrl": 27,
       "featured": false,
       "imageSrc": "/images/menu/mock-mojito.png"
     },
     {
-      "slug": "mock-pina-colada",
+      "slug": "mock-pina",
       "categorySlug": "mocktails",
       "namePt": "Piña Colada",
       "descriptionPt": "Leite de coco, abacaxi, leite condensado e calda de chocolate.",
       "priceBrl": 28,
       "featured": false,
-      "imageSrc": "/images/menu/mock-pina-colada.png"
+      "imageSrc": "/images/menu/mock-pina.png"
     },
     {
-      "slug": "mock-moscow-mule",
+      "slug": "mock-mule",
       "categorySlug": "mocktails",
       "namePt": "Moscow Mule",
       "descriptionPt": "Suco de gengibre, limão Taiti, xarope simples, água com gás e alecrim.",
       "priceBrl": 26,
       "featured": false,
-      "imageSrc": "/images/menu/mock-moscow-mule.png"
+      "imageSrc": "/images/menu/mock-mule.png"
     },
     {
       "slug": "pink-lemonade",
       "categorySlug": "mocktails",
       "namePt": "Pink Lemonade",
-      "descriptionPt": "Grenadine, xarope simples, limão Taiti, fatias de laranja e ramo de hortela.",
+      "descriptionPt": "Grenadine, xarope simples, limão Taiti, fatias de laranja e ramo de hortelã.",
       "priceBrl": 28,
       "featured": false,
       "imageSrc": "/images/menu/pink-lemonade.png"
@@ -526,7 +544,7 @@
       "slug": "arnold-palmer",
       "categorySlug": "mocktails",
       "namePt": "Arnold Palmer",
-      "descriptionPt": "Chá de frutas tropicais, limão siciliano, pétalas de hibisco e xarope de hortela.",
+      "descriptionPt": "Chá de frutas tropicais, limão siciliano, pétalas de hibisco e xarope de hortelã.",
       "priceBrl": 28,
       "featured": false,
       "imageSrc": "/images/menu/arnold-palmer.png"
@@ -577,28 +595,28 @@
       "imageSrc": "/images/menu/baden.png"
     },
     {
-      "slug": "caipira-cachaca-ypioca",
+      "slug": "caipira-ypioca",
       "categorySlug": "caipiras",
       "namePt": "Cachaça Ypioca",
-      "descriptionPt": "Frutas: LIMÃO TAITI, LIMÃO SICILIANO, ABACAXI OU MORANGO.",
+      "descriptionPt": "Frutas: limão Taiti, limão siciliano, abacaxi ou morango.",
       "priceBrl": 35,
       "featured": false,
-      "imageSrc": "/images/menu/caipira-cachaca-ypioca.png"
+      "imageSrc": "/images/menu/caipira-ypioca.png"
     },
     {
-      "slug": "caipira-absolut-vodka",
+      "slug": "caipira-absolut",
       "categorySlug": "caipiras",
       "namePt": "Absolut Vodka",
-      "descriptionPt": "Frutas: LIMÃO TAITI, LIMÃO SICILIANO, ABACAXI OU MORANGO.",
+      "descriptionPt": "Frutas: limão Taiti, limão siciliano, abacaxi ou morango.",
       "priceBrl": 40,
       "featured": false,
-      "imageSrc": "/images/menu/caipira-absolut-vodka.png"
+      "imageSrc": "/images/menu/caipira-absolut.png"
     },
     {
       "slug": "caipira-smirnoff",
       "categorySlug": "caipiras",
       "namePt": "Smirnoff",
-      "descriptionPt": "Frutas: LIMÃO TAITI, LIMÃO SICILIANO, ABACAXI OU MORANGO.",
+      "descriptionPt": "Frutas: limão Taiti, limão siciliano, abacaxi ou morango.",
       "priceBrl": 35,
       "featured": false,
       "imageSrc": "/images/menu/caipira-smirnoff.png"
@@ -606,8 +624,8 @@
     {
       "slug": "caipira-sake",
       "categorySlug": "caipiras",
-      "namePt": "Sake",
-      "descriptionPt": "Frutas: LIMÃO TAITI, LIMÃO SICILIANO, ABACAXI OU MORANGO.",
+      "namePt": "Saké",
+      "descriptionPt": "Frutas: limão Taiti, limão siciliano, abacaxi ou morango.",
       "priceBrl": 38,
       "featured": false,
       "imageSrc": "/images/menu/caipira-sake.png"
@@ -616,19 +634,19 @@
       "slug": "caipira-steinhaeger",
       "categorySlug": "caipiras",
       "namePt": "Steinhaeger",
-      "descriptionPt": "Frutas: LIMÃO TAITI, LIMÃO SICILIANO, ABACAXI OU MORANGO.",
+      "descriptionPt": "Frutas: limão Taiti, limão siciliano, abacaxi ou morango.",
       "priceBrl": 39,
       "featured": false,
       "imageSrc": "/images/menu/caipira-steinhaeger.png"
     },
     {
-      "slug": "dose-absolut-vodka",
+      "slug": "dose-absolut",
       "categorySlug": "doses",
       "namePt": "Absolut Vodka",
       "descriptionPt": "",
       "priceBrl": 35,
       "featured": false,
-      "imageSrc": "/images/menu/dose-absolut-vodka.png"
+      "imageSrc": "/images/menu/dose-absolut.png"
     },
     {
       "slug": "dose-smirnoff",
@@ -649,13 +667,13 @@
       "imageSrc": "/images/menu/dose-grey-goose.png"
     },
     {
-      "slug": "dose-beefeater-london-dry-gin",
+      "slug": "dose-beefeater",
       "categorySlug": "doses",
       "namePt": "Beefeater London Dry Gin",
       "descriptionPt": "",
       "priceBrl": 38,
       "featured": false,
-      "imageSrc": "/images/menu/dose-beefeater-london-dry-gin.png"
+      "imageSrc": "/images/menu/dose-beefeater.png"
     },
     {
       "slug": "dose-gordons",
@@ -676,67 +694,67 @@
       "imageSrc": "/images/menu/dose-tanqueray.png"
     },
     {
-      "slug": "dose-ballantines-10-anos",
+      "slug": "dose-ballantines",
       "categorySlug": "doses",
-      "namePt": "Ballantine's 10 Anos",
+      "namePt": "Ballantine's 10 anos",
       "descriptionPt": "",
       "priceBrl": 36,
       "featured": false,
-      "imageSrc": "/images/menu/dose-ballantines-10-anos.png"
+      "imageSrc": "/images/menu/dose-ballantines.png"
     },
     {
-      "slug": "dose-jameson-irish-whiskey",
+      "slug": "dose-jameson",
       "categorySlug": "doses",
       "namePt": "Jameson Irish Whiskey",
       "descriptionPt": "",
       "priceBrl": 36,
       "featured": false,
-      "imageSrc": "/images/menu/dose-jameson-irish-whiskey.png"
+      "imageSrc": "/images/menu/dose-jameson.png"
     },
     {
-      "slug": "dose-chivas-regal-12-anos",
+      "slug": "dose-chivas12",
       "categorySlug": "doses",
-      "namePt": "Chivas Regal 12 Anos",
+      "namePt": "Chivas Regal 12 anos",
       "descriptionPt": "",
       "priceBrl": 40,
       "featured": false,
-      "imageSrc": "/images/menu/dose-chivas-regal-12-anos.png"
+      "imageSrc": "/images/menu/dose-chivas12.png"
     },
     {
-      "slug": "dose-jack-daniels",
+      "slug": "dose-jack",
       "categorySlug": "doses",
       "namePt": "Jack Daniel's",
       "descriptionPt": "",
       "priceBrl": 38,
       "featured": false,
-      "imageSrc": "/images/menu/dose-jack-daniels.png"
+      "imageSrc": "/images/menu/dose-jack.png"
     },
     {
-      "slug": "dose-johnnie-walker-red-label",
+      "slug": "dose-jw-red",
       "categorySlug": "doses",
       "namePt": "Johnnie Walker Red Label",
       "descriptionPt": "",
       "priceBrl": 34,
       "featured": false,
-      "imageSrc": "/images/menu/dose-johnnie-walker-red-label.png"
+      "imageSrc": "/images/menu/dose-jw-red.png"
     },
     {
-      "slug": "dose-johnnie-walker-black-label",
+      "slug": "dose-jw-black",
       "categorySlug": "doses",
       "namePt": "Johnnie Walker Black Label",
       "descriptionPt": "",
       "priceBrl": 40,
       "featured": false,
-      "imageSrc": "/images/menu/dose-johnnie-walker-black-label.png"
+      "imageSrc": "/images/menu/dose-jw-black.png"
     },
     {
-      "slug": "dose-licor-43",
+      "slug": "dose-licor43",
       "categorySlug": "doses",
       "namePt": "Licor 43",
       "descriptionPt": "",
       "priceBrl": 42,
       "featured": false,
-      "imageSrc": "/images/menu/dose-licor-43.png"
+      "imageSrc": "/images/menu/dose-licor43.png"
     },
     {
       "slug": "dose-cointreau",
@@ -748,58 +766,58 @@
       "imageSrc": "/images/menu/dose-cointreau.png"
     },
     {
-      "slug": "dose-jack-daniels-honey",
+      "slug": "dose-jack-honey",
       "categorySlug": "doses",
       "namePt": "Jack Daniel's Honey",
       "descriptionPt": "",
       "priceBrl": 38,
       "featured": false,
-      "imageSrc": "/images/menu/dose-jack-daniels-honey.png"
+      "imageSrc": "/images/menu/dose-jack-honey.png"
     },
     {
       "slug": "dose-jagermeister",
       "categorySlug": "doses",
-      "namePt": "Jagermeister",
+      "namePt": "Jägermeister",
       "descriptionPt": "",
       "priceBrl": 36,
       "featured": false,
       "imageSrc": "/images/menu/dose-jagermeister.png"
     },
     {
-      "slug": "dose-bacardi-carta-branca",
+      "slug": "dose-bacardi",
       "categorySlug": "doses",
       "namePt": "Bacardi Carta Branca",
       "descriptionPt": "",
       "priceBrl": 25,
       "featured": false,
-      "imageSrc": "/images/menu/dose-bacardi-carta-branca.png"
+      "imageSrc": "/images/menu/dose-bacardi.png"
     },
     {
-      "slug": "dose-havana-club-3-anos",
+      "slug": "dose-havana",
       "categorySlug": "doses",
-      "namePt": "Havana Club 3 Anos",
+      "namePt": "Havana Club 3 anos",
       "descriptionPt": "",
       "priceBrl": 39,
       "featured": false,
-      "imageSrc": "/images/menu/dose-havana-club-3-anos.png"
+      "imageSrc": "/images/menu/dose-havana.png"
     },
     {
-      "slug": "dose-jose-cuervo-prata",
+      "slug": "dose-cuervo-prata",
       "categorySlug": "doses",
       "namePt": "José Cuervo Prata",
       "descriptionPt": "",
       "priceBrl": 33,
       "featured": false,
-      "imageSrc": "/images/menu/dose-jose-cuervo-prata.png"
+      "imageSrc": "/images/menu/dose-cuervo-prata.png"
     },
     {
-      "slug": "dose-jose-cuervo-ouro",
+      "slug": "dose-cuervo-ouro",
       "categorySlug": "doses",
       "namePt": "José Cuervo Ouro",
       "descriptionPt": "",
       "priceBrl": 35,
       "featured": false,
-      "imageSrc": "/images/menu/dose-jose-cuervo-ouro.png"
+      "imageSrc": "/images/menu/dose-cuervo-ouro.png"
     },
     {
       "slug": "dose-campari",
@@ -838,13 +856,13 @@
       "imageSrc": "/images/menu/dose-ypioca-ouro.png"
     },
     {
-      "slug": "garrafa-absolut-vodka",
+      "slug": "garrafa-absolut",
       "categorySlug": "garrafas",
       "namePt": "Absolut Vodka",
       "descriptionPt": "",
       "priceBrl": 350,
       "featured": false,
-      "imageSrc": "/images/menu/garrafa-absolut-vodka.png"
+      "imageSrc": "/images/menu/garrafa-absolut.png"
     },
     {
       "slug": "garrafa-grey-goose",
@@ -856,13 +874,13 @@
       "imageSrc": "/images/menu/garrafa-grey-goose.png"
     },
     {
-      "slug": "garrafa-beefeater-london-dry-gin",
+      "slug": "garrafa-beefeater",
       "categorySlug": "garrafas",
       "namePt": "Beefeater London Dry Gin",
       "descriptionPt": "",
       "priceBrl": 320,
       "featured": false,
-      "imageSrc": "/images/menu/garrafa-beefeater-london-dry-gin.png"
+      "imageSrc": "/images/menu/garrafa-beefeater.png"
     },
     {
       "slug": "garrafa-tanqueray",
@@ -874,40 +892,40 @@
       "imageSrc": "/images/menu/garrafa-tanqueray.png"
     },
     {
-      "slug": "garrafa-chivas-regal-12-anos",
+      "slug": "garrafa-chivas12",
       "categorySlug": "garrafas",
-      "namePt": "Chivas Regal 12 Anos",
+      "namePt": "Chivas Regal 12 anos",
       "descriptionPt": "",
       "priceBrl": 430,
       "featured": false,
-      "imageSrc": "/images/menu/garrafa-chivas-regal-12-anos.png"
+      "imageSrc": "/images/menu/garrafa-chivas12.png"
     },
     {
-      "slug": "garrafa-royal-salute-21-anos",
+      "slug": "garrafa-royal-salute",
       "categorySlug": "garrafas",
-      "namePt": "Royal Salute 21 Anos",
+      "namePt": "Royal Salute 21 anos",
       "descriptionPt": "",
       "priceBrl": 1950,
       "featured": false,
-      "imageSrc": "/images/menu/garrafa-royal-salute-21-anos.png"
+      "imageSrc": "/images/menu/garrafa-royal-salute.png"
     },
     {
-      "slug": "garrafa-jack-daniels",
+      "slug": "garrafa-jack",
       "categorySlug": "garrafas",
       "namePt": "Jack Daniel's",
       "descriptionPt": "",
       "priceBrl": 400,
       "featured": false,
-      "imageSrc": "/images/menu/garrafa-jack-daniels.png"
+      "imageSrc": "/images/menu/garrafa-jack.png"
     },
     {
-      "slug": "garrafa-johnnie-walker-black-label",
+      "slug": "garrafa-jw-black",
       "categorySlug": "garrafas",
       "namePt": "Johnnie Walker Black Label",
       "descriptionPt": "",
       "priceBrl": 430,
       "featured": false,
-      "imageSrc": "/images/menu/garrafa-johnnie-walker-black-label.png"
+      "imageSrc": "/images/menu/garrafa-jw-black.png"
     }
   ],
   "stores": [

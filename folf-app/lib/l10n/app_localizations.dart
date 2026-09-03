@@ -968,6 +968,24 @@ abstract class AppLocalizations {
   /// **'Seu carrinho está vazio.'**
   String get emptyCart;
 
+  /// No description provided for @serviceCharge10.
+  ///
+  /// In pt, this message translates to:
+  /// **'Incluir taxa de serviço 10% (garçom)'**
+  String get serviceCharge10;
+
+  /// No description provided for @serviceChargeLabel.
+  ///
+  /// In pt, this message translates to:
+  /// **'Taxa de serviço 10%'**
+  String get serviceChargeLabel;
+
+  /// No description provided for @orderSubtotal.
+  ///
+  /// In pt, this message translates to:
+  /// **'Subtotal'**
+  String get orderSubtotal;
+
   /// No description provided for @emptyOrders.
   ///
   /// In pt, this message translates to:

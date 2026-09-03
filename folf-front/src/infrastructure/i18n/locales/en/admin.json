@@ -151,6 +151,8 @@
     "paymentStatusLabel": "Payment status",
     "paidAt": "Paid at",
     "noPayment": "No payment recorded",
+    "subtotal": "Subtotal",
+    "serviceCharge": "Service charge 10%",
     "paymentStatus": {
       "PENDING": "Pending",
       "PAID": "Paid",
@@ -258,7 +260,8 @@
     "cart": "Cart",
     "emptyCart": "Tap products to add them.",
     "checkout": "Register order",
-    "registered": "Order registered. It now appears in transactions."
+    "registered": "Order registered. It now appears in transactions.",
+    "serviceCharge": "Include 10% service charge (waiter)"
   },
   "errors": {
     "RESERVATION_OVERLAP": "This bay already has a booking in that slot ({{customerName}}, {{startAt}} – {{endAt}}).",

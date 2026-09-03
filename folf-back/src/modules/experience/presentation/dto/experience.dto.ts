@@ -3,6 +3,7 @@ import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsDateString,
   IsInt,
   IsOptional,
@@ -66,6 +67,14 @@ export class CustomerCreateOrderDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @ApiPropertyOptional({
+    default: false,
+    description: 'Incluir taxa de serviço de 10% (gorjeta) no total',
+  })
+  @IsOptional()
+  @IsBoolean()
+  includeServiceCharge?: boolean;
 
   @ApiProperty({ type: [CreateOrderItemDto] })
   @IsArray()

@@ -22,6 +22,8 @@ export interface Order {
   tableLabel: string | null
   notes: string | null
   totalBrl: number
+  includeServiceCharge?: boolean
+  serviceChargeBrl?: number
   createdAt: string
   customerId?: string | null
   customer?: Pick<Customer, 'id' | 'fullName' | 'cpf' | 'phone'> | null
@@ -55,6 +57,7 @@ export type CreateOrderPayload = {
   customerId?: string
   tableLabel?: string
   notes?: string
+  includeServiceCharge?: boolean
   items?: Array<{ productId: string; quantity?: number; notes?: string }>
 }
 

@@ -1,8 +1,8 @@
 /** Tarifas GSPro por persona/hora (BRL). partySize = 1 + companionCount (1–4). */
 const PRICE_PER_PERSON_BY_PARTY_SIZE: Record<number, number> = {
-  1: 180,
-  2: 180,
-  3: 150,
+  1: 150,
+  2: 150,
+  3: 130,
   4: 120,
 }
 

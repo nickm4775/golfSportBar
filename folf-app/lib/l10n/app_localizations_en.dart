@@ -476,6 +476,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyCart => 'Your cart is empty.';
 
   @override
+  String get serviceCharge10 => 'Include 10% service charge (waiter)';
+
+  @override
+  String get serviceChargeLabel => 'Service charge 10%';
+
+  @override
+  String get orderSubtotal => 'Subtotal';
+
+  @override
   String get emptyOrders => 'No orders yet.';
 
   @override

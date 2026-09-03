@@ -151,6 +151,8 @@
     "paymentStatusLabel": "Estado del pago",
     "paidAt": "Pagado el",
     "noPayment": "Sin pago registrado",
+    "subtotal": "Subtotal",
+    "serviceCharge": "Tasa de servicio 10%",
     "paymentStatus": {
       "PENDING": "Pendiente",
       "PAID": "Pagado",
@@ -258,7 +260,8 @@
     "cart": "Carrito",
     "emptyCart": "Tocá productos para sumarlos.",
     "checkout": "Registrar pedido",
-    "registered": "Pedido registrado. Ya figura en transacciones."
+    "registered": "Pedido registrado. Ya figura en transacciones.",
+    "serviceCharge": "Incluir tasa de servicio 10% (camarero)"
   },
   "errors": {
     "RESERVATION_OVERLAP": "Este bay ya tiene una reserva en ese horario ({{customerName}}, {{startAt}} – {{endAt}}).",

@@ -477,6 +477,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get emptyCart => 'Il carrello è vuoto.';
 
   @override
+  String get serviceCharge10 => 'Includi servizio 10% (cameriere)';
+
+  @override
+  String get serviceChargeLabel => 'Servizio 10%';
+
+  @override
+  String get orderSubtotal => 'Subtotale';
+
+  @override
   String get emptyOrders => 'Nessun ordine ancora.';
 
   @override

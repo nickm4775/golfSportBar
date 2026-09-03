@@ -151,6 +151,8 @@
     "paymentStatusLabel": "Stato pagamento",
     "paidAt": "Pagato il",
     "noPayment": "Nessun pagamento registrato",
+    "subtotal": "Subtotale",
+    "serviceCharge": "Servizio 10%",
     "paymentStatus": {
       "PENDING": "In attesa",
       "PAID": "Pagato",
@@ -258,7 +260,8 @@
     "cart": "Carrello",
     "emptyCart": "Tocca i prodotti per aggiungerli.",
     "checkout": "Registra ordine",
-    "registered": "Ordine registrato. Compare già nelle transazioni."
+    "registered": "Ordine registrato. Compare già nelle transazioni.",
+    "serviceCharge": "Includi servizio 10% (cameriere)"
   },
   "errors": {
     "RESERVATION_OVERLAP": "Questo bay ha già una prenotazione in quell'orario ({{customerName}}, {{startAt}} – {{endAt}}).",

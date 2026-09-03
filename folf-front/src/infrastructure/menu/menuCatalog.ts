@@ -119,6 +119,15 @@ export const menuCatalog: readonly MenuItem[] = [
     imageSrc: '/images/menu/paper-plane.png',
   },
   {
+    id: 'alabama-slammer',
+    category: 'classicos',
+    nameKey: 'items.alabamaSlammer.name',
+    descriptionKey: 'items.alabamaSlammer.description',
+    priceBrl: 40,
+    featured: false,
+    imageSrc: '/images/menu/alabama-slammer.png',
+  },
+  {
     id: 'gin-citric',
     category: 'autorais',
     nameKey: 'items.ginCitric.name',
@@ -378,6 +387,15 @@ export const menuCatalog: readonly MenuItem[] = [
     priceBrl: 9,
     featured: false,
     imageSrc: '/images/menu/refrigerantes.png',
+  },
+  {
+    id: 'suco-natural',
+    category: 'refrigerantes',
+    nameKey: 'items.sucoNatural.name',
+    descriptionKey: 'items.sucoNatural.description',
+    priceBrl: 15,
+    featured: false,
+    imageSrc: '/images/menu/suco-natural.png',
   },
   {
     id: 'agua-sem-gas',

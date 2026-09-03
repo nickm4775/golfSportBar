@@ -50,6 +50,19 @@ export class Order {
   })
   totalBrl!: number;
 
+  @Column({ name: 'include_service_charge', type: 'boolean', default: false })
+  includeServiceCharge!: boolean;
+
+  @Column({
+    name: 'service_charge_brl',
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+    default: 0,
+    transformer: decimalTransformer,
+  })
+  serviceChargeBrl!: number;
+
   @Column({ name: 'customer_id', type: 'uuid', nullable: true })
   customerId!: string | null;
 

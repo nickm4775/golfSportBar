@@ -15,22 +15,31 @@ interface PosState {
   customer: Customer | null
   tableLabel: string
   notes: string
+  includeServiceCharge: boolean
   lines: PosLine[]
   setCustomer: (customer: Customer | null) => void
   setTableLabel: (value: string) => void
   setNotes: (value: string) => void
+  setIncludeServiceCharge: (value: boolean) => void
   addProduct: (product: MenuItem) => void
   setQuantity: (productId: string, quantity: number) => void
   setLineNotes: (productId: string, notes: string) => void
   removeLine: (productId: string) => void
   clear: () => void
+  subtotal: () => number
+  serviceCharge: () => number
   total: () => number
+}
+
+function roundBrl(value: number) {
+  return Math.round(value * 100) / 100
 }
 
 export const usePosStore = create<PosState>((set, get) => ({
   customer: null,
   tableLabel: '',
   notes: '',
+  includeServiceCharge: false,
   lines: [],
 
   setCustomer(customer) {
@@ -43,6 +52,10 @@ export const usePosStore = create<PosState>((set, get) => ({
 
   setNotes(notes) {
     set({ notes })
+  },
+
+  setIncludeServiceCharge(includeServiceCharge) {
+    set({ includeServiceCharge })
   },
 
   addProduct(product) {
@@ -91,10 +104,19 @@ export const usePosStore = create<PosState>((set, get) => ({
   },
 
   clear() {
-    set({ customer: null, tableLabel: '', notes: '', lines: [] })
+    set({ customer: null, tableLabel: '', notes: '', includeServiceCharge: false, lines: [] })
+  },
+
+  subtotal() {
+    return get().lines.reduce((sum, line) => sum + line.unitPriceBrl * line.quantity, 0)
+  },
+
+  serviceCharge() {
+    if (!get().includeServiceCharge) return 0
+    return roundBrl(get().subtotal() * 0.1)
   },
 
   total() {
-    return get().lines.reduce((sum, line) => sum + line.unitPriceBrl * line.quantity, 0)
+    return roundBrl(get().subtotal() + get().serviceCharge())
   },
 }))

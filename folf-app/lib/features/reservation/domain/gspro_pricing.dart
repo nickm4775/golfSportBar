@@ -1,13 +1,13 @@
 /// Tarifas GSPro por persona/hora (BRL). partySize = 1 + companionCount.
 const Map<int, double> kGsproPricePerPersonByPartySize = {
-  1: 180,
-  2: 180,
-  3: 150,
+  1: 150,
+  2: 150,
+  3: 130,
   4: 120,
 };
 
 double pricePerPersonBrl(int partySize) =>
-    kGsproPricePerPersonByPartySize[partySize] ?? 180;
+    kGsproPricePerPersonByPartySize[partySize] ?? 150;
 
 double computeReservationTotal({
   required int companionCount,

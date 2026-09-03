@@ -42,3 +42,9 @@ export function calculateOrderTotal(
     0,
   );
 }
+
+/** 10% waiter / service charge rounded to 2 decimal places (BRL). */
+export function calculateServiceCharge(subtotal: number, include: boolean) {
+  if (!include) return 0;
+  return Math.round(subtotal * 0.1 * 100) / 100;
+}

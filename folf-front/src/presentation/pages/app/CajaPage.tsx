@@ -35,11 +35,15 @@ export function CajaPage() {
   const setCustomer = usePosStore((state) => state.setCustomer)
   const setTableLabel = usePosStore((state) => state.setTableLabel)
   const setNotes = usePosStore((state) => state.setNotes)
+  const includeServiceCharge = usePosStore((state) => state.includeServiceCharge)
+  const setIncludeServiceCharge = usePosStore((state) => state.setIncludeServiceCharge)
   const addProduct = usePosStore((state) => state.addProduct)
   const setQuantity = usePosStore((state) => state.setQuantity)
   const setLineNotes = usePosStore((state) => state.setLineNotes)
   const removeLine = usePosStore((state) => state.removeLine)
   const clear = usePosStore((state) => state.clear)
+  const subtotal = usePosStore((state) => state.subtotal)
+  const serviceCharge = usePosStore((state) => state.serviceCharge)
   const total = usePosStore((state) => state.total)
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('')
@@ -65,6 +69,7 @@ export function CajaPage() {
         customerId: customer.id,
         tableLabel: tableLabel || undefined,
         notes: notes || undefined,
+        includeServiceCharge: includeServiceCharge || undefined,
         items: lines.map((line) => ({
           productId: line.productId,
           quantity: line.quantity,
@@ -217,9 +222,32 @@ export function CajaPage() {
             </ul>
           )}
 
-          <div className="mb-3 flex items-center justify-between text-sm">
-            <span>{t('recent.total')}</span>
-            <strong>{formatBrl(total(), locale)}</strong>
+          <div className="mb-3 grid gap-2 text-sm">
+            <label className="flex cursor-pointer items-start gap-2 text-xs text-[var(--gsb-muted)]">
+              <input
+                type="checkbox"
+                className="mt-0.5"
+                checked={includeServiceCharge}
+                onChange={(event) => setIncludeServiceCharge(event.target.checked)}
+              />
+              <span>{t('pos.serviceCharge')}</span>
+            </label>
+            {includeServiceCharge ? (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--gsb-muted)]">{t('orders.subtotal')}</span>
+                  <span>{formatBrl(subtotal(), locale)}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[var(--gsb-muted)]">{t('orders.serviceCharge')}</span>
+                  <span>{formatBrl(serviceCharge(), locale)}</span>
+                </div>
+              </>
+            ) : null}
+            <div className="flex items-center justify-between">
+              <span>{t('recent.total')}</span>
+              <strong>{formatBrl(total(), locale)}</strong>
+            </div>
           </div>
           <button
             type="button"

@@ -230,6 +230,7 @@ class _CartSheet extends StatefulWidget {
 class _CartSheetState extends State<_CartSheet> {
   late final TextEditingController _orderNotes;
   final Map<String, TextEditingController> _itemNotes = {};
+  bool _includeServiceCharge = false;
 
   @override
   void initState() {
@@ -309,7 +310,36 @@ class _CartSheetState extends State<_CartSheet> {
                       textInputAction: TextInputAction.done,
                       onChanged: (value) => context.read<CartCubit>().setNotes(value),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 8),
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      controlAffinity: ListTileControlAffinity.leading,
+                      value: _includeServiceCharge,
+                      onChanged: (value) => setState(() => _includeServiceCharge = value ?? false),
+                      title: Text(l10n.serviceCharge10),
+                    ),
+                    if (_includeServiceCharge) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(l10n.orderSubtotal, style: Theme.of(context).textTheme.bodySmall),
+                          Text(formatBrl(cart.total), style: Theme.of(context).textTheme.bodySmall),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(l10n.serviceChargeLabel, style: Theme.of(context).textTheme.bodySmall),
+                          Text(
+                            formatBrl(_serviceCharge(cart.total)),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                    const SizedBox(height: 4),
                   ],
                   FilledButton(
                     onPressed: widget.table == null || cart.items.isEmpty
@@ -328,13 +358,16 @@ class _CartSheetState extends State<_CartSheet> {
                                   tableLabel: widget.table!,
                                   items: items,
                                   notes: orderNotes.isEmpty ? null : orderNotes,
+                                  includeServiceCharge: _includeServiceCharge,
                                 );
                             if (placed != null && context.mounted) {
                               context.read<CartCubit>().clear();
                               Navigator.pop(context);
                             }
                           },
-                    child: Text('${l10n.placeOrder} · ${formatBrl(cart.total)}'),
+                    child: Text(
+                      '${l10n.placeOrder} · ${formatBrl(_payableTotal(cart.total))}',
+                    ),
                   ),
                 ],
               ),
@@ -343,5 +376,12 @@ class _CartSheetState extends State<_CartSheet> {
         );
       },
     );
+  }
+
+  double _serviceCharge(double subtotal) => (subtotal * 0.1 * 100).round() / 100;
+
+  double _payableTotal(double subtotal) {
+    if (!_includeServiceCharge) return subtotal;
+    return ((subtotal + _serviceCharge(subtotal)) * 100).round() / 100;
   }
 }

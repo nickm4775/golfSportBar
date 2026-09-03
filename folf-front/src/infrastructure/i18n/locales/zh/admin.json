@@ -151,6 +151,8 @@
     "paymentStatusLabel": "支付状态",
     "paidAt": "支付时间",
     "noPayment": "暂无支付记录",
+    "subtotal": "小计",
+    "serviceCharge": "服务费 10%",
     "paymentStatus": {
       "PENDING": "待支付",
       "PAID": "已支付",
@@ -258,7 +260,8 @@
     "cart": "购物车",
     "emptyCart": "点击产品即可加入。",
     "checkout": "登记订单",
-    "registered": "订单已登记，可在交易列表中查看。"
+    "registered": "订单已登记，可在交易列表中查看。",
+    "serviceCharge": "包含 10% 服务费（服务员）"
   },
   "errors": {
     "RESERVATION_OVERLAP": "该打位在该时段已有预约（{{customerName}}，{{startAt}} – {{endAt}}）。",

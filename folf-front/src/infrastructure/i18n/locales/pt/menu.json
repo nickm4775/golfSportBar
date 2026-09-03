@@ -77,6 +77,10 @@
       "name": "Paper Plane",
       "description": "Aperol, whisky bourbon, limão siciliano e Cynar."
     },
+    "alabamaSlammer": {
+      "name": "Alabama Slammer",
+      "description": "Southern Comfort, licor amaretto, sloe gin e suco de laranja."
+    },
     "ginCitric": {
       "name": "Gin Citric Tropical",
       "description": "Beefeater London Dry, maracujá, xarope simples, limão siciliano, água tônica e ramo de alecrim."
@@ -192,6 +196,10 @@
     "refrigerantes": {
       "name": "Refrigerantes",
       "description": "Coca-Cola, Coca-Cola Zero, Guaraná, Guaraná Zero ou Sprite."
+    },
+    "sucoNatural": {
+      "name": "Suco natural",
+      "description": "Suco natural de fruta."
     },
     "aguaSemGas": {
       "name": "Água sem gás",
