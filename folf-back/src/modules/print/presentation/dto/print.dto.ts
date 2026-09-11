@@ -55,6 +55,12 @@ export class UpsertPrinterDto {
   @IsOptional()
   @IsInt()
   paperWidth?: number;
+
+  @ApiPropertyOptional({ format: 'uuid', nullable: true })
+  @IsOptional()
+  @ValidateIf((_, value) => value !== null && value !== undefined)
+  @IsUUID()
+  agentPrinterId?: string | null;
 }
 
 export class DiscoverPrintersDto {

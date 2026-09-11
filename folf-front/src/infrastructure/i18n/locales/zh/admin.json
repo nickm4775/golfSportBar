@@ -327,6 +327,30 @@
     "printerSaved": "打印机已保存。",
     "probeDone": "检测完成。",
     "testQueued": "测试小票已入队。",
-    "lastSeen": "上次在线"
+    "lastSeen": "上次在线",
+    "agentPairing": {
+      "title": "配对打印代理",
+      "help": "生成一个代码，并在门店网络设备上安装的代理应用中输入。",
+      "generate": "生成代码",
+      "regenerate": "生成新代码",
+      "code": "代码",
+      "expiresIn": "{{seconds}} 秒后过期",
+      "expired": "代码已过期",
+      "instructions": "打开打印代理，输入服务器地址和此代码。"
+    },
+    "agentsList": {
+      "title": "已配对代理",
+      "noAgents": "尚无已配对代理。",
+      "online": "在线",
+      "offline": "离线",
+      "lastSeen": "上次在线",
+      "printers": "打印机",
+      "platform": "平台"
+    },
+    "agentPrinter": {
+      "label": "代理打印机",
+      "none": "未分配",
+      "unassignedWarning": "请为该工位分配一台代理打印机以便打印。"
+    }
   }
 }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'"
+    />
+    <title>Negocenda Print Agent</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>Negocenda Print</h1>
+          <p class="muted small" id="meta">Sin emparejar</p>
+        </div>
+      </div>
+      <div class="status-block">
+        <span id="statusBadge" class="badge badge-idle">Cargando</span>
+        <p id="statusText" class="muted small">Cargando…</p>
+      </div>
+    </header>
+
+    <section class="card" id="connectionCard">
+      <button type="button" class="section-toggle" id="btnToggleConnection" aria-expanded="true">
+        <span>Conexión al servidor</span>
+        <span class="chevron" aria-hidden="true"></span>
+      </button>
+      <div class="section-body" id="connectionBody">
+        <label>
+          URL del API
+          <input id="apiBaseUrl" type="text" placeholder="http://localhost:3000" autocomplete="off" />
+        </label>
+        <label>
+          Código de emparejamiento
+          <input id="pairCode" type="text" placeholder="A1B2C3" maxlength="8" autocomplete="off" />
+        </label>
+        <div class="row">
+          <button id="btnPair" type="button">Emparejar</button>
+          <button id="btnStart" type="button">Iniciar</button>
+          <button id="btnStop" type="button" class="secondary">Detener</button>
+          <button id="btnUnpair" type="button" class="danger ghost">Desvincular</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <div>
+          <h2>Impresoras</h2>
+          <p class="muted small">Puedes agregar varias (caja, cocina, barra…)</p>
+        </div>
+        <div class="row tight">
+          <button id="btnDiscover" type="button">Buscar</button>
+          <button id="btnToggleManual" type="button" class="secondary">Manual</button>
+        </div>
+      </div>
+
+      <div id="discoverPanel" class="panel hidden">
+        <div class="filter-row">
+          <label class="check"><input type="checkbox" id="discNetwork" checked /> Red</label>
+          <label class="check"><input type="checkbox" id="discUsb" checked /> USB</label>
+          <label class="check"><input type="checkbox" id="discBluetooth" checked /> Bluetooth</label>
+          <button id="btnCancelDiscover" type="button" class="secondary ghost hidden">Cancelar</button>
+        </div>
+        <p id="discoverProgress" class="muted small">Listo para escanear red, USB y Bluetooth emparejado.</p>
+        <div id="discoverResults" class="discover-list"></div>
+        <div class="row">
+          <label class="inline grow">
+            Nombre al agregar
+            <input
+              id="discoverName"
+              type="text"
+              placeholder="Opcional (vacío = nombre del escaneo)"
+              autocomplete="off"
+            />
+          </label>
+          <label class="inline">
+            Ancho
+            <select id="discoverPaperWidth">
+              <option value="58">58 mm</option>
+              <option value="80">80 mm</option>
+            </select>
+          </label>
+          <button id="btnAddSelected" type="button" disabled>Agregar seleccionadas</button>
+        </div>
+      </div>
+
+      <div id="manualPanel" class="panel hidden">
+        <div class="grid-2">
+          <label>
+            Nombre
+            <input id="printerName" type="text" value="" placeholder="Caja, Cocina, Barra…" />
+          </label>
+          <label>
+            Tipo
+            <select id="printerType">
+              <option value="network">Red (Ethernet / WiFi)</option>
+              <option value="usb">USB</option>
+              <option value="bluetooth">Bluetooth</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span id="addressLabel">IP:puerto</span>
+          <input id="printerAddress" type="text" placeholder="192.168.1.50:9100" />
+        </label>
+        <div class="grid-2">
+          <label>
+            Ancho de papel
+            <select id="printerPaperWidth">
+              <option value="58">58 mm</option>
+              <option value="80">80 mm</option>
+            </select>
+          </label>
+          <div class="align-end">
+            <button id="btnSavePrinter" type="button">Guardar impresora</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="printerList" class="printer-grid"></div>
+      <div id="printerEmpty" class="empty-state">
+        <p>No hay impresoras configuradas</p>
+        <p class="muted small">Usa <strong>Buscar</strong> para detectar dispositivos en red, USB o Bluetooth, o agrégalos manualmente.</p>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Actividad</h2>
+      <pre id="logBox" class="log"></pre>
+    </section>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

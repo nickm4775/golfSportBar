@@ -3,29 +3,28 @@ import { services } from '@/app/compositionRoot'
 import { useAuthStore } from './authStore'
 import type {
   DiscoveredPrinter,
+  PairingCodeResult,
   PrepStation,
+  PrintAgent,
   PrintExecutionMode,
   PrintSettings,
+  UpsertPrinterPayload,
 } from '@/domain/print/Print'
 
 interface PrintState {
   settings: PrintSettings | null
   discovered: DiscoveredPrinter[]
+  agents: PrintAgent[]
+  pairingCode: PairingCodeResult | null
   loading: boolean
   discovering: boolean
   error: string | null
   load: () => Promise<void>
+  loadAgents: () => Promise<void>
+  generatePairingCode: () => Promise<void>
   setMode: (mode: PrintExecutionMode) => Promise<void>
-  savePrinter: (
-    station: PrepStation,
-    payload: {
-      name?: string
-      host?: string | null
-      port?: number
-      enabled?: boolean
-      paperWidth?: number
-    },
-  ) => Promise<void>
+  savePrinter: (station: PrepStation, payload: UpsertPrinterPayload) => Promise<void>
+  assignAgentPrinter: (station: PrepStation, agentPrinterId: string | null) => Promise<void>
   discover: (cidr?: string) => Promise<void>
   probe: (station: PrepStation) => Promise<void>
   testPrint: (station: PrepStation) => Promise<void>
@@ -41,6 +40,8 @@ function requireBusinessId() {
 export const usePrintStore = create<PrintState>((set, get) => ({
   settings: null,
   discovered: [],
+  agents: [],
+  pairingCode: null,
   loading: false,
   discovering: false,
   error: null,
@@ -50,6 +51,9 @@ export const usePrintStore = create<PrintState>((set, get) => ({
     try {
       const settings = await services.print.getSettings(requireBusinessId())
       set({ settings, loading: false })
+      if (settings.printExecutionMode === 'AGENT') {
+        await get().loadAgents()
+      }
     } catch (error) {
       set({
         loading: false,
@@ -58,11 +62,28 @@ export const usePrintStore = create<PrintState>((set, get) => ({
     }
   },
 
+  async loadAgents() {
+    try {
+      const agents = await services.print.listAgents(requireBusinessId())
+      set({ agents })
+    } catch (error) {
+      set({ error: error instanceof Error ? error.message : 'Unknown error' })
+    }
+  },
+
+  async generatePairingCode() {
+    const pairingCode = await services.print.generateAgentPairingCode(requireBusinessId())
+    set({ pairingCode })
+  },
+
   async setMode(mode) {
     const settings = await services.print.updateSettings(requireBusinessId(), {
       printExecutionMode: mode,
     })
     set({ settings })
+    if (mode === 'AGENT') {
+      await get().loadAgents()
+    }
   },
 
   async savePrinter(station, payload) {
@@ -72,6 +93,10 @@ export const usePrintStore = create<PrintState>((set, get) => ({
       payload,
     )
     set({ settings })
+  },
+
+  async assignAgentPrinter(station, agentPrinterId) {
+    await get().savePrinter(station, { agentPrinterId })
   },
 
   async discover(cidr) {

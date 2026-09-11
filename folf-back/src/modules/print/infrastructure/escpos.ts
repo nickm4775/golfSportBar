@@ -55,8 +55,12 @@ export function renderEscPosTicket(payload: TicketPayload, paperWidth = 80): Buf
     push(`Notas: ${payload.notes.trim()}\n`);
   }
   push(line());
-  push('\n\n');
-  push(Buffer.from([0x1d, 0x56, 0x01]));
+  // Feed enough paper so the last printed lines clear the cutter blade before cutting.
+  // ESC d 5 -> feed 5 lines; GS V 66 0 -> feed to cutting position + partial cut
+  // (function B: the printer adds the head-to-cutter distance itself).
+  // Fallback for mechs without function B: ESC d 6 then GS V 1 (0x1d 0x56 0x01).
+  push(Buffer.from([0x1b, 0x64, 0x05]));
+  push(Buffer.from([0x1d, 0x56, 0x42, 0x00]));
 
   return Buffer.concat(chunks);
 }

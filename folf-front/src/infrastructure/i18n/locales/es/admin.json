@@ -327,6 +327,30 @@
     "printerSaved": "Impresora guardada.",
     "probeDone": "Comprobación lista.",
     "testQueued": "Ticket de prueba encolado.",
-    "lastSeen": "Última vez"
+    "lastSeen": "Última vez",
+    "agentPairing": {
+      "title": "Emparejar agente de impresión",
+      "help": "Genera un código e ingrésalo en la app del agente instalada en un equipo de la red del local.",
+      "generate": "Generar código",
+      "regenerate": "Generar nuevo código",
+      "code": "Código",
+      "expiresIn": "Vence en {{seconds}} s",
+      "expired": "Código vencido",
+      "instructions": "Abre el agente de impresión, ingresa la URL del servidor y este código."
+    },
+    "agentsList": {
+      "title": "Agentes emparejados",
+      "noAgents": "Todavía no hay agentes emparejados.",
+      "online": "En línea",
+      "offline": "Fuera de línea",
+      "lastSeen": "Última vez",
+      "printers": "Impresoras",
+      "platform": "Plataforma"
+    },
+    "agentPrinter": {
+      "label": "Impresora del agente",
+      "none": "Sin asignar",
+      "unassignedWarning": "Asigna una impresora del agente para que esta estación pueda imprimir."
+    }
   }
 }

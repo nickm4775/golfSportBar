@@ -9,6 +9,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Business } from './business.entity';
+import { AgentPrinter } from './agent-printer.entity';
 import {
   PrepStation,
   PrinterConnectionStatus,
@@ -54,6 +55,9 @@ export class BusinessPrinter {
   @Column({ name: 'last_error', type: 'text', nullable: true })
   lastError!: string | null;
 
+  @Column({ name: 'agent_printer_id', type: 'uuid', nullable: true })
+  agentPrinterId!: string | null;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt!: Date;
 
@@ -63,4 +67,8 @@ export class BusinessPrinter {
   @ManyToOne(() => Business, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'business_id' })
   business!: Business;
+
+  @ManyToOne(() => AgentPrinter, { onDelete: 'SET NULL', nullable: true })
+  @JoinColumn({ name: 'agent_printer_id' })
+  agentPrinter!: AgentPrinter | null;
 }

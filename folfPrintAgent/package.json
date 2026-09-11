@@ -1,0 +1,94 @@
+{
+  "name": "negocenda-print-agent",
+  "version": "1.0.0",
+  "description": "Agente de impresión térmica Negocenda (bandeja del sistema)",
+  "main": "dist/main.js",
+  "author": "Negocenda",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "postinstall": "node scripts/rebuild-usb.cjs || echo \"[warn] native usb rebuild skipped — run npm run rebuild\"",
+    "rebuild": "node scripts/rebuild-usb.cjs",
+    "build": "tsc && node scripts/copy-static.cjs",
+    "start": "npm run build && electron .",
+    "dev": "npm run build && electron .",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "publish:downloads": "node scripts/publish-downloads.cjs"
+  },
+  "dependencies": {
+    "axios": "^1.8.4",
+    "electron-store": "^8.2.0",
+    "usb": "^2.14.0",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^3.7.1",
+    "@types/node": "^22.13.10",
+    "electron": "^35.0.1",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.8.2"
+  },
+  "build": {
+    "appId": "com.negocenda.printagent",
+    "productName": "Negocenda Print Agent",
+    "artifactName": "Negocenda-Print-Agent-${os}.${ext}",
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [],
+    "afterPack": "./scripts/after-pack.cjs",
+    "mac": {
+      "category": "public.app-category.business",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "identity": null,
+      "icon": "build/icon.icns",
+      "extendInfo": {
+        "NSLocalNetworkUsageDescription": "Negocenda Print Agent necesita acceso a la red local para detectar e imprimir en impresoras térmicas (TCP 9100).",
+        "NSBluetoothAlwaysUsageDescription": "Negocenda Print Agent usa Bluetooth para listar impresoras ya emparejadas e intentar imprimir por canal serial.",
+        "NSBluetoothPeripheralUsageDescription": "Negocenda Print Agent usa Bluetooth para impresoras térmicas emparejadas."
+      }
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "Negocenda-Print-Agent-Setup.${ext}"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        },
+        {
+          "target": "tar.gz",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Office",
+      "icon": "build/icon.png",
+      "artifactName": "Negocenda-Print-Agent.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "Negocenda-Print-Agent-Setup.${ext}"
+    }
+  }
+}

@@ -73,6 +73,12 @@ export enum PrinterConnectionStatus {
   OFFLINE = 'OFFLINE',
 }
 
+export enum PrinterConnectionType {
+  NETWORK = 'network',
+  USB = 'usb',
+  BLUETOOTH = 'bluetooth',
+}
+
 export enum PrintJobStatus {
   PENDING = 'PENDING',
   PRINTED = 'PRINTED',

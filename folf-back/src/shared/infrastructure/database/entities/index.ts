@@ -18,6 +18,9 @@ export { Payment } from './payment.entity';
 export { BusinessPrintSettings } from './business-print-settings.entity';
 export { BusinessPrinter } from './business-printer.entity';
 export { PrintJob } from './print-job.entity';
+export { PrintAgent } from './print-agent.entity';
+export { PrintAgentPairingCode } from './print-agent-pairing-code.entity';
+export { AgentPrinter } from './agent-printer.entity';
 
 import { User } from './user.entity';
 import { Organization } from './organization.entity';
@@ -39,6 +42,9 @@ import { Payment } from './payment.entity';
 import { BusinessPrintSettings } from './business-print-settings.entity';
 import { BusinessPrinter } from './business-printer.entity';
 import { PrintJob } from './print-job.entity';
+import { PrintAgent } from './print-agent.entity';
+import { PrintAgentPairingCode } from './print-agent-pairing-code.entity';
+import { AgentPrinter } from './agent-printer.entity';
 
 export const ENTITIES = [
   User,
@@ -61,4 +67,7 @@ export const ENTITIES = [
   BusinessPrintSettings,
   BusinessPrinter,
   PrintJob,
+  PrintAgent,
+  PrintAgentPairingCode,
+  AgentPrinter,
 ];

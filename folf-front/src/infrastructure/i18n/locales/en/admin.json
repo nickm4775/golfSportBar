@@ -327,6 +327,30 @@
     "printerSaved": "Printer saved.",
     "probeDone": "Check complete.",
     "testQueued": "Test ticket queued.",
-    "lastSeen": "Last seen"
+    "lastSeen": "Last seen",
+    "agentPairing": {
+      "title": "Pair print agent",
+      "help": "Generate a code and enter it in the agent app installed on a machine on the venue network.",
+      "generate": "Generate code",
+      "regenerate": "Generate new code",
+      "code": "Code",
+      "expiresIn": "Expires in {{seconds}}s",
+      "expired": "Code expired",
+      "instructions": "Open the print agent, enter the server URL and this code."
+    },
+    "agentsList": {
+      "title": "Paired agents",
+      "noAgents": "No agents paired yet.",
+      "online": "Online",
+      "offline": "Offline",
+      "lastSeen": "Last seen",
+      "printers": "Printers",
+      "platform": "Platform"
+    },
+    "agentPrinter": {
+      "label": "Agent printer",
+      "none": "Unassigned",
+      "unassignedWarning": "Assign an agent printer so this station can print."
+    }
   }
 }

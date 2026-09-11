@@ -2,10 +2,13 @@ import { apiRequest } from '@/infrastructure/http/apiClient'
 import type {
   DiscoveredPrinter,
   IPrintRepository,
+  PairingCodeResult,
   PrepStation,
+  PrintAgent,
   PrintExecutionMode,
   PrintSettings,
   PrinterConnectionStatus,
+  UpsertPrinterPayload,
 } from '@/domain/print/Print'
 
 export class HttpPrintRepository implements IPrintRepository {
@@ -21,17 +24,7 @@ export class HttpPrintRepository implements IPrintRepository {
     })
   }
 
-  upsertPrinter(
-    businessId: string,
-    station: PrepStation,
-    payload: {
-      name?: string
-      host?: string | null
-      port?: number
-      enabled?: boolean
-      paperWidth?: number
-    },
-  ) {
+  upsertPrinter(businessId: string, station: PrepStation, payload: UpsertPrinterPayload) {
     return apiRequest<PrintSettings>(
       `/businesses/${businessId}/settings/print/printers/${station}`,
       {
@@ -68,6 +61,19 @@ export class HttpPrintRepository implements IPrintRepository {
   testPrint(businessId: string, station: PrepStation) {
     return apiRequest(`/businesses/${businessId}/settings/print/printers/${station}/test`, {
       method: 'POST',
+      businessId,
+    })
+  }
+
+  generateAgentPairingCode(businessId: string) {
+    return apiRequest<PairingCodeResult>(
+      `/businesses/${businessId}/settings/print/agent/pairing-code`,
+      { method: 'POST', businessId },
+    )
+  }
+
+  listAgents(businessId: string) {
+    return apiRequest<PrintAgent[]>(`/businesses/${businessId}/settings/print/agents`, {
       businessId,
     })
   }

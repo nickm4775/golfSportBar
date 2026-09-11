@@ -327,6 +327,30 @@
     "printerSaved": "Stampante salvata.",
     "probeDone": "Verifica completata.",
     "testQueued": "Ticket di prova in coda.",
-    "lastSeen": "Ultimo contatto"
+    "lastSeen": "Ultimo contatto",
+    "agentPairing": {
+      "title": "Abbina agente di stampa",
+      "help": "Genera un codice e inseriscilo nell'app dell'agente installata su un PC della rete del locale.",
+      "generate": "Genera codice",
+      "regenerate": "Genera nuovo codice",
+      "code": "Codice",
+      "expiresIn": "Scade tra {{seconds}}s",
+      "expired": "Codice scaduto",
+      "instructions": "Apri l'agente di stampa, inserisci l'URL del server e questo codice."
+    },
+    "agentsList": {
+      "title": "Agenti abbinati",
+      "noAgents": "Nessun agente abbinato.",
+      "online": "Online",
+      "offline": "Offline",
+      "lastSeen": "Ultimo contatto",
+      "printers": "Stampanti",
+      "platform": "Piattaforma"
+    },
+    "agentPrinter": {
+      "label": "Stampante dell'agente",
+      "none": "Non assegnata",
+      "unassignedWarning": "Assegna una stampante dell'agente per far stampare questa postazione."
+    }
   }
 }

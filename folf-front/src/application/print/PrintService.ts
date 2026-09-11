@@ -1,7 +1,10 @@
 import type {
+  AgentPrinter,
   DiscoveredPrinter,
   IPrintRepository,
+  PairingCodeResult,
   PrepStation,
+  PrintAgent,
   PrintExecutionMode,
   PrintSettings,
 } from '@/domain/print/Print'
@@ -40,6 +43,22 @@ export class PrintService {
   testPrint(businessId: string, station: PrepStation) {
     return this.print.testPrint(businessId, station)
   }
+
+  generateAgentPairingCode(businessId: string) {
+    return this.print.generateAgentPairingCode(businessId)
+  }
+
+  listAgents(businessId: string) {
+    return this.print.listAgents(businessId)
+  }
 }
 
-export type { PrintSettings, DiscoveredPrinter, PrepStation, PrintExecutionMode }
+export type {
+  PrintSettings,
+  DiscoveredPrinter,
+  PrepStation,
+  PrintExecutionMode,
+  PrintAgent,
+  AgentPrinter,
+  PairingCodeResult,
+}

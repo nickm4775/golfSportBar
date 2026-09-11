@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -17,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { PrintService } from '../application/print.service';
+import { PrintAgentService } from '../application/print-agent.service';
 import {
   AgentDiscoverResultDto,
   AgentHeartbeatDto,
@@ -41,7 +43,10 @@ import { ApiStandardErrors } from '../../../shared/infrastructure/swagger/swagge
 @UseGuards(JwtAuthGuard, BusinessContextGuard, PermissionsGuard)
 @Controller('businesses/:businessId')
 export class PrintController {
-  constructor(private readonly printService: PrintService) {}
+  constructor(
+    private readonly printService: PrintService,
+    private readonly printAgentService: PrintAgentService,
+  ) {}
 
   @Get('settings/print')
   @RequirePermissions('business:read')
@@ -106,9 +111,28 @@ export class PrintController {
     return this.printService.enqueueTest(businessId, station);
   }
 
+  @Post('settings/print/agent/pairing-code')
+  @RequirePermissions('business:write')
+  @ApiOperation({ summary: 'Generar código de empareje del agente' })
+  @ApiStandardErrors()
+  createPairingCode(
+    @Param('businessId') businessId: string,
+    @Req() req: { user: { id: string } },
+  ) {
+    return this.printAgentService.createPairingCode(businessId, req.user.id);
+  }
+
+  @Get('settings/print/agents')
+  @RequirePermissions('business:read')
+  @ApiOperation({ summary: 'Listar agentes emparejados y sus impresoras' })
+  @ApiStandardErrors()
+  listAgents(@Param('businessId') businessId: string) {
+    return this.printAgentService.listAgents(businessId);
+  }
+
   @Post('settings/print/agent/heartbeat')
   @RequirePermissions('business:read')
-  @ApiOperation({ summary: 'Heartbeat del agente de impresión' })
+  @ApiOperation({ summary: 'Heartbeat del agente de impresión (legacy)' })
   @ApiStandardErrors()
   heartbeat(@Param('businessId') businessId: string, @Body() dto: AgentHeartbeatDto) {
     return this.printService.agentHeartbeat(businessId, dto);

@@ -13,6 +13,7 @@ export type BusinessPrinter = {
   connectionStatus: PrinterConnectionStatus
   lastSeenAt: string | null
   lastError: string | null
+  agentPrinterId: string | null
 }
 
 export type PrintSettings = {
@@ -28,6 +29,42 @@ export type DiscoveredPrinter = {
   latencyMs: number
 }
 
+export type PrinterConnectionType = 'network' | 'usb' | 'bluetooth'
+
+export type AgentPrinter = {
+  id: string
+  name: string
+  connectionType: PrinterConnectionType
+  address: string
+  paperWidth: number
+  isOnline: boolean
+  lastSeenAt: string | null
+}
+
+export type PrintAgent = {
+  id: string
+  deviceName: string
+  platform: string
+  lastSeenAt: string | null
+  online: boolean
+  printers: AgentPrinter[]
+}
+
+export type PairingCodeResult = {
+  code: string
+  expiresAt: string
+  ttlSeconds: number
+}
+
+export type UpsertPrinterPayload = {
+  name?: string
+  host?: string | null
+  port?: number
+  enabled?: boolean
+  paperWidth?: number
+  agentPrinterId?: string | null
+}
+
 export interface IPrintRepository {
   getSettings(businessId: string): Promise<PrintSettings>
   updateSettings(
@@ -37,13 +74,7 @@ export interface IPrintRepository {
   upsertPrinter(
     businessId: string,
     station: PrepStation,
-    payload: {
-      name?: string
-      host?: string | null
-      port?: number
-      enabled?: boolean
-      paperWidth?: number
-    },
+    payload: UpsertPrinterPayload,
   ): Promise<PrintSettings>
   discover(
     businessId: string,
@@ -54,4 +85,6 @@ export interface IPrintRepository {
     station: PrepStation,
   ): Promise<{ station: PrepStation; status: PrinterConnectionStatus; latencyMs?: number; error?: string }>
   testPrint(businessId: string, station: PrepStation): Promise<unknown>
+  generateAgentPairingCode(businessId: string): Promise<PairingCodeResult>
+  listAgents(businessId: string): Promise<PrintAgent[]>
 }

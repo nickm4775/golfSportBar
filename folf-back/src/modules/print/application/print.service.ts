@@ -7,6 +7,8 @@ import { Business } from '../../../shared/infrastructure/database/entities/busin
 import { BusinessPrintSettings } from '../../../shared/infrastructure/database/entities/business-print-settings.entity';
 import { BusinessPrinter } from '../../../shared/infrastructure/database/entities/business-printer.entity';
 import { PrintJob } from '../../../shared/infrastructure/database/entities/print-job.entity';
+import { AgentPrinter } from '../../../shared/infrastructure/database/entities/agent-printer.entity';
+import { PrintAgent } from '../../../shared/infrastructure/database/entities/print-agent.entity';
 import { Order } from '../../../shared/infrastructure/database/entities/order.entity';
 import { OrderItem } from '../../../shared/infrastructure/database/entities/order-item.entity';
 import {
@@ -50,6 +52,10 @@ export class PrintService {
     private readonly businessRepo: Repository<Business>,
     @InjectRepository(Order)
     private readonly orderRepo: Repository<Order>,
+    @InjectRepository(AgentPrinter)
+    private readonly agentPrinterRepo: Repository<AgentPrinter>,
+    @InjectRepository(PrintAgent)
+    private readonly printAgentRepo: Repository<PrintAgent>,
     private readonly cache: RedisCacheService,
     private readonly config: ConfigService,
     @Optional() private readonly realtime?: BusinessRealtimeService,
@@ -100,7 +106,7 @@ export class PrintService {
       where: { businessId },
       order: { station: 'ASC' },
     });
-    return this.presentSettings(settings, printers);
+    return await this.presentSettings(settings, printers);
   }
 
   async updateSettings(businessId: string, dto: UpdatePrintSettingsDto) {
@@ -113,7 +119,7 @@ export class PrintService {
   }
 
   async upsertPrinter(businessId: string, station: PrepStation, dto: UpsertPrinterDto) {
-    await this.ensureSettings(businessId);
+    const settings = await this.ensureSettings(businessId);
     let printer = await this.printerRepo.findOne({ where: { businessId, station } });
     if (!printer) {
       printer = this.printerRepo.create({ businessId, station, name: station });
@@ -123,9 +129,26 @@ export class PrintService {
     if (dto.port !== undefined) printer.port = dto.port;
     if (dto.enabled !== undefined) printer.enabled = dto.enabled;
     if (dto.paperWidth !== undefined) printer.paperWidth = dto.paperWidth;
+    if (dto.agentPrinterId !== undefined) {
+      if (dto.agentPrinterId) {
+        const agentPrinter = await this.agentPrinterRepo.findOne({
+          where: { id: dto.agentPrinterId, businessId },
+        });
+        if (!agentPrinter) {
+          throw new DomainException(
+            'Agent printer not found for this business',
+            'AGENT_PRINTER_NOT_FOUND',
+            400,
+          );
+        }
+        printer.agentPrinterId = agentPrinter.id;
+      } else {
+        printer.agentPrinterId = null;
+      }
+    }
     await this.printerRepo.save(printer);
 
-    if (printer.host) {
+    if (printer.host && settings.printExecutionMode === PrintExecutionMode.DIRECT) {
       await this.probePrinter(businessId, station);
     }
     return this.getSettings(businessId);
@@ -138,7 +161,7 @@ export class PrintService {
       return { printers, mode: settings.printExecutionMode };
     }
 
-    if (!this.isAgentOnline(settings)) {
+    if (!(await this.isAgentOnline(settings))) {
       throw new DomainException('Print agent is not connected', 'PRINT_AGENT_OFFLINE', 503);
     }
 
@@ -200,7 +223,7 @@ export class PrintService {
       };
     }
 
-    if (!this.isAgentOnline(settings)) {
+    if (!(await this.isAgentOnline(settings))) {
       throw new DomainException('Print agent is not connected', 'PRINT_AGENT_OFFLINE', 503);
     }
 
@@ -332,10 +355,18 @@ export class PrintService {
 
       let status = PrintJobStatus.PENDING;
       let errorMessage: string | null = null;
+      let printerId: string | null = null;
 
       if (!printer?.enabled) {
         status = PrintJobStatus.FAILED;
         errorMessage = 'Printer disabled';
+      } else if (settings.printExecutionMode === PrintExecutionMode.AGENT) {
+        if (!printer.agentPrinterId) {
+          status = PrintJobStatus.FAILED;
+          errorMessage = 'Agent printer not assigned for station';
+        } else {
+          printerId = printer.agentPrinterId;
+        }
       } else if (!printer.host) {
         status = PrintJobStatus.FAILED;
         errorMessage = 'Printer host not configured';
@@ -354,6 +385,7 @@ export class PrintService {
         status,
         payload,
         errorMessage,
+        printerId,
       });
       jobs.push(job);
     }
@@ -369,7 +401,18 @@ export class PrintService {
     const business = await this.businessRepo.findOneByOrFail({ id: businessId });
     const settings = await this.ensureSettings(businessId);
     const printer = await this.requirePrinter(businessId, station);
-    if (!printer.enabled || !printer.host) {
+    if (!printer.enabled) {
+      throw new DomainException('Printer not ready', 'PRINTER_NOT_READY', 400);
+    }
+    if (settings.printExecutionMode === PrintExecutionMode.AGENT) {
+      if (!printer.agentPrinterId) {
+        throw new DomainException(
+          'Agent printer not assigned for station',
+          'AGENT_PRINTER_NOT_ASSIGNED',
+          400,
+        );
+      }
+    } else if (!printer.host) {
       throw new DomainException('Printer not ready', 'PRINTER_NOT_READY', 400);
     }
 
@@ -396,6 +439,10 @@ export class PrintService {
       station,
       status: PrintJobStatus.PENDING,
       payload,
+      printerId:
+        settings.printExecutionMode === PrintExecutionMode.AGENT
+          ? printer.agentPrinterId
+          : null,
     });
 
     await this.dispatch(businessId, [job], settings.printExecutionMode);
@@ -526,16 +573,30 @@ export class PrintService {
     return printer;
   }
 
-  private isAgentOnline(settings: BusinessPrintSettings) {
-    if (!settings.agentLastSeenAt) return false;
-    return Date.now() - new Date(settings.agentLastSeenAt).getTime() < AGENT_ONLINE_MS;
+  async isAgentOnline(settings: BusinessPrintSettings) {
+    if (settings.agentLastSeenAt) {
+      const seenRecently =
+        Date.now() - new Date(settings.agentLastSeenAt).getTime() < AGENT_ONLINE_MS;
+      if (seenRecently) return true;
+    }
+
+    const agents = await this.printAgentRepo.find({
+      where: { businessId: settings.businessId },
+      take: 5,
+    });
+    return agents.some(
+      (agent) =>
+        !agent.revokedAt &&
+        agent.lastSeenAt &&
+        Date.now() - agent.lastSeenAt.getTime() < AGENT_ONLINE_MS,
+    );
   }
 
-  private presentSettings(settings: BusinessPrintSettings, printers: BusinessPrinter[]) {
+  private async presentSettings(settings: BusinessPrintSettings, printers: BusinessPrinter[]) {
     return {
       printExecutionMode: settings.printExecutionMode,
       agentLastSeenAt: settings.agentLastSeenAt,
-      agentOnline: this.isAgentOnline(settings),
+      agentOnline: await this.isAgentOnline(settings),
       printers: printers.map((printer) => ({
         id: printer.id,
         station: printer.station,
@@ -547,6 +608,7 @@ export class PrintService {
         connectionStatus: printer.connectionStatus,
         lastSeenAt: printer.lastSeenAt,
         lastError: printer.lastError,
+        agentPrinterId: printer.agentPrinterId,
       })),
     };
   }
