@@ -21,6 +21,7 @@ interface CatalogState {
   }) => Promise<void>
   updateProduct: (productId: string, payload: ProductPayload) => Promise<void>
   deleteProduct: (productId: string) => Promise<void>
+  uploadProductImage: (file: File) => Promise<string>
 }
 
 function requireBusinessId() {
@@ -61,5 +62,10 @@ export const useCatalogStore = create<CatalogState>((set) => ({
   async deleteProduct(productId) {
     await services.catalog.deleteProduct(requireBusinessId(), productId)
     await useCatalogStore.getState().load()
+  },
+
+  async uploadProductImage(file) {
+    const result = await services.catalog.uploadProductImage(requireBusinessId(), file)
+    return result.url
   },
 }))

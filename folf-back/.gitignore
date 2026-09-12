@@ -5,6 +5,9 @@ coverage/
 .env
 .env.local
 
+# Uploads
+uploads/
+
 # TypeORM
 typeorm/_logs/
 

@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { randomUUID } from 'node:crypto';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { Repository } from 'typeorm';
 import { BusinessProduct } from '../../../shared/infrastructure/database/entities/business-product.entity';
 import { Product } from '../../../shared/infrastructure/database/entities/product.entity';
@@ -12,6 +15,13 @@ import { BusinessRealtimeService } from '../../realtime/application/business-rea
 import { PrepStation } from '../../../shared/domain/enums';
 
 const KITCHEN_SLUGS = new Set(['petiscos', 'pizzas', 'burgers', 'sobremesas']);
+
+const IMAGE_EXTENSIONS_BY_MIME_TYPE: Record<string, string> = {
+  'image/jpeg': '.jpg',
+  'image/png': '.png',
+  'image/webp': '.webp',
+  'image/gif': '.gif',
+};
 
 @Injectable()
 export class CatalogService {
@@ -129,6 +139,21 @@ export class CatalogService {
     });
     await this.emitChanged(businessId, productId);
     return saved;
+  }
+
+  async saveProductImage(businessId: string, file: Express.Multer.File) {
+    const ext = IMAGE_EXTENSIONS_BY_MIME_TYPE[file.mimetype] ?? '';
+    const filename = `${randomUUID()}${ext}`;
+    const dir = join(process.cwd(), 'uploads', 'products', businessId);
+
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, filename), file.buffer);
+
+    const publicBaseUrl = (
+      process.env.PUBLIC_BASE_URL ?? `http://localhost:${process.env.PORT ?? 3000}`
+    ).replace(/\/+$/, '');
+
+    return { url: `${publicBaseUrl}/uploads/products/${businessId}/${filename}` };
   }
 
   async removeBusinessProduct(businessId: string, productId: string) {

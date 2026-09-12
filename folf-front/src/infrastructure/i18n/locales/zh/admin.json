@@ -148,6 +148,7 @@
     "paid": "已登记收款，订单已完成。",
     "details": "查看详情",
     "printReceipt": "打印小票",
+    "printingInProgress": "正在打印",
     "detailTitle": "订单详情",
     "paymentStatusLabel": "支付状态",
     "paidAt": "支付时间",
@@ -336,8 +337,6 @@
       "generate": "生成代码",
       "regenerate": "生成新代码",
       "code": "代码",
-      "expiresIn": "{{seconds}} 秒后过期",
-      "expired": "代码已过期",
       "instructions": "打开打印代理，输入服务器地址和此代码。"
     },
     "agentsList": {

@@ -148,6 +148,7 @@
     "paid": "Payment recorded. Order completed.",
     "details": "View details",
     "printReceipt": "Print receipt",
+    "printingInProgress": "Printing in progress",
     "detailTitle": "Order details",
     "paymentStatusLabel": "Payment status",
     "paidAt": "Paid at",
@@ -336,8 +337,6 @@
       "generate": "Generate code",
       "regenerate": "Generate new code",
       "code": "Code",
-      "expiresIn": "Expires in {{seconds}}s",
-      "expired": "Code expired",
       "instructions": "Open the print agent, enter the server URL and this code."
     },
     "agentsList": {

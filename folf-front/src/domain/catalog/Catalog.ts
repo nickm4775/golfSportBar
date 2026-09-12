@@ -59,4 +59,5 @@ export interface ICatalogRepository {
   ): Promise<void>
   updateProduct(businessId: string, productId: string, payload: ProductPayload): Promise<void>
   deleteProduct(businessId: string, productId: string): Promise<void>
+  uploadProductImage(businessId: string, file: File): Promise<{ url: string }>
 }

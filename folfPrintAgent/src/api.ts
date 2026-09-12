@@ -35,6 +35,7 @@ export type PrintJob = {
   payload?: TicketPayload;
   status?: string;
   attempts?: number;
+  station?: string;
 };
 
 export type HeartbeatResult = {

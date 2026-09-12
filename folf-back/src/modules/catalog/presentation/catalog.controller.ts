@@ -2,16 +2,24 @@ import {
   Body,
   Controller,
   Delete,
+  FileTypeValidator,
   Get,
   HttpCode,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Patch,
   Post,
   Query,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiCreatedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
@@ -91,6 +99,45 @@ export class CatalogController {
     @Body() dto: CreateBusinessProductDto,
   ) {
     return this.catalogService.createProduct(businessId, dto);
+  }
+
+  @Post('products/images')
+  @UseGuards(PermissionsGuard)
+  @RequirePermissions('catalog:write')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({
+    summary: 'Subir imagen de producto',
+    description:
+      'Guarda la imagen en disco y devuelve la URL absoluta para usar como imageSrc al crear o actualizar un producto.',
+  })
+  @ApiParam({ name: 'businessId', format: 'uuid' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+      },
+    },
+  })
+  @ApiCreatedResponse({ description: 'Imagen guardada' })
+  @ApiStandardErrors()
+  uploadProductImage(
+    @Param('businessId') businessId: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),
+          new FileTypeValidator({
+            fileType: /^image\/(jpeg|png|webp|gif)$/,
+            overrideMimeType: true,
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    return this.catalogService.saveProductImage(businessId, file);
   }
 
   @Patch('products/:productId')

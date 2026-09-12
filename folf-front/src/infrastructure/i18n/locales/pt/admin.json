@@ -148,6 +148,7 @@
     "paid": "Pagamento registrado. Pedido concluído.",
     "details": "Ver detalhes",
     "printReceipt": "Imprimir comprovante",
+    "printingInProgress": "Impressão em andamento",
     "detailTitle": "Detalhes do pedido",
     "paymentStatusLabel": "Status do pagamento",
     "paidAt": "Pago em",
@@ -336,8 +337,6 @@
       "generate": "Gerar código",
       "regenerate": "Gerar novo código",
       "code": "Código",
-      "expiresIn": "Expira em {{seconds}} s",
-      "expired": "Código expirado",
       "instructions": "Abra o agente de impressão, informe a URL do servidor e este código."
     },
     "agentsList": {

@@ -24,7 +24,9 @@ import { PrintService } from './print.service';
 
 const AGENT_ONLINE_MS = 90_000;
 const CLAIM_TTL_MS = 60_000;
-const PAIRING_TTL_MS = 10 * 60 * 1000;
+// Pairing codes are single-use (usedAt gates redemption), so a long TTL only avoids a
+// stale-code UX annoyance without weakening security.
+const PAIRING_TTL_MS = 10 * 365 * 24 * 60 * 60 * 1000;
 const PAIRING_RATE_LIMIT = 3;
 const PAIRING_RATE_WINDOW_SEC = 600;
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -193,6 +195,7 @@ export class PrintAgentService {
         payload: job.payload,
         status: job.status,
         attempts: job.attempts,
+        station: job.station,
       })),
     };
   }
@@ -208,6 +211,7 @@ export class PrintAgentService {
       payload: job.payload,
       status: job.status,
       attempts: job.attempts,
+      station: job.station,
     }));
   }
 

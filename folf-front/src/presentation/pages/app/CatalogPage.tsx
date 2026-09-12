@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pencil, TrashBin } from '@gravity-ui/icons'
 import { formatBrl } from '@/shared/lib/formatBrl'
@@ -278,6 +278,7 @@ function ProductFormModal({
   }) => Promise<void>
 }) {
   const { t } = useTranslation('admin')
+  const uploadProductImage = useCatalogStore((state) => state.uploadProductImage)
   const [name, setName] = useState(initial.name)
   const [description, setDescription] = useState(initial.description)
   const [categoryId, setCategoryId] = useState(initial.categoryId)
@@ -287,6 +288,23 @@ function ProductFormModal({
   const [isAvailable, setIsAvailable] = useState(initial.isAvailable)
   const [prepStation, setPrepStation] = useState(initial.prepStation)
   const [saving, setSaving] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
+
+  const handleImageSelect = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+    setUploadingImage(true)
+    try {
+      const url = await uploadProductImage(file)
+      setImageSrc(url)
+      notify({ title: t('toast.updated') })
+    } catch (error) {
+      notifyError(t('toast.error'), error)
+    } finally {
+      setUploadingImage(false)
+    }
+  }
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
@@ -361,14 +379,28 @@ function ProductFormModal({
             onChange={(event) => setPriceBrl(event.target.value)}
           />
         </label>
-        <label className="text-xs text-[var(--gsb-muted)]">
+        <div className="text-xs text-[var(--gsb-muted)]">
           {t('common.image')}
-          <input
-            className={`${inputClass} mt-1`}
-            value={imageSrc}
-            onChange={(event) => setImageSrc(event.target.value)}
-          />
-        </label>
+          <div className="mt-1 flex items-center gap-3">
+            {imageSrc ? (
+              <img
+                src={imageSrc}
+                className="h-20 w-20 rounded-lg border border-[var(--gsb-border)] object-cover"
+                alt=""
+              />
+            ) : null}
+            <label className={`${ghostButtonClass} cursor-pointer`}>
+              {uploadingImage ? t('common.loading') : t('common.image')}
+              <input
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                className="hidden"
+                disabled={uploadingImage}
+                onChange={(event) => void handleImageSelect(event)}
+              />
+            </label>
+          </div>
+        </div>
         <label className="flex items-center gap-2 text-sm text-[var(--gsb-fg)]">
           <input type="checkbox" checked={featured} onChange={(event) => setFeatured(event.target.checked)} />
           {t('common.featured')}
@@ -378,7 +410,7 @@ function ProductFormModal({
           {t('common.available')}
         </label>
         <div className="flex gap-2">
-          <button type="submit" className={primaryButtonClass} disabled={saving}>
+          <button type="submit" className={primaryButtonClass} disabled={saving || uploadingImage}>
             {submitLabel}
           </button>
           <button type="button" className={ghostButtonClass} onClick={onClose}>

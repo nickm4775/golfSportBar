@@ -161,7 +161,7 @@ export function OrdersPage() {
                           onClick={() => {
                             setPrintingOrderId(order.id)
                             void printReceipt(order.id)
-                              .then(() => notify({ title: t('toast.updated') }))
+                              .then(() => notify({ title: t('orders.printingInProgress') }))
                               .catch((error) => notifyError(t('toast.error'), error))
                               .finally(() => setPrintingOrderId(null))
                           }}

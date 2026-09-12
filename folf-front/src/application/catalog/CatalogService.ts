@@ -34,4 +34,8 @@ export class CatalogService {
   deleteProduct(businessId: string, productId: string) {
     return this.catalog.deleteProduct(businessId, productId)
   }
+
+  uploadProductImage(businessId: string, file: File) {
+    return this.catalog.uploadProductImage(businessId, file)
+  }
 }

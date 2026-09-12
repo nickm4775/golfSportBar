@@ -42,4 +42,14 @@ export class HttpCatalogRepository implements ICatalogRepository {
       businessId,
     })
   }
+
+  uploadProductImage(businessId: string, file: File) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return apiRequest<{ url: string }>(`/businesses/${businessId}/products/images`, {
+      method: 'POST',
+      businessId,
+      body: formData,
+    })
+  }
 }

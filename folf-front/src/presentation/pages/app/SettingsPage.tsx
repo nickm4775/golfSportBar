@@ -14,10 +14,6 @@ import {
 
 const STATIONS: PrepStation[] = ['KITCHEN', 'BAR', 'RECEIPT']
 
-function secondsLeft(expiresAt: string): number {
-  return Math.max(0, Math.round((new Date(expiresAt).getTime() - Date.now()) / 1000))
-}
-
 export function SettingsPage() {
   const { t } = useTranslation('admin')
   const settings = usePrintStore((s) => s.settings)
@@ -138,7 +134,7 @@ export function SettingsPage() {
                       : t('settings.agentPairing.generate')}
                   </button>
                 </div>
-                {pairingCode ? <PairingCodeCard expiresAt={pairingCode.expiresAt} code={pairingCode.code} /> : null}
+                {pairingCode ? <PairingCodeCard code={pairingCode.code} /> : null}
               </div>
 
               <div className="grid gap-3">
@@ -322,31 +318,13 @@ export function SettingsPage() {
   )
 }
 
-function PairingCodeCard({ expiresAt, code }: { expiresAt: string; code: string }) {
+function PairingCodeCard({ code }: { code: string }) {
   const { t } = useTranslation('admin')
-  const [remaining, setRemaining] = useState(() => secondsLeft(expiresAt))
-
-  useEffect(() => {
-    setRemaining(secondsLeft(expiresAt))
-    const id = setInterval(() => setRemaining(secondsLeft(expiresAt)), 1000)
-    return () => clearInterval(id)
-  }, [expiresAt])
-
-  const expired = remaining <= 0
 
   return (
     <div className="grid gap-1 border border-[var(--gsb-border)] rounded-lg p-4">
       <span className="text-xs text-[var(--gsb-muted)]">{t('settings.agentPairing.code')}</span>
-      <span
-        className={`font-mono text-3xl tracking-[0.3em] ${expired ? 'text-[var(--gsb-muted)] line-through' : ''}`}
-      >
-        {code}
-      </span>
-      <span className="text-xs text-[var(--gsb-muted)]">
-        {expired
-          ? t('settings.agentPairing.expired')
-          : t('settings.agentPairing.expiresIn', { seconds: remaining })}
-      </span>
+      <span className="font-mono text-3xl tracking-[0.3em]">{code}</span>
       <p className="mt-1 text-xs text-[var(--gsb-muted)]">{t('settings.agentPairing.instructions')}</p>
     </div>
   )

@@ -1,6 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import { PrintApiClient, PrintJob, RemotePrinter } from './api';
-import { renderEscPosTicket, TicketPayload } from './escpos';
+import {
+  renderEscPosReceipt,
+  renderEscPosTicket,
+  ReceiptPayload,
+  TicketPayload,
+} from './escpos';
 import { printEscPos } from './print-dispatch';
 import { LocalPrinter, store } from './store';
 import {
@@ -325,8 +330,10 @@ export class AgentRuntime {
       }
 
       try {
-        const payload = (job.payload ?? {}) as TicketPayload;
-        const bytes = renderEscPosTicket(payload, target.paperWidth);
+        const bytes =
+          job.station === 'RECEIPT'
+            ? renderEscPosReceipt((job.payload ?? {}) as ReceiptPayload, target.paperWidth)
+            : renderEscPosTicket((job.payload ?? {}) as TicketPayload, target.paperWidth);
         await printEscPos(target, bytes);
         this.processed.add(jobId);
         this.attemptCounts.delete(jobId);

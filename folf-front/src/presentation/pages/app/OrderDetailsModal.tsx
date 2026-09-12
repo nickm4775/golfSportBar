@@ -1,10 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatBrl } from '@/shared/lib/formatBrl'
 import type { Order } from '@/domain/order/Order'
+import { OrderStatus } from '@/shared/domain/enums'
 import { useOrdersStore } from '@/presentation/stores/ordersStore'
+import { useCatalogStore } from '@/presentation/stores/catalogStore'
+import { useAuthStore } from '@/presentation/stores/authStore'
+import { notify, notifyError } from '@/presentation/lib/notify'
 import { formatDateTime } from '@/presentation/components/admin/admin.utils'
-import { Modal, StatusBadge } from '@/presentation/components/admin/AdminUi'
+import { Modal, StatusBadge, inputClass, primaryButtonClass } from '@/presentation/components/admin/AdminUi'
 
 export function OrderDetailsModal({
   orderId,
@@ -16,9 +20,17 @@ export function OrderDetailsModal({
   const { t, i18n } = useTranslation('admin')
   const locale = i18n.language.split('-')[0]
   const getById = useOrdersStore((state) => state.getById)
+  const addItem = useOrdersStore((state) => state.addItem)
   const liveOrder = useOrdersStore((state) => state.items.find((item) => item.id === orderId))
   const [loading, setLoading] = useState(!liveOrder?.items?.length)
   const [error, setError] = useState<string | null>(null)
+  const canAddItem = useAuthStore((state) => state.hasPermission('orders:create'))
+  const menu = useCatalogStore((state) => state.menu)
+  const loadMenu = useCatalogStore((state) => state.load)
+  const [newItemProductId, setNewItemProductId] = useState('')
+  const [newItemQuantity, setNewItemQuantity] = useState(1)
+  const [newItemNotes, setNewItemNotes] = useState('')
+  const [addingItem, setAddingItem] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -37,6 +49,12 @@ export function OrderDetailsModal({
       cancelled = true
     }
   }, [getById, orderId, t])
+
+  useEffect(() => {
+    if (!menu) void loadMenu()
+  }, [menu, loadMenu])
+
+  const availableProducts = useMemo(() => (menu?.items ?? []).filter((item) => item.isAvailable), [menu])
 
   const order: Order | undefined = liveOrder
 
@@ -119,6 +137,70 @@ export function OrderDetailsModal({
               </tbody>
             </table>
           </div>
+
+          {canAddItem && order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELLED ? (
+            <form
+              className="grid gap-2 rounded-xl border border-[var(--gsb-border)] bg-[var(--gsb-surface)] p-3 sm:grid-cols-[1fr_6rem_1fr_auto] sm:items-end"
+              onSubmit={(event) => {
+                event.preventDefault()
+                if (!newItemProductId) return
+                setAddingItem(true)
+                void addItem(order.id, {
+                  productId: newItemProductId,
+                  quantity: newItemQuantity,
+                  notes: newItemNotes || undefined,
+                })
+                  .then(() => {
+                    setNewItemProductId('')
+                    setNewItemQuantity(1)
+                    setNewItemNotes('')
+                    notify({ title: t('toast.updated') })
+                  })
+                  .catch((error) => notifyError(t('toast.error'), error))
+                  .finally(() => setAddingItem(false))
+              }}
+            >
+              <label className="text-xs text-[var(--gsb-muted)]">
+                {t('orders.product')}
+                <select
+                  className={`${inputClass} mt-1`}
+                  value={newItemProductId}
+                  onChange={(event) => setNewItemProductId(event.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    {t('orders.product')}
+                  </option>
+                  {availableProducts.map((product) => (
+                    <option key={product.id} value={product.id}>
+                      {product.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="text-xs text-[var(--gsb-muted)]">
+                {t('common.quantity')}
+                <input
+                  type="number"
+                  min={1}
+                  className={`${inputClass} mt-1`}
+                  value={newItemQuantity}
+                  onChange={(event) => setNewItemQuantity(Number(event.target.value))}
+                />
+              </label>
+              <label className="text-xs text-[var(--gsb-muted)]">
+                {t('common.notes')}
+                <input
+                  className={`${inputClass} mt-1`}
+                  value={newItemNotes}
+                  onChange={(event) => setNewItemNotes(event.target.value)}
+                />
+              </label>
+              <button type="submit" className={primaryButtonClass} disabled={!newItemProductId || addingItem}>
+                {t('orders.addItem')}
+              </button>
+            </form>
+          ) : null}
 
           <div className="grid gap-2 rounded-xl border border-[var(--gsb-border)] bg-[var(--gsb-surface)] p-4 text-sm">
             {Number(order.serviceChargeBrl ?? 0) > 0 ? (

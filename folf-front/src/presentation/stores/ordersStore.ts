@@ -14,7 +14,10 @@ interface OrdersState {
   getById: (orderId: string) => Promise<Order>
   create: (payload: CreateOrderPayload) => Promise<Order>
   updateStatus: (orderId: string, status: OrderStatus) => Promise<void>
-  addItem: (orderId: string, payload: { productId: string; quantity?: number }) => Promise<void>
+  addItem: (
+    orderId: string,
+    payload: { productId: string; quantity?: number; notes?: string },
+  ) => Promise<void>
   checkout: (orderId: string, payload: CheckoutOrderPayload) => Promise<OrderCheckoutResult>
   getPayment: (orderId: string) => Promise<OrderCheckoutResult>
 }
