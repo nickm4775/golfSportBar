@@ -147,6 +147,7 @@
     "confirmCash": "确认现金收款",
     "paid": "已登记收款，订单已完成。",
     "details": "查看详情",
+    "printReceipt": "打印小票",
     "detailTitle": "订单详情",
     "paymentStatusLabel": "支付状态",
     "paidAt": "支付时间",
@@ -311,7 +312,8 @@
     "printersTitle": "打印机",
     "station": {
       "KITCHEN": "厨房",
-      "BAR": "吧台"
+      "BAR": "吧台",
+      "RECEIPT": "小票"
     },
     "connection": {
       "UNKNOWN": "未知",

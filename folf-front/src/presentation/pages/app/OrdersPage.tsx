@@ -1,22 +1,23 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Funnel } from '@gravity-ui/icons'
+import { Check, Eye, Funnel, Printer, Xmark } from '@gravity-ui/icons'
 import { formatBrl } from '@/shared/lib/formatBrl'
 import { OrderStatus } from '@/shared/domain/enums'
 import { useOrdersStore } from '@/presentation/stores/ordersStore'
 import { useAuthStore } from '@/presentation/stores/authStore'
+import { usePrintStore } from '@/presentation/stores/printStore'
 import { notify, notifyError } from '@/presentation/lib/notify'
 import { formatDateTime, matchesQuery, nextOrderStatuses } from '@/presentation/components/admin/admin.utils'
 import { usePagination } from '@/presentation/components/admin/usePagination'
 import {
   EmptyState,
   ErrorBanner,
+  IconButton,
   ListToolbar,
   PageHeader,
   PaginationBar,
   StatusBadge,
-  ghostButtonClass,
   inputClass,
   primaryButtonClass,
 } from '@/presentation/components/admin/AdminUi'
@@ -32,6 +33,7 @@ export function OrdersPage() {
   const error = useOrdersStore((state) => state.error)
   const load = useOrdersStore((state) => state.load)
   const updateStatus = useOrdersStore((state) => state.updateStatus)
+  const printReceipt = usePrintStore((state) => state.printReceipt)
   const canRead = useAuthStore((state) => state.hasPermission('orders:read'))
   const canCreate = useAuthStore((state) => state.hasPermission('orders:create'))
   const canManage = useAuthStore((state) => state.hasPermission('orders:manage'))
@@ -40,6 +42,7 @@ export function OrdersPage() {
   const [search, setSearch] = useState('')
   const [checkoutOrder, setCheckoutOrder] = useState<Order | null>(null)
   const [detailsOrderId, setDetailsOrderId] = useState<string | null>(null)
+  const [printingOrderId, setPrintingOrderId] = useState<string | null>(null)
 
   useEffect(() => {
     if (activeBusinessId) void load(statusFilter || undefined)
@@ -147,20 +150,31 @@ export function OrdersPage() {
                   <td className="px-4 py-3">
                     <div className="flex flex-wrap gap-2">
                       {canRead ? (
-                        <button
-                          type="button"
-                          className={ghostButtonClass}
-                          onClick={() => setDetailsOrderId(order.id)}
+                        <IconButton label={t('orders.details')} onClick={() => setDetailsOrderId(order.id)}>
+                          <Eye className="size-4" />
+                        </IconButton>
+                      ) : null}
+                      {canRead ? (
+                        <IconButton
+                          label={t('orders.printReceipt')}
+                          disabled={printingOrderId === order.id}
+                          onClick={() => {
+                            setPrintingOrderId(order.id)
+                            void printReceipt(order.id)
+                              .then(() => notify({ title: t('toast.updated') }))
+                              .catch((error) => notifyError(t('toast.error'), error))
+                              .finally(() => setPrintingOrderId(null))
+                          }}
                         >
-                          {t('orders.details')}
-                        </button>
+                          <Printer className="size-4" />
+                        </IconButton>
                       ) : null}
                       {canManage
                         ? nextOrderStatuses(order.status).map((status) => (
-                            <button
+                            <IconButton
                               key={status}
-                              type="button"
-                              className={ghostButtonClass}
+                              label={t(`status.${status}`)}
+                              tone={status === OrderStatus.CANCELLED ? 'danger' : 'ghost'}
                               onClick={() => {
                                 if (status === OrderStatus.COMPLETED) {
                                   setCheckoutOrder(order)
@@ -171,8 +185,12 @@ export function OrdersPage() {
                                   .catch((error) => notifyError(t('toast.error'), error))
                               }}
                             >
-                              {t(`status.${status}`)}
-                            </button>
+                              {status === OrderStatus.CANCELLED ? (
+                                <Xmark className="size-4" />
+                              ) : (
+                                <Check className="size-4" />
+                              )}
+                            </IconButton>
                           ))
                         : null}
                     </div>

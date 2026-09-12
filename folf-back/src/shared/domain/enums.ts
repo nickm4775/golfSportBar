@@ -60,6 +60,7 @@ export enum PaymentProvider {
 export enum PrepStation {
   KITCHEN = 'KITCHEN',
   BAR = 'BAR',
+  RECEIPT = 'RECEIPT',
 }
 
 export enum PrintExecutionMode {

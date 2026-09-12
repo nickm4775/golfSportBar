@@ -11,6 +11,7 @@ import { AgentPrinter } from '../../../shared/infrastructure/database/entities/a
 import { PrintAgent } from '../../../shared/infrastructure/database/entities/print-agent.entity';
 import { Order } from '../../../shared/infrastructure/database/entities/order.entity';
 import { OrderItem } from '../../../shared/infrastructure/database/entities/order-item.entity';
+import { Payment } from '../../../shared/infrastructure/database/entities/payment.entity';
 import {
   PrepStation,
   PrintExecutionMode,
@@ -21,7 +22,12 @@ import {
 import { DomainException } from '../../../shared/domain/domain.exception';
 import { RedisCacheService } from '../../../shared/infrastructure/redis/redis-cache.service';
 import { BusinessRealtimeService } from '../../realtime/application/business-realtime.service';
-import { renderEscPosTicket, type TicketPayload } from '../infrastructure/escpos';
+import {
+  renderEscPosReceipt,
+  renderEscPosTicket,
+  type ReceiptPayload,
+  type TicketPayload,
+} from '../infrastructure/escpos';
 import { probeTcp, scanLanForPrinters, sendTcpBytes } from '../infrastructure/lan';
 import {
   AgentDiscoverResultDto,
@@ -87,13 +93,14 @@ export class PrintService {
             : PrintExecutionMode.AGENT,
       });
     }
-    for (const station of [PrepStation.KITCHEN, PrepStation.BAR]) {
+    for (const station of [PrepStation.KITCHEN, PrepStation.BAR, PrepStation.RECEIPT]) {
       const existing = await this.printerRepo.findOne({ where: { businessId, station } });
       if (!existing) {
         await this.printerRepo.save({
           businessId,
           station,
-          name: station === PrepStation.KITCHEN ? 'Cocina' : 'Bar',
+          name:
+            station === PrepStation.KITCHEN ? 'Cocina' : station === PrepStation.BAR ? 'Bar' : 'Recibo',
         });
       }
     }
@@ -397,6 +404,91 @@ export class PrintService {
     return jobs;
   }
 
+  async enqueueReceiptForOrder(businessId: string, orderId: string): Promise<PrintJob> {
+    const order = await this.orderRepo.findOne({
+      where: { id: orderId, businessId },
+      relations: {
+        items: { product: true },
+        business: true,
+        customer: true,
+        payments: true,
+      },
+    });
+    if (!order) throw new NotFoundException('Order not found');
+
+    const business =
+      order.business ?? (await this.businessRepo.findOneByOrFail({ id: businessId }));
+
+    const latestPayment = [...(order.payments ?? [])].sort((a, b) => {
+      const byDate = Date.parse(String(b.createdAt)) - Date.parse(String(a.createdAt));
+      return byDate !== 0 ? byDate : b.id.localeCompare(a.id);
+    })[0];
+
+    const settings = await this.ensureSettings(businessId);
+    const printer = await this.printerRepo.findOne({
+      where: { businessId, station: PrepStation.RECEIPT },
+    });
+
+    const payload = this.buildReceiptPayload({
+      businessName: business.name,
+      tableLabel: order.tableLabel,
+      customerName: order.customer?.fullName,
+      createdAt: order.createdAt,
+      timezone: business.timezone,
+      items: order.items ?? [],
+      subtotalBrl: order.totalBrl - order.serviceChargeBrl,
+      serviceChargeBrl: order.includeServiceCharge ? order.serviceChargeBrl : null,
+      totalBrl: order.totalBrl,
+      payment: latestPayment,
+    });
+
+    let status = PrintJobStatus.PENDING;
+    let errorMessage: string | null = null;
+    let printerId: string | null = null;
+
+    if (!printer?.enabled) {
+      status = PrintJobStatus.FAILED;
+      errorMessage = 'Printer disabled';
+    } else if (settings.printExecutionMode === PrintExecutionMode.AGENT) {
+      if (!printer.agentPrinterId) {
+        status = PrintJobStatus.FAILED;
+        errorMessage = 'Agent printer not assigned for station';
+      } else {
+        printerId = printer.agentPrinterId;
+      }
+    } else if (!printer.host) {
+      status = PrintJobStatus.FAILED;
+      errorMessage = 'Printer host not configured';
+    } else if (
+      settings.printExecutionMode === PrintExecutionMode.DIRECT &&
+      printer.connectionStatus === PrinterConnectionStatus.OFFLINE
+    ) {
+      status = PrintJobStatus.FAILED;
+      errorMessage = 'Printer offline';
+    }
+
+    const job = await this.jobRepo.save({
+      businessId,
+      orderId,
+      station: PrepStation.RECEIPT,
+      status,
+      payload,
+      errorMessage,
+      printerId,
+    });
+
+    if (job.status === PrintJobStatus.PENDING) {
+      await this.dispatch(businessId, [job], settings.printExecutionMode);
+      return job;
+    }
+
+    throw new DomainException(
+      job.errorMessage ?? 'Receipt printer not ready',
+      'PRINT_RECEIPT_FAILED',
+      400,
+    );
+  }
+
   async enqueueTest(businessId: string, station: PrepStation) {
     const business = await this.businessRepo.findOneByOrFail({ id: businessId });
     const settings = await this.ensureSettings(businessId);
@@ -505,8 +597,10 @@ export class PrintService {
     }
 
     try {
-      const payload = job.payload as unknown as TicketPayload;
-      const bytes = renderEscPosTicket(payload, printer.paperWidth);
+      const bytes =
+        job.station === PrepStation.RECEIPT
+          ? renderEscPosReceipt(job.payload as unknown as ReceiptPayload, printer.paperWidth)
+          : renderEscPosTicket(job.payload as unknown as TicketPayload, printer.paperWidth);
       await sendTcpBytes(printer.host, printer.port, bytes);
       await this.jobRepo.update(job.id, {
         status: PrintJobStatus.PRINTED,
@@ -548,6 +642,37 @@ export class PrintService {
         notes: item.notes,
       })),
       isTest: input.isTest,
+    };
+  }
+
+  private buildReceiptPayload(input: {
+    businessName: string;
+    tableLabel?: string | null;
+    customerName?: string | null;
+    createdAt: Date;
+    timezone: string;
+    items: Array<{ quantity: number; unitPriceBrl: number; product: { namePt: string } }>;
+    subtotalBrl: number;
+    serviceChargeBrl?: number | null;
+    totalBrl: number;
+    payment?: Payment | null;
+  }): ReceiptPayload {
+    return {
+      businessName: input.businessName,
+      tableLabel: input.tableLabel,
+      customerName: input.customerName,
+      createdAtLabel: formatInTimezone(input.createdAt, input.timezone),
+      lines: input.items.map((item) => ({
+        quantity: item.quantity,
+        name: item.product.namePt,
+        unitPriceLabel: formatBrl(item.unitPriceBrl),
+        lineTotalLabel: formatBrl(item.unitPriceBrl * item.quantity),
+      })),
+      subtotalLabel: formatBrl(input.subtotalBrl),
+      serviceChargeLabel: input.serviceChargeBrl != null ? formatBrl(input.serviceChargeBrl) : null,
+      totalLabel: formatBrl(input.totalBrl),
+      paymentMethodLabel: input.payment?.method ?? null,
+      paymentStatusLabel: input.payment?.status ?? null,
     };
   }
 
@@ -624,6 +749,10 @@ export class PrintService {
 
 function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function formatBrl(value: number): string {
+  return `R$ ${value.toFixed(2)}`;
 }
 
 function formatInTimezone(date: Date, timezone: string) {

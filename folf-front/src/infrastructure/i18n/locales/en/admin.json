@@ -147,6 +147,7 @@
     "confirmCash": "Confirm cash payment",
     "paid": "Payment recorded. Order completed.",
     "details": "View details",
+    "printReceipt": "Print receipt",
     "detailTitle": "Order details",
     "paymentStatusLabel": "Payment status",
     "paidAt": "Paid at",
@@ -311,7 +312,8 @@
     "printersTitle": "Printers",
     "station": {
       "KITCHEN": "Kitchen",
-      "BAR": "Bar"
+      "BAR": "Bar",
+      "RECEIPT": "Receipt"
     },
     "connection": {
       "UNKNOWN": "Unknown",

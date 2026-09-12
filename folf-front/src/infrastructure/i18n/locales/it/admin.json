@@ -147,6 +147,7 @@
     "confirmCash": "Conferma incasso",
     "paid": "Pagamento registrato. Ordine concluso.",
     "details": "Vedi dettagli",
+    "printReceipt": "Stampa scontrino",
     "detailTitle": "Dettaglio ordine",
     "paymentStatusLabel": "Stato pagamento",
     "paidAt": "Pagato il",
@@ -311,7 +312,8 @@
     "printersTitle": "Stampanti",
     "station": {
       "KITCHEN": "Cucina",
-      "BAR": "Bar"
+      "BAR": "Bar",
+      "RECEIPT": "Ricevuta"
     },
     "connection": {
       "UNKNOWN": "Sconosciuto",

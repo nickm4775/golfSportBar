@@ -12,7 +12,7 @@ import {
   primaryButtonClass,
 } from '@/presentation/components/admin/AdminUi'
 
-const STATIONS: PrepStation[] = ['KITCHEN', 'BAR']
+const STATIONS: PrepStation[] = ['KITCHEN', 'BAR', 'RECEIPT']
 
 function secondsLeft(expiresAt: string): number {
   return Math.max(0, Math.round((new Date(expiresAt).getTime() - Date.now()) / 1000))

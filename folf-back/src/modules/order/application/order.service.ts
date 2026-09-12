@@ -258,6 +258,13 @@ export class OrderService {
     return this.addItem(order.businessId, orderId, dto);
   }
 
+  async printReceipt(businessId: string, orderId: string) {
+    if (!this.printService) {
+      throw new DomainException('Print service not available', 'PRINT_UNAVAILABLE', 503);
+    }
+    return this.printService.enqueueReceiptForOrder(businessId, orderId);
+  }
+
   private async emitChanged(businessId: string, entityId: string, actorUserId?: string) {
     const order = await this.orderRepo.findOne({ where: { id: entityId } });
     await this.realtime?.notify(

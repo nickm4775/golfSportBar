@@ -65,6 +65,13 @@ export class HttpPrintRepository implements IPrintRepository {
     })
   }
 
+  printReceipt(businessId: string, orderId: string) {
+    return apiRequest(`/businesses/${businessId}/orders/${orderId}/print-receipt`, {
+      method: 'POST',
+      businessId,
+    })
+  }
+
   generateAgentPairingCode(businessId: string) {
     return apiRequest<PairingCodeResult>(
       `/businesses/${businessId}/settings/print/agent/pairing-code`,

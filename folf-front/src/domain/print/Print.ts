@@ -1,4 +1,4 @@
-export type PrepStation = 'KITCHEN' | 'BAR'
+export type PrepStation = 'KITCHEN' | 'BAR' | 'RECEIPT'
 export type PrintExecutionMode = 'DIRECT' | 'AGENT'
 export type PrinterConnectionStatus = 'UNKNOWN' | 'ONLINE' | 'OFFLINE'
 
@@ -85,6 +85,7 @@ export interface IPrintRepository {
     station: PrepStation,
   ): Promise<{ station: PrepStation; status: PrinterConnectionStatus; latencyMs?: number; error?: string }>
   testPrint(businessId: string, station: PrepStation): Promise<unknown>
+  printReceipt(businessId: string, orderId: string): Promise<unknown>
   generateAgentPairingCode(businessId: string): Promise<PairingCodeResult>
   listAgents(businessId: string): Promise<PrintAgent[]>
 }

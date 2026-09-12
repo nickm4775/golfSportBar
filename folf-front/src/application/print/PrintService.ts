@@ -44,6 +44,10 @@ export class PrintService {
     return this.print.testPrint(businessId, station)
   }
 
+  printReceipt(businessId: string, orderId: string) {
+    return this.print.printReceipt(businessId, orderId)
+  }
+
   generateAgentPairingCode(businessId: string) {
     return this.print.generateAgentPairingCode(businessId)
   }

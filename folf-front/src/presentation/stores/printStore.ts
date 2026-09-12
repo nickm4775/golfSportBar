@@ -28,6 +28,7 @@ interface PrintState {
   discover: (cidr?: string) => Promise<void>
   probe: (station: PrepStation) => Promise<void>
   testPrint: (station: PrepStation) => Promise<void>
+  printReceipt: (orderId: string) => Promise<void>
   assignDiscovered: (station: PrepStation, host: string, port: number) => Promise<void>
 }
 
@@ -120,6 +121,10 @@ export const usePrintStore = create<PrintState>((set, get) => ({
 
   async testPrint(station) {
     await services.print.testPrint(requireBusinessId(), station)
+  },
+
+  async printReceipt(orderId) {
+    await services.print.printReceipt(requireBusinessId(), orderId)
   },
 
   async assignDiscovered(station, host, port) {

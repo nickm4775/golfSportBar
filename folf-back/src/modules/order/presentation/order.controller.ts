@@ -112,6 +112,21 @@ export class OrderController {
     return this.orderService.updateStatus(businessId, orderId, dto);
   }
 
+  @Post(':orderId/print-receipt')
+  @UseGuards(PermissionsGuard)
+  @RequirePermissions('orders:read')
+  @ApiOperation({
+    summary: 'Imprimir comprobante del pedido',
+    description: 'Encola la impresión del comprobante en la estación RECEIPT.',
+  })
+  @ApiParam({ name: 'businessId', format: 'uuid' })
+  @ApiParam({ name: 'orderId', format: 'uuid' })
+  @ApiCreatedResponse({ description: 'Trabajo de impresión encolado' })
+  @ApiStandardErrors()
+  printReceipt(@Param('businessId') businessId: string, @Param('orderId') orderId: string) {
+    return this.orderService.printReceipt(businessId, orderId);
+  }
+
   @Post(':orderId/items')
   @UseGuards(PermissionsGuard)
   @RequirePermissions('orders:create')

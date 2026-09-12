@@ -147,6 +147,7 @@
     "confirmCash": "Confirmar cobro",
     "paid": "Pago registrado. Pedido concluido.",
     "details": "Ver detalle",
+    "printReceipt": "Imprimir comprobante",
     "detailTitle": "Detalle del pedido",
     "paymentStatusLabel": "Estado del pago",
     "paidAt": "Pagado el",
@@ -311,7 +312,8 @@
     "printersTitle": "Impresoras",
     "station": {
       "KITCHEN": "Cocina",
-      "BAR": "Bar"
+      "BAR": "Bar",
+      "RECEIPT": "Recibo"
     },
     "connection": {
       "UNKNOWN": "Desconocido",
