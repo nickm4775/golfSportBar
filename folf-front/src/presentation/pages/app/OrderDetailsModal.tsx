@@ -28,6 +28,7 @@ export function OrderDetailsModal({
   const menu = useCatalogStore((state) => state.menu)
   const loadMenu = useCatalogStore((state) => state.load)
   const [newItemProductId, setNewItemProductId] = useState('')
+  const [productQuery, setProductQuery] = useState('')
   const [newItemQuantity, setNewItemQuantity] = useState(1)
   const [newItemNotes, setNewItemNotes] = useState('')
   const [addingItem, setAddingItem] = useState(false)
@@ -55,6 +56,30 @@ export function OrderDetailsModal({
   }, [menu, loadMenu])
 
   const availableProducts = useMemo(() => (menu?.items ?? []).filter((item) => item.isAvailable), [menu])
+
+  const filterProducts = (query: string) => {
+    const needle = normalizeSearch(query)
+    if (!needle) return availableProducts
+    return availableProducts.filter(
+      (product) =>
+        normalizeSearch(product.name).includes(needle) ||
+        normalizeSearch(product.categoryName ?? '').includes(needle),
+    )
+  }
+
+  // Keep the selected product visible so the select never holds a value without an option.
+  const productMatches = filterProducts(productQuery)
+  const selectedProduct = availableProducts.find((product) => product.id === newItemProductId)
+  const filteredProducts =
+    selectedProduct && !productMatches.includes(selectedProduct)
+      ? [selectedProduct, ...productMatches]
+      : productMatches
+
+  const handleProductQueryChange = (query: string) => {
+    setProductQuery(query)
+    const matches = filterProducts(query)
+    if (query.trim() && matches.length === 1) setNewItemProductId(matches[0].id)
+  }
 
   const order: Order | undefined = liveOrder
 
@@ -152,6 +177,7 @@ export function OrderDetailsModal({
                 })
                   .then(() => {
                     setNewItemProductId('')
+                    setProductQuery('')
                     setNewItemQuantity(1)
                     setNewItemNotes('')
                     notify({ title: t('toast.updated') })
@@ -162,6 +188,14 @@ export function OrderDetailsModal({
             >
               <label className="text-xs text-[var(--gsb-muted)]">
                 {t('orders.product')}
+                <input
+                  type="search"
+                  className={`${inputClass} mt-1`}
+                  value={productQuery}
+                  placeholder={t('orders.searchProduct')}
+                  aria-label={t('orders.searchProduct')}
+                  onChange={(event) => handleProductQueryChange(event.target.value)}
+                />
                 <select
                   className={`${inputClass} mt-1`}
                   value={newItemProductId}
@@ -171,7 +205,7 @@ export function OrderDetailsModal({
                   <option value="" disabled>
                     {t('orders.product')}
                   </option>
-                  {availableProducts.map((product) => (
+                  {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name}
                     </option>
@@ -249,4 +283,12 @@ export function OrderDetailsModal({
       )}
     </Modal>
   )
+}
+
+function normalizeSearch(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
 }

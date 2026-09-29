@@ -31,7 +31,7 @@ export class PaymentController {
   @ApiOperation({
     summary: 'Cobrar y cerrar pedido',
     description:
-      'CASH y PIX registran el cobro por el total del pedido y lo cierran de inmediato. No hay pasarela ni vuelto.',
+      'CASH, PIX, CREDIT_CARD y DEBIT_CARD registran el cobro por el total del pedido y lo cierran de inmediato. No hay pasarela ni vuelto.',
   })
   @ApiParam({ name: 'businessId', format: 'uuid' })
   @ApiParam({ name: 'orderId', format: 'uuid' })

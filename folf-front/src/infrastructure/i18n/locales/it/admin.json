@@ -141,8 +141,11 @@
     "paymentMethod": "Metodo di pagamento",
     "method": {
       "PIX": "PIX",
-      "CASH": "Contanti"
+      "CASH": "Contanti",
+      "CREDIT_CARD": "Carta di credito",
+      "DEBIT_CARD": "Carta di debito"
     },
+    "searchProduct": "Cerca prodotto…",
     "confirmPix": "Conferma PIX",
     "confirmCash": "Conferma incasso",
     "paid": "Pagamento registrato. Ordine concluso.",

@@ -141,8 +141,11 @@
     "paymentMethod": "Payment method",
     "method": {
       "PIX": "PIX",
-      "CASH": "Cash"
+      "CASH": "Cash",
+      "CREDIT_CARD": "Credit card",
+      "DEBIT_CARD": "Debit card"
     },
+    "searchProduct": "Search product…",
     "confirmPix": "Confirm PIX",
     "confirmCash": "Confirm cash payment",
     "paid": "Payment recorded. Order completed.",

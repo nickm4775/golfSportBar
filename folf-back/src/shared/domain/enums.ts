@@ -43,6 +43,8 @@ export enum SessionStatus {
 export enum PaymentMethod {
   PIX = 'PIX',
   CASH = 'CASH',
+  CREDIT_CARD = 'CREDIT_CARD',
+  DEBIT_CARD = 'DEBIT_CARD',
 }
 
 export enum PaymentStatus {

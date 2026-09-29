@@ -94,6 +94,26 @@ describe('PaymentService', () => {
     expect(result.payment.status).toBe(PaymentStatus.PAID);
   });
 
+  it.each([PaymentMethod.CREDIT_CARD, PaymentMethod.DEBIT_CARD])(
+    'closes the order immediately on %s checkout without cash fields',
+    async (method) => {
+      const result = await payments.checkout('biz-1', 'order-1', { method });
+
+      expect(paymentRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          method,
+          status: PaymentStatus.PAID,
+          amountBrl: 50,
+          cashReceivedBrl: null,
+          changeBrl: null,
+          provider: null,
+        }),
+      );
+      expect(orders.completeAfterPayment).toHaveBeenCalledWith('biz-1', 'order-1');
+      expect(result.order.status).toBe(OrderStatus.COMPLETED);
+    },
+  );
+
   it('throws when the order is not in progress', async () => {
     orderRepo.findOne.mockResolvedValue({
       ...openOrder,

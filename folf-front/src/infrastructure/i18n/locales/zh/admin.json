@@ -141,8 +141,11 @@
     "paymentMethod": "支付方式",
     "method": {
       "PIX": "PIX",
-      "CASH": "现金"
+      "CASH": "现金",
+      "CREDIT_CARD": "信用卡",
+      "DEBIT_CARD": "借记卡"
     },
+    "searchProduct": "搜索产品…",
     "confirmPix": "确认 PIX",
     "confirmCash": "确认现金收款",
     "paid": "已登记收款，订单已完成。",

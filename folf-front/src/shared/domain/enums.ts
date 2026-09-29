@@ -35,8 +35,10 @@ export const SessionStatus = {
 export type SessionStatus = (typeof SessionStatus)[keyof typeof SessionStatus]
 
 export const PaymentMethod = {
-  PIX: 'PIX',
   CASH: 'CASH',
+  PIX: 'PIX',
+  CREDIT_CARD: 'CREDIT_CARD',
+  DEBIT_CARD: 'DEBIT_CARD',
 } as const
 export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 

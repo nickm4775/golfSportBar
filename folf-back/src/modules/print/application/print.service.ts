@@ -29,6 +29,7 @@ import {
   type TicketPayload,
 } from '../infrastructure/escpos';
 import { probeTcp, scanLanForPrinters, sendTcpBytes } from '../infrastructure/lan';
+import { paymentMethodLabel } from './payment-method-label';
 import {
   AgentDiscoverResultDto,
   AgentHeartbeatDto,
@@ -671,7 +672,7 @@ export class PrintService {
       subtotalLabel: formatBrl(input.subtotalBrl),
       serviceChargeLabel: input.serviceChargeBrl != null ? formatBrl(input.serviceChargeBrl) : null,
       totalLabel: formatBrl(input.totalBrl),
-      paymentMethodLabel: input.payment?.method ?? null,
+      paymentMethodLabel: paymentMethodLabel(input.payment?.method),
       paymentStatusLabel: input.payment?.status ?? null,
     };
   }

@@ -77,7 +77,7 @@ export function OrderCheckoutModal({ order, onClose }: { order: Order; onClose: 
 
         <fieldset className="grid gap-2">
           <legend className="text-xs text-[var(--gsb-muted)]">{t('orders.paymentMethod')}</legend>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {(Object.values(PaymentMethod) as PaymentMethod[]).map((value) => (
               <button
                 key={value}

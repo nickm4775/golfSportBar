@@ -141,8 +141,11 @@
     "paymentMethod": "Método de pago",
     "method": {
       "PIX": "PIX",
-      "CASH": "Efectivo"
+      "CASH": "Efectivo",
+      "CREDIT_CARD": "Tarjeta de crédito",
+      "DEBIT_CARD": "Tarjeta de débito"
     },
+    "searchProduct": "Buscar producto…",
     "confirmPix": "Confirmar PIX",
     "confirmCash": "Confirmar cobro",
     "paid": "Pago registrado. Pedido concluido.",
