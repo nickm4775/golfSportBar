@@ -24,6 +24,13 @@ describe('OrderStateMachine', () => {
     expect(() => assertItemTransition(OrderItemStatus.PREPARING, OrderItemStatus.SERVED)).not.toThrow();
   });
 
+  it('lets staff undo a served item back to preparing only', () => {
+    expect(() => assertItemTransition(OrderItemStatus.SERVED, OrderItemStatus.PREPARING)).not.toThrow();
+    expect(() => assertItemTransition(OrderItemStatus.SERVED, OrderItemStatus.PENDING)).toThrow(
+      'Cannot transition item',
+    );
+  });
+
   it('calculates order total', () => {
     expect(
       calculateOrderTotal([

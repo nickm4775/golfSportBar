@@ -18,6 +18,7 @@ import {
   AddOrderItemDto,
   CreateOrderDto,
   CreateOrderItemDto,
+  SetServiceChargeDto,
   UpdateOrderItemDto,
   UpdateOrderItemStatusDto,
   UpdateOrderStatusDto,
@@ -142,25 +143,47 @@ export class OrderService {
   }
 
   async addItem(businessId: string, orderId: string, dto: AddOrderItemDto) {
+    return this.addItems(businessId, orderId, [dto]);
+  }
+
+  /** Saves every item or none, then prints them together: one ticket per station. */
+  async addItems(businessId: string, orderId: string, items: AddOrderItemDto[]) {
     const order = await this.requireOrder(businessId, orderId);
-    if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED) {
-      throw new DomainException('Cannot modify a closed order', 'ORDER_CLOSED');
-    }
+    this.assertOrderEditable(order);
 
-    const savedItem = await this.persistItem(
-      this.dataSource.manager,
-      businessId,
-      orderId,
-      dto,
-    );
-
-    if (order.status === OrderStatus.OPEN) {
-      await this.orderRepo.update(orderId, { status: OrderStatus.IN_PROGRESS });
-    }
+    const itemIds = await this.dataSource.transaction(async (manager) => {
+      const ids: string[] = [];
+      for (const item of items) {
+        const saved = await this.persistItem(manager, businessId, orderId, item);
+        ids.push(saved.id);
+      }
+      if (order.status === OrderStatus.OPEN) {
+        await manager.update(Order, orderId, { status: OrderStatus.IN_PROGRESS });
+      }
+      return ids;
+    });
 
     const updated = await this.recalculateTotal(orderId);
     await this.emitChanged(businessId, orderId);
-    await this.printService?.enqueueForOrderItems(businessId, orderId, [savedItem.id]);
+    const jobs = await this.printService?.enqueueForOrderItems(businessId, orderId, itemIds);
+    return {
+      ...updated,
+      printJobs: (jobs ?? []).map(({ station, status, errorMessage }) => ({
+        station,
+        status,
+        errorMessage,
+      })),
+    };
+  }
+
+  async setServiceCharge(businessId: string, orderId: string, dto: SetServiceChargeDto) {
+    const order = await this.requireOrder(businessId, orderId);
+    this.assertOrderEditable(order);
+
+    await this.orderRepo.update(orderId, { includeServiceCharge: dto.includeServiceCharge });
+
+    const updated = await this.recalculateTotal(orderId);
+    await this.emitChanged(businessId, orderId);
     return updated;
   }
 
@@ -171,9 +194,7 @@ export class OrderService {
     dto: UpdateOrderItemDto,
   ) {
     const order = await this.requireOrder(businessId, orderId);
-    if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED) {
-      throw new DomainException('Cannot modify a closed order', 'ORDER_CLOSED');
-    }
+    this.assertOrderEditable(order);
 
     const item = await this.orderItemRepo.findOne({ where: { id: itemId, orderId } });
     if (!item) throw new NotFoundException('Order item not found');
@@ -352,6 +373,12 @@ export class OrderService {
     });
     if (!order) throw new NotFoundException('Order not found');
     return order;
+  }
+
+  private assertOrderEditable(order: Order) {
+    if (order.status === OrderStatus.COMPLETED || order.status === OrderStatus.CANCELLED) {
+      throw new DomainException('Cannot modify a closed order', 'ORDER_CLOSED');
+    }
   }
 
   private present(order: Order) {

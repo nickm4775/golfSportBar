@@ -144,7 +144,7 @@ export function OrdersPage() {
                       : '—'}
                   </td>
                   <td>
-                    <StatusBadge label={t(`status.${order.status}`)} />
+                    <StatusBadge label={t(`status.${order.status}`)} status={order.status} />
                   </td>
                   <td className="text-[var(--gsb-muted)]">{formatDateTime(order.createdAt, locale)}</td>
                   <td className="px-4 py-3">

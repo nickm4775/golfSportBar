@@ -1,6 +1,6 @@
 import { apiRequest } from '@/infrastructure/http/apiClient'
-import type { CheckoutOrderPayload, CreateOrderPayload, IOrderRepository, Order, OrderCheckoutResult } from '@/domain/order/Order'
-import type { OrderStatus } from '@/shared/domain/enums'
+import type { AddOrderItemPayload, CheckoutOrderPayload, CreateOrderPayload, IOrderRepository, Order, OrderCheckoutResult } from '@/domain/order/Order'
+import type { OrderItemStatus, OrderStatus } from '@/shared/domain/enums'
 
 export class HttpOrderRepository implements IOrderRepository {
   list(businessId: string, status?: OrderStatus) {
@@ -28,15 +28,27 @@ export class HttpOrderRepository implements IOrderRepository {
     })
   }
 
-  addItem(
-    businessId: string,
-    orderId: string,
-    payload: { productId: string; quantity?: number; notes?: string },
-  ) {
-    return apiRequest<Order>(`/businesses/${businessId}/orders/${orderId}/items`, {
+  addItems(businessId: string, orderId: string, items: AddOrderItemPayload[]) {
+    return apiRequest<Order>(`/businesses/${businessId}/orders/${orderId}/items/batch`, {
       method: 'POST',
       businessId,
-      body: JSON.stringify(payload),
+      body: JSON.stringify({ items }),
+    })
+  }
+
+  updateItemStatus(businessId: string, orderId: string, itemId: string, status: OrderItemStatus) {
+    return apiRequest<Order>(`/businesses/${businessId}/orders/${orderId}/items/${itemId}/status`, {
+      method: 'PATCH',
+      businessId,
+      body: JSON.stringify({ status }),
+    })
+  }
+
+  setServiceCharge(businessId: string, orderId: string, includeServiceCharge: boolean) {
+    return apiRequest<Order>(`/businesses/${businessId}/orders/${orderId}/service-charge`, {
+      method: 'PATCH',
+      businessId,
+      body: JSON.stringify({ includeServiceCharge }),
     })
   }
 

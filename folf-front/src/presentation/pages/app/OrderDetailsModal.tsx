@@ -1,14 +1,29 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatBrl } from '@/shared/lib/formatBrl'
-import type { Order } from '@/domain/order/Order'
-import { OrderStatus } from '@/shared/domain/enums'
+import type { Order, OrderItem } from '@/domain/order/Order'
+import { OrderItemStatus, OrderStatus } from '@/shared/domain/enums'
 import { useOrdersStore } from '@/presentation/stores/ordersStore'
 import { useCatalogStore } from '@/presentation/stores/catalogStore'
 import { useAuthStore } from '@/presentation/stores/authStore'
 import { notify, notifyError } from '@/presentation/lib/notify'
 import { formatDateTime } from '@/presentation/components/admin/admin.utils'
-import { Modal, StatusBadge, inputClass, primaryButtonClass } from '@/presentation/components/admin/AdminUi'
+import { Modal, StatusBadge, ghostButtonClass, inputClass, primaryButtonClass } from '@/presentation/components/admin/AdminUi'
+
+const NEXT_ITEM_STATUS: Partial<Record<OrderItemStatus, OrderItemStatus>> = {
+  [OrderItemStatus.PENDING]: OrderItemStatus.PREPARING,
+  [OrderItemStatus.PREPARING]: OrderItemStatus.SERVED,
+  [OrderItemStatus.SERVED]: OrderItemStatus.PREPARING,
+}
+
+type PendingItem = {
+  key: string
+  productId: string
+  name: string
+  unitPriceBrl: number
+  quantity: number
+  notes: string
+}
 
 export function OrderDetailsModal({
   orderId,
@@ -20,18 +35,24 @@ export function OrderDetailsModal({
   const { t, i18n } = useTranslation('admin')
   const locale = i18n.language.split('-')[0]
   const getById = useOrdersStore((state) => state.getById)
-  const addItem = useOrdersStore((state) => state.addItem)
+  const addItems = useOrdersStore((state) => state.addItems)
+  const updateItemStatus = useOrdersStore((state) => state.updateItemStatus)
+  const setServiceCharge = useOrdersStore((state) => state.setServiceCharge)
   const liveOrder = useOrdersStore((state) => state.items.find((item) => item.id === orderId))
   const [loading, setLoading] = useState(!liveOrder?.items?.length)
   const [error, setError] = useState<string | null>(null)
   const canAddItem = useAuthStore((state) => state.hasPermission('orders:create'))
+  const canManage = useAuthStore((state) => state.hasPermission('orders:manage'))
   const menu = useCatalogStore((state) => state.menu)
   const loadMenu = useCatalogStore((state) => state.load)
   const [newItemProductId, setNewItemProductId] = useState('')
   const [productQuery, setProductQuery] = useState('')
   const [newItemQuantity, setNewItemQuantity] = useState(1)
   const [newItemNotes, setNewItemNotes] = useState('')
-  const [addingItem, setAddingItem] = useState(false)
+  const [pendingItems, setPendingItems] = useState<PendingItem[]>([])
+  const [confirmingItems, setConfirmingItems] = useState(false)
+  const [updatingItemId, setUpdatingItemId] = useState<string | null>(null)
+  const [updatingServiceCharge, setUpdatingServiceCharge] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -82,9 +103,77 @@ export function OrderDetailsModal({
   }
 
   const order: Order | undefined = liveOrder
+  const isClosed = order?.status === OrderStatus.COMPLETED || order?.status === OrderStatus.CANCELLED
+  // The API returns items in storage order, which shifts after an update; keep rows in place.
+  const orderItems = [...(order?.items ?? [])].sort(compareItems)
+
+  const handleAddPendingItem = () => {
+    if (!selectedProduct) return
+    setPendingItems((items) => [
+      ...items,
+      {
+        key: crypto.randomUUID(),
+        productId: selectedProduct.id,
+        name: selectedProduct.name,
+        unitPriceBrl: Number(selectedProduct.priceBrl),
+        quantity: newItemQuantity,
+        notes: newItemNotes.trim(),
+      },
+    ])
+    setNewItemProductId('')
+    setProductQuery('')
+    setNewItemQuantity(1)
+    setNewItemNotes('')
+  }
+
+  const handleConfirmItems = () => {
+    setConfirmingItems(true)
+    void addItems(
+      orderId,
+      pendingItems.map(({ productId, quantity, notes }) => ({
+        productId,
+        quantity,
+        notes: notes || undefined,
+      })),
+    )
+      .then((updated) => {
+        setPendingItems([])
+        notify({ title: t('toast.updated') })
+        const failedJobs = (updated.printJobs ?? []).filter((job) => job.status === 'FAILED')
+        if (failedJobs.length) {
+          notify({
+            title: t('orders.printFailed'),
+            description: failedJobs.map((job) => `${job.station}: ${job.errorMessage ?? ''}`).join(' · '),
+            variant: 'danger',
+          })
+        }
+      })
+      .catch((error) => notifyError(t('toast.error'), error))
+      .finally(() => setConfirmingItems(false))
+  }
+
+  const handleClose = () => {
+    if (pendingItems.length && !window.confirm(t('orders.discardPendingItems'))) return
+    onClose()
+  }
+
+  const handleItemStatusClick = (item: OrderItem, nextStatus: OrderItemStatus) => {
+    setUpdatingItemId(item.id)
+    void updateItemStatus(orderId, item.id, nextStatus)
+      .catch((error) => notifyError(t('toast.error'), error))
+      .finally(() => setUpdatingItemId(null))
+  }
+
+  const handleServiceChargeChange = (includeServiceCharge: boolean) => {
+    setUpdatingServiceCharge(true)
+    void setServiceCharge(orderId, includeServiceCharge)
+      .then(() => notify({ title: t('toast.updated') }))
+      .catch((error) => notifyError(t('toast.error'), error))
+      .finally(() => setUpdatingServiceCharge(false))
+  }
 
   return (
-    <Modal title={t('orders.detailTitle')} onClose={onClose} wide>
+    <Modal title={t('orders.detailTitle')} onClose={handleClose} wide>
       {loading && !order ? (
         <p className="text-sm text-[var(--gsb-muted)]">{t('common.loading')}</p>
       ) : error ? (
@@ -108,7 +197,7 @@ export function OrderDetailsModal({
             <div>
               <dt className="text-xs text-[var(--gsb-muted)]">{t('orders.changeStatus')}</dt>
               <dd className="mt-1">
-                <StatusBadge label={t(`status.${order.status}`)} />
+                <StatusBadge label={t(`status.${order.status}`)} status={order.status} />
               </dd>
             </div>
             <div>
@@ -136,14 +225,17 @@ export function OrderDetailsModal({
                 </tr>
               </thead>
               <tbody>
-                {(order.items ?? []).length === 0 ? (
+                {orderItems.length === 0 ? (
                   <tr>
                     <td colSpan={5} className="px-3 py-4 text-[var(--gsb-muted)]">
                       {t('common.empty')}
                     </td>
                   </tr>
                 ) : (
-                  (order.items ?? []).map((item) => (
+                  orderItems.map((item) => {
+                    const nextStatus = NEXT_ITEM_STATUS[item.status]
+                    const badge = <StatusBadge label={t(`status.${item.status}`)} status={item.status} />
+                    return (
                     <tr key={item.id} className="border-t border-[var(--gsb-border)]">
                       <td className="px-3 py-2">
                         {item.product?.namePt ?? item.productId.slice(0, 8)}
@@ -151,39 +243,38 @@ export function OrderDetailsModal({
                       <td>{item.quantity}</td>
                       <td>{formatBrl(Number(item.unitPriceBrl) * item.quantity, locale)}</td>
                       <td>
-                        <StatusBadge label={t(`status.${item.status}`)} />
+                        {canManage && nextStatus && order.status !== OrderStatus.CANCELLED ? (
+                          <button
+                            type="button"
+                            className="cursor-pointer rounded-full transition-opacity hover:opacity-75 disabled:cursor-wait disabled:opacity-50"
+                            disabled={updatingItemId === item.id}
+                            aria-label={`${t('orders.changeStatus')}: ${t(`status.${nextStatus}`)}`}
+                            title={t(`status.${nextStatus}`)}
+                            onClick={() => handleItemStatusClick(item, nextStatus)}
+                          >
+                            {badge}
+                          </button>
+                        ) : (
+                          badge
+                        )}
                       </td>
                       <td className="max-w-40 truncate px-3 py-2 text-[var(--gsb-muted)]">
                         {item.notes ?? '—'}
                       </td>
                     </tr>
-                  ))
+                    )
+                  })
                 )}
               </tbody>
             </table>
           </div>
 
-          {canAddItem && order.status !== OrderStatus.COMPLETED && order.status !== OrderStatus.CANCELLED ? (
+          {canAddItem && !isClosed ? (
             <form
               className="grid gap-2 rounded-xl border border-[var(--gsb-border)] bg-[var(--gsb-surface)] p-3 sm:grid-cols-[1fr_6rem_1fr_auto] sm:items-end"
               onSubmit={(event) => {
                 event.preventDefault()
-                if (!newItemProductId) return
-                setAddingItem(true)
-                void addItem(order.id, {
-                  productId: newItemProductId,
-                  quantity: newItemQuantity,
-                  notes: newItemNotes || undefined,
-                })
-                  .then(() => {
-                    setNewItemProductId('')
-                    setProductQuery('')
-                    setNewItemQuantity(1)
-                    setNewItemNotes('')
-                    notify({ title: t('toast.updated') })
-                  })
-                  .catch((error) => notifyError(t('toast.error'), error))
-                  .finally(() => setAddingItem(false))
+                handleAddPendingItem()
               }}
             >
               <label className="text-xs text-[var(--gsb-muted)]">
@@ -230,13 +321,63 @@ export function OrderDetailsModal({
                   onChange={(event) => setNewItemNotes(event.target.value)}
                 />
               </label>
-              <button type="submit" className={primaryButtonClass} disabled={!newItemProductId || addingItem}>
+              <button type="submit" className={ghostButtonClass} disabled={!newItemProductId}>
                 {t('orders.addItem')}
               </button>
             </form>
           ) : null}
 
+          {pendingItems.length ? (
+            <section className="grid gap-3 rounded-xl border border-[var(--gsb-accent)] p-3">
+              <h3 className="text-xs uppercase tracking-wider text-[var(--gsb-muted)]">
+                {t('orders.pendingItems')}
+              </h3>
+              <ul className="grid gap-2 text-sm">
+                {pendingItems.map((item) => (
+                  <li key={item.key} className="flex items-center justify-between gap-3">
+                    <span className="min-w-0 truncate">
+                      {item.quantity}× {item.name}
+                      {item.notes ? <span className="text-[var(--gsb-muted)]"> · {item.notes}</span> : null}
+                    </span>
+                    <span className="flex shrink-0 items-center gap-3">
+                      {formatBrl(item.unitPriceBrl * item.quantity, locale)}
+                      <button
+                        type="button"
+                        className={ghostButtonClass}
+                        disabled={confirmingItems}
+                        onClick={() =>
+                          setPendingItems((items) => items.filter((pending) => pending.key !== item.key))
+                        }
+                      >
+                        {t('common.delete')}
+                      </button>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                className={`${primaryButtonClass} justify-self-end`}
+                disabled={confirmingItems}
+                onClick={handleConfirmItems}
+              >
+                {t('orders.confirmItems')}
+              </button>
+            </section>
+          ) : null}
+
           <div className="grid gap-2 rounded-xl border border-[var(--gsb-border)] bg-[var(--gsb-surface)] p-4 text-sm">
+            {canManage && !isClosed ? (
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={Boolean(order.includeServiceCharge)}
+                  disabled={updatingServiceCharge}
+                  onChange={(event) => handleServiceChargeChange(event.target.checked)}
+                />
+                <span>{t('pos.serviceCharge')}</span>
+              </label>
+            ) : null}
             {Number(order.serviceChargeBrl ?? 0) > 0 ? (
               <>
                 <div className="flex justify-between gap-4">
@@ -283,6 +424,10 @@ export function OrderDetailsModal({
       )}
     </Modal>
   )
+}
+
+function compareItems(a: OrderItem, b: OrderItem) {
+  return Date.parse(a.createdAt) - Date.parse(b.createdAt) || a.id.localeCompare(b.id)
 }
 
 function normalizeSearch(value: string) {

@@ -8,6 +8,7 @@ export interface OrderItem {
   unitPriceBrl: number
   status: OrderItemStatus
   notes: string | null
+  createdAt: string
   product?: {
     id: string
     namePt: string
@@ -29,6 +30,13 @@ export interface Order {
   customer?: Pick<Customer, 'id' | 'fullName' | 'cpf' | 'phone'> | null
   items?: OrderItem[]
   payment?: OrderPayment | null
+  printJobs?: OrderPrintJob[]
+}
+
+export interface OrderPrintJob {
+  station: string
+  status: string
+  errorMessage: string | null
 }
 
 export interface OrderPayment {
@@ -61,16 +69,21 @@ export type CreateOrderPayload = {
   items?: Array<{ productId: string; quantity?: number; notes?: string }>
 }
 
+export type AddOrderItemPayload = { productId: string; quantity?: number; notes?: string }
+
 export interface IOrderRepository {
   list(businessId: string, status?: OrderStatus): Promise<Order[]>
   getById(businessId: string, orderId: string): Promise<Order>
   create(businessId: string, payload: CreateOrderPayload): Promise<Order>
   updateStatus(businessId: string, orderId: string, status: OrderStatus): Promise<Order>
-  addItem(
+  addItems(businessId: string, orderId: string, items: AddOrderItemPayload[]): Promise<Order>
+  updateItemStatus(
     businessId: string,
     orderId: string,
-    payload: { productId: string; quantity?: number; notes?: string },
+    itemId: string,
+    status: OrderItemStatus,
   ): Promise<Order>
+  setServiceCharge(businessId: string, orderId: string, includeServiceCharge: boolean): Promise<Order>
   checkout(businessId: string, orderId: string, payload: CheckoutOrderPayload): Promise<OrderCheckoutResult>
   getPayment(businessId: string, orderId: string): Promise<OrderCheckoutResult>
 }

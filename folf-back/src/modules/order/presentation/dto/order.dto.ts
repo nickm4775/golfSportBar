@@ -1,6 +1,7 @@
 import { OrderItemStatus, OrderStatus } from '../../../../shared/domain/enums';
 import { Type } from 'class-transformer';
 import {
+  ArrayNotEmpty,
   IsArray,
   IsBoolean,
   IsEnum,
@@ -73,6 +74,12 @@ export class UpdateOrderStatusDto {
   status!: OrderStatus;
 }
 
+export class SetServiceChargeDto {
+  @ApiProperty({ description: 'Incluir taxa de serviço de 10% (gorjeta) no total' })
+  @IsBoolean()
+  includeServiceCharge!: boolean;
+}
+
 export class AddOrderItemDto {
   @ApiProperty({ format: 'uuid', description: 'ID del producto global' })
   @IsUUID()
@@ -89,6 +96,15 @@ export class AddOrderItemDto {
   @IsOptional()
   @IsString()
   notes?: string;
+}
+
+export class AddOrderItemsDto {
+  @ApiProperty({ type: [AddOrderItemDto] })
+  @IsArray()
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => AddOrderItemDto)
+  items!: AddOrderItemDto[];
 }
 
 export class UpdateOrderItemDto {

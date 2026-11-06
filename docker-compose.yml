@@ -107,6 +107,8 @@ services:
       dockerfile: Dockerfile
     container_name: folf-frontend
     restart: unless-stopped
+    ports:
+    - "5173:5173"
     environment:
       VITE_PORT: 5173
       VITE_API_PROXY_TARGET: http://backend:3000

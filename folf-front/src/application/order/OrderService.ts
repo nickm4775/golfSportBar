@@ -1,5 +1,5 @@
-import type { CheckoutOrderPayload, CreateOrderPayload, IOrderRepository, OrderCheckoutResult } from '@/domain/order/Order'
-import type { OrderStatus } from '@/shared/domain/enums'
+import type { AddOrderItemPayload, CheckoutOrderPayload, CreateOrderPayload, IOrderRepository, OrderCheckoutResult } from '@/domain/order/Order'
+import type { OrderItemStatus, OrderStatus } from '@/shared/domain/enums'
 
 export class OrderService {
   private readonly orders: IOrderRepository
@@ -24,12 +24,16 @@ export class OrderService {
     return this.orders.updateStatus(businessId, orderId, status)
   }
 
-  addItem(
-    businessId: string,
-    orderId: string,
-    payload: { productId: string; quantity?: number; notes?: string },
-  ) {
-    return this.orders.addItem(businessId, orderId, payload)
+  addItems(businessId: string, orderId: string, items: AddOrderItemPayload[]) {
+    return this.orders.addItems(businessId, orderId, items)
+  }
+
+  updateItemStatus(businessId: string, orderId: string, itemId: string, status: OrderItemStatus) {
+    return this.orders.updateItemStatus(businessId, orderId, itemId, status)
+  }
+
+  setServiceCharge(businessId: string, orderId: string, includeServiceCharge: boolean) {
+    return this.orders.setServiceCharge(businessId, orderId, includeServiceCharge)
   }
 
   checkout(businessId: string, orderId: string, payload: CheckoutOrderPayload) {

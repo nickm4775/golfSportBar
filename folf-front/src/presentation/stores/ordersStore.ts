@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { services } from '@/app/compositionRoot'
 import { useAuthStore } from './authStore'
-import type { CheckoutOrderPayload, CreateOrderPayload, Order, OrderCheckoutResult } from '@/domain/order/Order'
-import type { OrderStatus } from '@/shared/domain/enums'
+import type { AddOrderItemPayload, CheckoutOrderPayload, CreateOrderPayload, Order, OrderCheckoutResult } from '@/domain/order/Order'
+import type { OrderItemStatus, OrderStatus } from '@/shared/domain/enums'
 
 interface OrdersState {
   items: Order[]
@@ -14,10 +14,9 @@ interface OrdersState {
   getById: (orderId: string) => Promise<Order>
   create: (payload: CreateOrderPayload) => Promise<Order>
   updateStatus: (orderId: string, status: OrderStatus) => Promise<void>
-  addItem: (
-    orderId: string,
-    payload: { productId: string; quantity?: number; notes?: string },
-  ) => Promise<void>
+  addItems: (orderId: string, items: AddOrderItemPayload[]) => Promise<Order>
+  updateItemStatus: (orderId: string, itemId: string, status: OrderItemStatus) => Promise<void>
+  setServiceCharge: (orderId: string, includeServiceCharge: boolean) => Promise<void>
   checkout: (orderId: string, payload: CheckoutOrderPayload) => Promise<OrderCheckoutResult>
   getPayment: (orderId: string) => Promise<OrderCheckoutResult>
 }
@@ -77,8 +76,23 @@ export const useOrdersStore = create<OrdersState>((set, get) => ({
     })
   },
 
-  async addItem(orderId, payload) {
-    const updated = await services.orders.addItem(requireBusinessId(), orderId, payload)
+  async addItems(orderId, items) {
+    const updated = await services.orders.addItems(requireBusinessId(), orderId, items)
+    set({
+      items: get().items.map((item) => (item.id === orderId ? updated : item)),
+    })
+    return updated
+  },
+
+  async updateItemStatus(orderId, itemId, status) {
+    const updated = await services.orders.updateItemStatus(requireBusinessId(), orderId, itemId, status)
+    set({
+      items: get().items.map((item) => (item.id === orderId ? updated : item)),
+    })
+  },
+
+  async setServiceCharge(orderId, includeServiceCharge) {
+    const updated = await services.orders.setServiceCharge(requireBusinessId(), orderId, includeServiceCharge)
     set({
       items: get().items.map((item) => (item.id === orderId ? updated : item)),
     })

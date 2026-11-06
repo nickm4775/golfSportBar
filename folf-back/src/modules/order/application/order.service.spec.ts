@@ -6,6 +6,7 @@ import { BusinessProduct } from '../../../shared/infrastructure/database/entitie
 import { Customer } from '../../../shared/infrastructure/database/entities/customer.entity';
 import { OrderItemStatus, OrderStatus } from '../../../shared/domain/enums';
 import { DomainException } from '../../../shared/domain/domain.exception';
+import { PrintService } from '../../print/application/print.service';
 
 describe('OrderService.create', () => {
   let service: OrderService;
@@ -229,5 +230,159 @@ describe('OrderService.create', () => {
       status: OrderItemStatus.SERVED,
     });
     expect(orderRepo.update).not.toHaveBeenCalled();
+  });
+
+  describe('setServiceCharge', () => {
+    const openOrder = {
+      id: 'order-1',
+      businessId: 'biz-1',
+      status: OrderStatus.IN_PROGRESS,
+      items: [],
+      customer: null,
+      payments: [],
+    };
+
+    beforeEach(() => {
+      orderRepo.findOne.mockResolvedValue(openOrder);
+      orderItemRepo.find.mockResolvedValue([{ quantity: 2, unitPriceBrl: 50 }]);
+    });
+
+    it('adds 10% to the total when enabled', async () => {
+      orderRepo.findOneOrFail.mockResolvedValue({ ...openOrder, includeServiceCharge: true });
+
+      await service.setServiceCharge('biz-1', 'order-1', { includeServiceCharge: true });
+
+      expect(orderRepo.update).toHaveBeenCalledWith('order-1', { includeServiceCharge: true });
+      expect(orderRepo.update).toHaveBeenCalledWith('order-1', {
+        serviceChargeBrl: 10,
+        totalBrl: 110,
+      });
+    });
+
+    it('removes the charge from the total when disabled', async () => {
+      orderRepo.findOneOrFail.mockResolvedValue({ ...openOrder, includeServiceCharge: false });
+
+      await service.setServiceCharge('biz-1', 'order-1', { includeServiceCharge: false });
+
+      expect(orderRepo.update).toHaveBeenCalledWith('order-1', {
+        serviceChargeBrl: 0,
+        totalBrl: 100,
+      });
+    });
+
+    it.each([OrderStatus.COMPLETED, OrderStatus.CANCELLED])(
+      'rejects changes on a %s order',
+      async (status) => {
+        orderRepo.findOne.mockResolvedValue({ ...openOrder, status });
+
+        await expect(
+          service.setServiceCharge('biz-1', 'order-1', { includeServiceCharge: true }),
+        ).rejects.toMatchObject({ code: 'ORDER_CLOSED' });
+        expect(orderRepo.update).not.toHaveBeenCalled();
+      },
+    );
+  });
+
+  describe('adding items to an existing order', () => {
+    const order = {
+      id: 'order-1',
+      businessId: 'biz-1',
+      status: OrderStatus.IN_PROGRESS,
+      items: [],
+      customer: null,
+      payments: [],
+    };
+    let printService: { enqueueForOrderItems: jest.Mock };
+    let withPrint: OrderService;
+
+    beforeEach(() => {
+      printService = {
+        enqueueForOrderItems: jest.fn().mockResolvedValue([
+          {
+            id: 'job-1',
+            station: 'BAR',
+            status: 'FAILED',
+            errorMessage: 'Printer disabled',
+            payload: {},
+          },
+        ]),
+      };
+      withPrint = new OrderService(
+        orderRepo as unknown as Repository<Order>,
+        orderItemRepo as unknown as Repository<OrderItem>,
+        businessProductRepo as unknown as Repository<BusinessProduct>,
+        customerRepo as unknown as Repository<Customer>,
+        {
+          transaction: jest.fn(async (cb: (em: EntityManager) => Promise<unknown>) =>
+            cb(manager as unknown as EntityManager),
+          ),
+        } as unknown as DataSource,
+        undefined,
+        printService as unknown as PrintService,
+      );
+      orderRepo.findOne.mockResolvedValue(order);
+      orderRepo.findOneOrFail.mockResolvedValue(order);
+      orderItemRepo.find.mockResolvedValue([]);
+      manager.findOne.mockResolvedValue({ priceBrl: 20 });
+    });
+
+    it('sends a single item to print and reports each ticket outcome', async () => {
+      manager.save.mockResolvedValue({ id: 'item-9' });
+
+      const result = await withPrint.addItem('biz-1', 'order-1', { productId: 'product-1' });
+
+      expect(printService.enqueueForOrderItems).toHaveBeenCalledWith('biz-1', 'order-1', ['item-9']);
+      expect(result.printJobs).toEqual([
+        { station: 'BAR', status: 'FAILED', errorMessage: 'Printer disabled' },
+      ]);
+    });
+
+    it('prints all confirmed items together so each station gets one ticket', async () => {
+      manager.save.mockResolvedValueOnce({ id: 'item-1' }).mockResolvedValueOnce({ id: 'item-2' });
+
+      await withPrint.addItems('biz-1', 'order-1', [
+        { productId: 'product-1' },
+        { productId: 'product-2', quantity: 2 },
+      ]);
+
+      expect(printService.enqueueForOrderItems).toHaveBeenCalledTimes(1);
+      expect(printService.enqueueForOrderItems).toHaveBeenCalledWith('biz-1', 'order-1', [
+        'item-1',
+        'item-2',
+      ]);
+    });
+
+    it('moves an open order to in progress', async () => {
+      orderRepo.findOne.mockResolvedValue({ ...order, status: OrderStatus.OPEN });
+      manager.save.mockResolvedValue({ id: 'item-1' });
+
+      await withPrint.addItems('biz-1', 'order-1', [{ productId: 'product-1' }]);
+
+      expect(manager.update).toHaveBeenCalledWith(Order, 'order-1', {
+        status: OrderStatus.IN_PROGRESS,
+      });
+    });
+
+    it('prints nothing when a product is unavailable', async () => {
+      manager.findOne.mockResolvedValueOnce({ priceBrl: 20 }).mockResolvedValueOnce(null);
+      manager.save.mockResolvedValue({ id: 'item-1' });
+
+      await expect(
+        withPrint.addItems('biz-1', 'order-1', [
+          { productId: 'product-1' },
+          { productId: 'product-2' },
+        ]),
+      ).rejects.toMatchObject({ code: 'PRODUCT_UNAVAILABLE' });
+      expect(printService.enqueueForOrderItems).not.toHaveBeenCalled();
+    });
+
+    it('rejects items on a closed order', async () => {
+      orderRepo.findOne.mockResolvedValue({ ...order, status: OrderStatus.COMPLETED });
+
+      await expect(
+        withPrint.addItems('biz-1', 'order-1', [{ productId: 'product-1' }]),
+      ).rejects.toMatchObject({ code: 'ORDER_CLOSED' });
+      expect(manager.save).not.toHaveBeenCalled();
+    });
   });
 });

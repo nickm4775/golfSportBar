@@ -22,7 +22,9 @@ import { OrderStatus } from '../../../shared/domain/enums';
 import { OrderService } from '../application/order.service';
 import {
   AddOrderItemDto,
+  AddOrderItemsDto,
   CreateOrderDto,
+  SetServiceChargeDto,
   UpdateOrderItemDto,
   UpdateOrderItemStatusDto,
   UpdateOrderStatusDto,
@@ -112,6 +114,25 @@ export class OrderController {
     return this.orderService.updateStatus(businessId, orderId, dto);
   }
 
+  @Patch(':orderId/service-charge')
+  @UseGuards(PermissionsGuard)
+  @RequirePermissions('orders:manage')
+  @ApiOperation({
+    summary: 'Agregar o quitar la tasa de servicio del 10%',
+    description: 'Recalcula el total. No disponible en pedidos cerrados.',
+  })
+  @ApiParam({ name: 'businessId', format: 'uuid' })
+  @ApiParam({ name: 'orderId', format: 'uuid' })
+  @ApiOkResponse({ description: 'Pedido con total recalculado' })
+  @ApiStandardErrors()
+  setServiceCharge(
+    @Param('businessId') businessId: string,
+    @Param('orderId') orderId: string,
+    @Body() dto: SetServiceChargeDto,
+  ) {
+    return this.orderService.setServiceCharge(businessId, orderId, dto);
+  }
+
   @Post(':orderId/print-receipt')
   @UseGuards(PermissionsGuard)
   @RequirePermissions('orders:read')
@@ -146,6 +167,25 @@ export class OrderController {
     return this.orderService.addItem(businessId, orderId, dto);
   }
 
+  @Post(':orderId/items/batch')
+  @UseGuards(PermissionsGuard)
+  @RequirePermissions('orders:create')
+  @ApiOperation({
+    summary: 'Confirmar varios ítems del pedido',
+    description: 'Guarda todos o ninguno y envía una sola comanda por estación.',
+  })
+  @ApiParam({ name: 'businessId', format: 'uuid' })
+  @ApiParam({ name: 'orderId', format: 'uuid' })
+  @ApiCreatedResponse({ description: 'Ítems agregados, total recalculado' })
+  @ApiStandardErrors()
+  addItems(
+    @Param('businessId') businessId: string,
+    @Param('orderId') orderId: string,
+    @Body() dto: AddOrderItemsDto,
+  ) {
+    return this.orderService.addItems(businessId, orderId, dto.items);
+  }
+
   @Patch(':orderId/items/:itemId')
   @UseGuards(PermissionsGuard)
   @RequirePermissions('orders:create')
@@ -171,7 +211,7 @@ export class OrderController {
   @RequirePermissions('orders:manage')
   @ApiOperation({
     summary: 'Cambiar estado del ítem',
-    description: 'Transiciones: PENDING→PREPARING→SERVED|CANCELLED.',
+    description: 'Transiciones: PENDING→PREPARING→SERVED|CANCELLED. SERVED→PREPARING deshace.',
   })
   @ApiParam({ name: 'businessId', format: 'uuid' })
   @ApiParam({ name: 'orderId', format: 'uuid' })

@@ -12,7 +12,7 @@ const ORDER_TRANSITIONS: Record<OrderStatus, OrderStatus[]> = {
 const ITEM_TRANSITIONS: Record<OrderItemStatus, OrderItemStatus[]> = {
   [OrderItemStatus.PENDING]: [OrderItemStatus.PREPARING, OrderItemStatus.CANCELLED],
   [OrderItemStatus.PREPARING]: [OrderItemStatus.SERVED, OrderItemStatus.CANCELLED],
-  [OrderItemStatus.SERVED]: [],
+  [OrderItemStatus.SERVED]: [OrderItemStatus.PREPARING],
   [OrderItemStatus.CANCELLED]: [],
 };
 
