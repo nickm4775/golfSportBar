@@ -50,6 +50,7 @@ dependencies:
   flutter_svg: ^2.3.0
   intl: 0.20.2
   centrifuge: ^0.16.0
+  flutter_map_vector_tiles: ^2.11.0
 
 dev_dependencies:
   flutter_test:

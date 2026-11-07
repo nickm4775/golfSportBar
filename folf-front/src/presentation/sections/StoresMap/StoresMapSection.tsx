@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from 'react'
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
+import { maplibreGL } from '@maplibre/maplibre-gl-leaflet'
+import 'maplibre-gl/dist/maplibre-gl.css'
 import { Button } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { services } from '@/app/compositionRoot'
 import type { StoreLocation } from '@/domain/store/StoreLocation'
-import { mapTiles } from '@/infrastructure/map/mapTiles'
+import { mapStyles } from '@/infrastructure/map/mapTiles'
 import { useTheme } from '@/app/providers/ThemeProvider'
 import { brandContact } from '@/shared/brand/contact'
 
@@ -30,19 +32,16 @@ function createMarkerIcon(isDark: boolean) {
 
 function ThemeTiles({ isDark }: { isDark: boolean }) {
   const map = useMap()
-  const tiles = isDark ? mapTiles.dark : mapTiles.light
 
   useEffect(() => {
+    const layer = maplibreGL({ style: isDark ? mapStyles.dark : mapStyles.light }).addTo(map)
     map.invalidateSize()
+    return () => {
+      layer.remove()
+    }
   }, [map, isDark])
 
-  return (
-    <TileLayer
-      key={isDark ? 'dark' : 'light'}
-      attribution={tiles.attribution}
-      url={tiles.url}
-    />
-  )
+  return null
 }
 
 function FitStores({ stores }: { stores: readonly StoreLocation[] }) {

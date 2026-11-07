@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:folf/core/widgets/gsb_widgets.dart';
 import 'package:folf/features/home/presentation/home_cubit.dart';
+import 'package:folf/features/map/presentation/map_tiles.dart';
 import 'package:folf/features/venue/domain/venue.dart';
 import 'package:folf/features/venue/presentation/venue_session_cubit.dart';
 import 'package:folf/l10n/app_localizations.dart';
@@ -43,13 +44,7 @@ class _MapPageState extends State<MapPage> {
           FlutterMap(
             options: MapOptions(initialCenter: center, initialZoom: 15.5),
             children: [
-              TileLayer(
-                key: ValueKey(dark ? 'dark' : 'light'),
-                urlTemplate: dark
-                    ? 'https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'
-                    : 'https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                userAgentPackageName: 'com.golfsportbar.folf',
-              ),
+              ThemedMapLayer(dark: dark),
               MarkerLayer(
                 markers: [
                   for (final venue in withCoords)
@@ -75,6 +70,9 @@ class _MapPageState extends State<MapPage> {
                       ),
                     ),
                 ],
+              ),
+              const SimpleAttributionWidget(
+                source: Text('OpenFreeMap, OpenMapTiles, OpenStreetMap'),
               ),
             ],
           ),
